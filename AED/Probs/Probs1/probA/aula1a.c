@@ -20,7 +20,7 @@ int main(int argc, char **argv)
   printf("I am a mathematical genius and can calculate the square root of any number!!!\n\n");
 
   if (argc != 2) // era argc < 2 || argc > 20
-  {              // isto
+  {              // ISTO
     printf("A single number is needed as an argument!\n");
     exit(EXIT_FAILURE);
   } // ISTO
