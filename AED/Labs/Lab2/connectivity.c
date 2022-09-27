@@ -90,69 +90,29 @@ void quick_find(int *id, int N, FILE *fp, int quietOut)
          printf(" %d %d\n", p, q);
    }
 
-   int *conjuntos[nConjuntos];
-   long int heads[nConjuntos];
-   heads[0] = id[0];
-   long int sizes[nConjuntos];
-
-   for (i = 0; i < nConjuntos; i++)
+   for (i = 0; i < N; i++)
    {
-      for (k = 0, j = 0, l = i, flag = 0; k < N; k++)
+      for (k = 0, j = 0; k < N; k++)
       {
-         if (id[k] == heads[i])
+         if (id[k] == i)
          {
             if (j == 0)
             {
-               conjuntos[i] = (int *)malloc(sizeof(int));
+               printf("%d", k);
             }
             else
             {
-               conjuntos[i] = (int *)realloc(conjuntos[i], (j + 1) * (sizeof(int))); // probblema nesta linha
+               printf("-%d", k);
             }
-            conjuntos[i][j] = k;
             j++;
          }
-         else
-         {
-            for (int v = 0; v <= i; v++)
-            {
-               if (id[k] == heads[v])
-               {
-                  flag++;
-               }
-            }
-            if (flag != 0)
-               continue;
-            l++;
-            heads[l] = id[k];
-         }
       }
-      sizes[i] = j;
+      if (j != 0)
+         printf("\n");
    }
 
    printf("QF: The number of links performed is %d for %d input pairs.\n",
           links_cnt, pairs_cnt);
-   for (i = 0; i < nConjuntos; i++)
-   {
-      for (k = 0; k < sizes[i]; k++)
-      {
-         if (k == sizes[i] - 1)
-            printf("%d", conjuntos[i][k]);
-         else
-            printf("%d-", conjuntos[i][k]);
-      }
-      printf("\n");
-   }
-   printf("Número de conjuntos: %d\n", nConjuntos);
-   /* for (i = 0; i < N; i++)
-   {
-      printf("%d\n", id[i]);
-   }
-   printf("\n\n");
-   for (i = 0; i < nConjuntos; i++)
-   {
-      printf("%ld\n", heads[i]);
-   } */
    printf("Find:  %ld\nUnion: %ld\nTotal: %ld\n", elemProc, elemUni, elemProc + elemUni + elem);
    return;
 }
