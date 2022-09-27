@@ -73,7 +73,6 @@ void quick_find(int *id, int N, FILE *fp, int quietOut)
       /* pair has new info; must perform union */
       for (t = id[p], i = 0, elemUni++; i < N; i++)
       {
-         // printf("%d\n", nConjuntos);
          if (id[i] == t)
          {
             id[i] = id[q];
