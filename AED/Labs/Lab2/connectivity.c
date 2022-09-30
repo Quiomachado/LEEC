@@ -141,6 +141,7 @@ void quick_union(int *id, int N, FILE *fp, int quietOut)
    elemProc = 0;
    elemUni = 0;
    elem = 0;
+   int nConjuntos = N;
 
    /* initialize; all disconnected */
    for (i = 0; i < N; i++)
@@ -178,6 +179,7 @@ void quick_union(int *id, int N, FILE *fp, int quietOut)
 
       /* pair has new info; must perform union */
       id[i] = j;
+      nConjuntos--;
       elemUni++;
       links_cnt++;
 
@@ -186,6 +188,7 @@ void quick_union(int *id, int N, FILE *fp, int quietOut)
    }
    printf("QU: The number of links performed is %d for %d input pairs.\n",
           links_cnt, pairs_cnt);
+   printf("Número de conjuntos: %d\n", nConjuntos);
    printf("Find:  %ld\nUnion: %ld\nTotal: %ld\n", elemProc, elemUni, elemProc + elemUni + elem);
 }
 
