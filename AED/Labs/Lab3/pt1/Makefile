@@ -13,7 +13,7 @@
 
 
 bin: *.c
-	cc palTab.c -o palTab
+	cc palTab.c -o palTab -g
 	chmod +x palTab
 
 

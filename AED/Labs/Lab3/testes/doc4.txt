@@ -1,0 +1,47 @@
+INESC-ID - www.inesc-id.pt
+
+
+Mission
+
+    Develop tomorrow's technologies by excelling in research, today
+
+
+Objectives
+
+    Integrate competences from researchers in electrical engineering
+    and computer science to advance the state of the art in computers,
+    telecommunications and information systems.
+
+    Support the first stages of the value generation chain: basic
+    research, applied research and advanced education.
+
+    In cooperation with other institutions, perform technology
+    transfer, support the creation of technology based startups and
+    provide technical support.
+
+
+Organization
+
+    INESC-ID is a not for profit, privately owned, institution, with
+    the status of "utilidade pública", dedicated to advanced research
+    and development in the domains of electronics, telecommunications
+    and information technologies.
+
+    INESC-ID was created in 2000 and was awarded the status of
+    "Laboratório Associado" in December of 2004. INESC-ID is owned by
+    Instituto Superior Técnico and by Instituto de Engenharia de
+    Sistemas and Computadores. It integrates more than 60 PhDs and 100
+    pos-graduation students working in one of the five main action
+    lines:
+
+        Information and decision support systems
+	Communication networks and mobility
+	Virtual interactive environments
+	Embedded electronic systems
+	Computational processing of the Portuguese language
+
+    INESC-ID has three major sources of financing: national projects
+    of R&D, funded by FCT; international projects of R&D, funded by
+    the European Community; development projects funded directly by
+    direct contracts between INESC-ID and national or international
+    companies.

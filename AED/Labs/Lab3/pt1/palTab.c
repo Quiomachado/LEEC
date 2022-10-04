@@ -17,13 +17,13 @@
 #include <stdio.h>
 #define MAX_STR 100
 
-typedef struct _st_texto {
-  int  n_total_palavras;      /* total number of words */
-  int  n_dist_palavras;       /* number of distinct words*/
-  char **palavras;            /* Table of strings for words */
-  int  *ocorrencias;          /* Table of integers counting occurrence */
+typedef struct _st_texto
+{
+  int n_total_palavras; /* total number of words */
+  int n_dist_palavras;  /* number of distinct words*/
+  char **palavras;      /* Table of strings for words */
+  int *ocorrencias;     /* Table of integers counting occurrence */
 } st_texto;
-
 
 /******************************************************************************
  * LePalavra()
@@ -37,16 +37,15 @@ typedef struct _st_texto {
  *   Maximum word size MAX_STR
  *****************************************************************************/
 
-char *LePalavra ( FILE *f )
+char *LePalavra(FILE *f)
 {
-  static char palavra[MAX_STR];       /* note static local buffer returned */
+  static char palavra[MAX_STR]; /* note static local buffer returned */
 
-  if ( fscanf ( f, "%s", palavra ) ==1 )
+  if (fscanf(f, "%s", palavra) == 1)
     return (palavra);
   else
-    return ((char *) NULL);
+    return ((char *)NULL);
 }
-
 
 /******************************************************************************
  * AbreFicheiro()
@@ -60,17 +59,17 @@ char *LePalavra ( FILE *f )
  *   Open named file in requested mode, message stderr and exit if open fails
  *****************************************************************************/
 
-FILE *AbreFicheiro ( char *nome, char *mode )
+FILE *AbreFicheiro(char *nome, char *mode)
 {
   FILE *fp;
-  fp = fopen ( nome, mode );
-  if ( fp == NULL ) {
-    fprintf ( stderr, "ERROR: cannot open file '%s'\n", nome);
-    exit ( 1 );                                 /* non-zero exit status */
+  fp = fopen(nome, mode);
+  if (fp == NULL)
+  {
+    fprintf(stderr, "ERROR: cannot open file '%s'\n", nome);
+    exit(1); /* non-zero exit status */
   }
   return (fp);
 }
-
 
 /******************************************************************************
  * AlocaTabelaPalavras()
@@ -84,7 +83,7 @@ FILE *AbreFicheiro ( char *nome, char *mode )
  *   Read input file to find dimensions, allocate and initialize tables
  *****************************************************************************/
 
-void AlocaTabelaPalavras ( char *ficheiro, st_texto *t)
+void AlocaTabelaPalavras(char *ficheiro, st_texto *t)
 {
   FILE *fp;
   char *palavra;
@@ -92,38 +91,42 @@ void AlocaTabelaPalavras ( char *ficheiro, st_texto *t)
 
   (*t).n_total_palavras = 0;
   (*t).n_dist_palavras = 0;
-  fp = AbreFicheiro ( ficheiro, "r" );
-  while ( ( palavra = LePalavra ( fp ) ) != NULL ) {
+  fp = AbreFicheiro(ficheiro, "r");
+  while ((palavra = LePalavra(fp)) != NULL)
+  {
     (*t).n_total_palavras++;
-    len = strlen ( palavra );
-    if ( len > n_max_caracteres )
+    len = strlen(palavra);
+    if (len > n_max_caracteres)
       n_max_caracteres = len;
   }
-  fclose ( fp );
-  printf ( "Words count: %d\n", (*t).n_total_palavras );
+  fclose(fp);
+  printf("Words count: %d\n", (*t).n_total_palavras);
 
-  (*t).palavras =  /* -- INSERT code for memory allocation --*/;
-  if ( (*t).palavras == NULL ) {
-    fprintf ( stderr, "ERROR: not enough memory available!\n" );
-    exit ( 2 );
+  t->palavras = (char **)malloc(t->n_total_palavras * sizeof(char *));
+  if ((*t).palavras == NULL)
+  {
+    fprintf(stderr, "ERROR: not enough memory available!\n");
+    exit(2);
   }
-  (*t).ocorrencias = /* -- INSERT code for memory allocation --*/;
-  if ( (*t).ocorrencias == NULL ) {
-    fprintf ( stderr, "ERROR: not enough memory available!\n" );
-    exit ( 4 );
+  t->ocorrencias = (int *)malloc(t->n_total_palavras * sizeof(int));
+  if ((*t).ocorrencias == NULL)
+  {
+    fprintf(stderr, "ERROR: not enough memory available!\n");
+    exit(4);
   }
-  for ( i = 0; i < (*t).n_total_palavras; i++ )   {
-    (*t).palavras[i] =  /* -- INSERT code for memory allocation --*/;
-    if ( (*t).palavras[i] == NULL ) {
-      fprintf ( stderr, "ERROR: not enough memory available!\n" );
-      exit ( 3 );
+  for (i = 0; i < (*t).n_total_palavras; i++)
+  {
+    (*t).palavras[i] = (char *)malloc((n_max_caracteres + 1) * sizeof(char));
+    if ((*t).palavras[i] == NULL)
+    {
+      fprintf(stderr, "ERROR: not enough memory available!\n");
+      exit(3);
     }
-    (*t).palavras[i][0] = /* -- INSERT code to initialize table of strings  --*/ ;
-    (*t).ocorrencias[i] = /* -- INSERT code to initialize table  of counters --*/ ;
+    (*t).palavras[i][0] = '\0';
+    (*t).ocorrencias[i] = 0;
   }
   return;
 }
-
 
 /******************************************************************************
  * NovaPalavra()
@@ -138,17 +141,17 @@ void AlocaTabelaPalavras ( char *ficheiro, st_texto *t)
  *   Otherwise returns the position of the word in the table
  *****************************************************************************/
 
-int NovaPalavra ( char *palavra, st_texto *t )
+int NovaPalavra(char *palavra, st_texto *t)
 {
   int i = 0;
-  while ( ( (*t).palavras[i][0] != '\0' ) && i < (*t).n_total_palavras ) {
-    if ( strcmp ( (*t).palavras[i], palavra ) == 0 )
+  while (((*t).palavras[i][0] != '\0') && i < (*t).n_total_palavras)
+  {
+    if (strcmp((*t).palavras[i], palavra) == 0)
       return (i);
     i++;
   }
   return (-1);
 }
-
 
 /******************************************************************************
  * PreencheTabelaPalavras()
@@ -162,27 +165,29 @@ int NovaPalavra ( char *palavra, st_texto *t )
  *
  *****************************************************************************/
 
-void PreencheTabelaPalavras ( char *ficheiro, st_texto *t )
+void PreencheTabelaPalavras(char *ficheiro, st_texto *t)
 {
   FILE *f;
   int n;
   char *palavra;
 
-  f = AbreFicheiro ( ficheiro, "r" );
-  while ( ( palavra = LePalavra ( f ) ) != NULL ) {
-    if ( ( n = NovaPalavra ( palavra, &(*t) ) ) == -1 ) {
-      strcpy ( (*t).palavras[(*t).n_dist_palavras], palavra );
+  f = AbreFicheiro(ficheiro, "r");
+  while ((palavra = LePalavra(f)) != NULL)
+  {
+    if ((n = NovaPalavra(palavra, &(*t))) == -1)
+    {
+      strcpy((*t).palavras[(*t).n_dist_palavras], palavra);
       (*t).ocorrencias[(*t).n_dist_palavras]++;
       (*t).n_dist_palavras++;
     }
-    else {
+    else
+    {
       (*t).ocorrencias[n]++;
     }
   }
-  fclose ( f );
+  fclose(f);
   return;
 }
-
 
 /******************************************************************************
  * EscreveFicheiro()
@@ -196,32 +201,46 @@ void PreencheTabelaPalavras ( char *ficheiro, st_texto *t )
  *   Open output file, write table of words.
  *****************************************************************************/
 
-void EscreveFicheiro ( char *ficheiro, st_texto *t )
+void EscreveFicheiro(char *ficheiro, st_texto *t)
 {
   FILE *f;
   char *nome;
   int i = 0;
 
-  nome =  /* -- INSERT code for memory allocation,  --*/ ;
+  nome = (char *)malloc((strlen(ficheiro) + 10) * sizeof(char));
   /* including dot (.) extension and string termination, see below */
-  if ( nome == NULL ) {
-    fprintf ( stderr, "ERROR: not enough memory available!\n" );
-    exit ( 5 );
+  if (nome == NULL)
+  {
+    fprintf(stderr, "ERROR: not enough memory available!\n");
+    exit(5);
   }
-  strcpy ( nome, ficheiro );
-  strcat ( nome, ".palavras" );
-  f = AbreFicheiro ( nome, "w" );
-  for ( i = 0; i < (*t).n_dist_palavras; i++ ) {
-    fprintf ( f, "%d: %s\n", (*t).ocorrencias[i], (*t).palavras[i] );
+  strcpy(nome, ficheiro);
+  strcat(nome, ".palavras");
+  f = AbreFicheiro(nome, "w");
+  for (i = 0; i < (*t).n_dist_palavras; i++)
+  {
+    fprintf(f, "%d: %s\n", (*t).ocorrencias[i], (*t).palavras[i]);
   }
-  printf ( "Count of distinct words: %d\n", (*t).n_dist_palavras );
-  fclose ( f );
+  printf("Count of distinct words: %d\n", (*t).n_dist_palavras);
+  fclose(f);
 
-  /* Anything else I should do here? */
+  free(nome);
 
   return;
 }
 
+void FreeTabelaPalavras(char *ficheiro, st_texto *t)
+{
+  int i;
+  for (i = 0; i < t->n_total_palavras; i++)
+  {
+    free(t->palavras[i]);
+  }
+  free(t->palavras);
+  free(t->ocorrencias);
+
+  return;
+}
 
 /******************************************************************************
  * main()
@@ -235,18 +254,20 @@ void EscreveFicheiro ( char *ficheiro, st_texto *t )
  *   Get filename, read input file and make word table, write output file
  *****************************************************************************/
 
-int main ( int argc, char **argv )
+int main(int argc, char **argv)
 {
   int i;
   st_texto st_palavras;
 
-  if ( argc < 2 ) {
-    fprintf ( stderr, "ERROR: missing filename in argument!\n" );
-    exit ( 6 );
+  if (argc < 2)
+  {
+    fprintf(stderr, "ERROR: missing filename in argument!\n");
+    exit(6);
   }
-  AlocaTabelaPalavras ( argv[1], &st_palavras );
-  PreencheTabelaPalavras ( argv[1],&st_palavras );
-  EscreveFicheiro ( argv[1], &st_palavras );
+  AlocaTabelaPalavras(argv[1], &st_palavras);
+  PreencheTabelaPalavras(argv[1], &st_palavras);
+  EscreveFicheiro(argv[1], &st_palavras);
+  FreeTabelaPalavras(argv[1], &st_palavras);
 
   return (0);
 }
