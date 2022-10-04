@@ -188,7 +188,7 @@ void quick_union(int *id, int N, FILE *fp, int quietOut)
    }
    printf("QU: The number of links performed is %d for %d input pairs.\n",
           links_cnt, pairs_cnt);
-   printf("Número de conjuntos: %d\n", nConjuntos);
+   printf("\nNúmero de conjuntos: %d\n\n", nConjuntos);
    printf("Find:  %ld\nUnion: %ld\nTotal: %ld\n", elemProc, elemUni, elemProc + elemUni + elem);
 }
 
