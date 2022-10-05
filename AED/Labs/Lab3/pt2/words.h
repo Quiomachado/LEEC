@@ -32,7 +32,7 @@ t_palavra  *criaPalavra (char *nome);
 char       *getPalavra (t_palavra *p);
 int         getNocorr (t_palavra *p);
 void        incOcorr (t_palavra *p);
-void        escreveUmaPalavra (t_palavra *p,FILE *fp);
+void        escreveUmaPalavra (t_palavra *p,FILE *fp, int total);
 void        libertaPalavra(t_palavra *p);
 
 #endif

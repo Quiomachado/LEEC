@@ -37,14 +37,14 @@ void Usage(char *nomeProg)
   exit(1);
 }
 
-void lerListaFim(t_lista *lp, FILE *fpOut)
+void lerListaFim(t_lista *lp, FILE *fpOut, int total)
 {
   if (lp == NULL)
   {
     return;
   }
-  lerListaFim(getProxElementoLista(lp), fpOut);
-  escreveUmaPalavra((t_palavra *)getItemLista(lp), fpOut);
+  lerListaFim(getProxElementoLista(lp), fpOut, total);
+  escreveUmaPalavra((t_palavra *)getItemLista(lp), fpOut, total);
   return;
 }
 
@@ -108,13 +108,13 @@ int main(int argc, char *argv[])
     aux = lp;
     while (aux != NULL)
     {
-      escreveUmaPalavra((t_palavra *)getItemLista(aux), fpOut);
+      escreveUmaPalavra((t_palavra *)getItemLista(aux), fpOut, numTotalPalavras);
       aux = getProxElementoLista(aux);
     }
   }
   else if (strcmp(argv[2], "FIM") == 0)
   {
-    lerListaFim(lp, fpOut);
+    lerListaFim(lp, fpOut, numTotalPalavras);
   }
 
   numPalavrasDiferentes = numItensNaLista(lp);
