@@ -15,17 +15,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>    /* strcasecmp() */
+#include <strings.h> /* strcasecmp() */
 
 #include "list.h"
 #include "words.h"
 
-
-struct _t_palavra {
-  char* pal;
+struct _t_palavra
+{
+  char *pal;
   int ocorrencias;
 };
-
 
 /******************************************************************************
  * testaPalavra ()
@@ -43,16 +42,18 @@ struct _t_palavra {
  * NOTE: for results identical to PalTab.c use strcmp(), instead of strcasecmp()
  *****************************************************************************/
 
-t_lista  *testaPalavra(t_lista *lp, char *novaPal)
+t_lista *testaPalavra(t_lista *lp, char *novaPal)
 {
-  t_lista *aux;       /* pointer to scan the list */
+  t_lista *aux; /* pointer to scan the list */
   t_palavra *pal;
-  int err;            /* error status, not checked */
+  int err; /* error status, not checked */
 
   aux = lp;
-  while (aux != NULL){
-    pal = (t_palavra*) getItemLista(aux);
-    if( strcasecmp(getPalavra(pal),novaPal) == 0) {
+  while (aux != NULL)
+  {
+    pal = (t_palavra *)getItemLista(aux);
+    if (strcasecmp(getPalavra(pal), novaPal) == 0)
+    {
       incOcorr(pal);
       return lp;
     }
@@ -66,7 +67,6 @@ t_lista  *testaPalavra(t_lista *lp, char *novaPal)
   return lp;
 }
 
-
 /******************************************************************************
  * libertaItem ()
  *
@@ -79,11 +79,9 @@ t_lista  *testaPalavra(t_lista *lp, char *novaPal)
 
 void libertaItem(Item this)
 {
-  libertaPalavra((t_palavra *) this);
+  libertaPalavra((t_palavra *)this);
   return;
 }
-
-
 
 /******************************************************************************
  * erroMemoria ()
@@ -96,16 +94,15 @@ void libertaItem(Item this)
  *
  *****************************************************************************/
 
-void erroMemoria(char *msg) {
+void erroMemoria(char *msg)
+{
 
   fprintf(stderr, "Error during memory reserve attempt.\n");
-  fprintf(stderr, "Msg: %s\n",msg);
+  fprintf(stderr, "Msg: %s\n", msg);
   fprintf(stderr, "Exit Program due to unmanaged error.\n");
 
   exit(1);
 }
-
-
 
 /******************************************************************************
  * criaPalavra()
@@ -117,24 +114,23 @@ void erroMemoria(char *msg) {
  * Description: Create and return a new word, set occurrence counter to 1
  *****************************************************************************/
 
-t_palavra  *criaPalavra(char *pal)
+t_palavra *criaPalavra(char *pal)
 {
   t_palavra *nova;
 
-  nova = /* INSERT CODE to ALLOCATE MEMORY */
-    if(nova == NULL)
-      erroMemoria("Reserve memory for new word in criaPalavra" );
+  nova = (t_palavra *)malloc(sizeof(t_palavra));
+  if (nova == NULL)
+    erroMemoria("Reserve memory for new word in criaPalavra");
 
-  nova -> pal = /* INSERT CODE to ALLOCATE MEMORY */
-    if(nova == NULL)
-      erroMemoria("Reserve of name in criaPalavra" );
+  nova->pal = (char *)malloc((strlen(pal) + 1) * sizeof(char));
+  if (nova == NULL)
+    erroMemoria("Reserve of name in criaPalavra");
 
-  strcpy(nova -> pal,pal);
-  nova -> ocorrencias = 1;
+  strcpy(nova->pal, pal);
+  nova->ocorrencias = 1;
 
   return nova;
 }
-
 
 /******************************************************************************
  * getPalavra ()
@@ -148,9 +144,8 @@ t_palavra  *criaPalavra(char *pal)
 
 char *getPalavra(t_palavra *p)
 {
-  return p -> pal;
+  return p->pal;
 }
-
 
 /******************************************************************************
  * getNocorr ()
@@ -164,9 +159,8 @@ char *getPalavra(t_palavra *p)
 
 int getNocorr(t_palavra *p)
 {
-  return p -> ocorrencias;
+  return p->ocorrencias;
 }
-
 
 /******************************************************************************
  * inOcorr ()
@@ -181,9 +175,8 @@ int getNocorr(t_palavra *p)
 
 void incOcorr(t_palavra *p)
 {
-  (p -> ocorrencias)++;
+  (p->ocorrencias)++;
 }
-
 
 /******************************************************************************
  * escreveUmaPalavra ()
@@ -199,9 +192,8 @@ void incOcorr(t_palavra *p)
 
 void escreveUmaPalavra(t_palavra *p, FILE *fp)
 {
-  fprintf(fp,"%4d : %s\n", p->ocorrencias, p->pal);
+  fprintf(fp, "%4d : %s\n", p->ocorrencias, p->pal);
 }
-
 
 /******************************************************************************
  * libertaPalavra ()
