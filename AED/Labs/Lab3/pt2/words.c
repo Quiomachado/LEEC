@@ -208,6 +208,7 @@ void escreveUmaPalavra(t_palavra *p, FILE *fp)
 void libertaPalavra(t_palavra *p)
 {
   /* -- FREE MEMORY RESERVED FOR WORD -- */
-
+  free(p->pal);
+  free(p);
   return;
 }

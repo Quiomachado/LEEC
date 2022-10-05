@@ -37,6 +37,17 @@ void Usage(char *nomeProg)
   exit(1);
 }
 
+void lerListaFim(t_lista *lp, FILE *fpOut)
+{
+  if (lp == NULL)
+  {
+    return;
+  }
+  lerListaFim(getProxElementoLista(lp), fpOut);
+  escreveUmaPalavra((t_palavra *)getItemLista(lp), fpOut);
+  return;
+}
+
 /******************************************************************************
  * main ()
  *
@@ -92,11 +103,18 @@ int main(int argc, char *argv[])
     exit(3);
   }
   /* write out words to output file */
-  aux = lp;
-  while (aux != NULL)
+  if (argc < 3 || strcmp(argv[2], "INICIO") == 0)
   {
-    escreveUmaPalavra((t_palavra *)getItemLista(aux), fpOut);
-    aux = getProxElementoLista(aux);
+    aux = lp;
+    while (aux != NULL)
+    {
+      escreveUmaPalavra((t_palavra *)getItemLista(aux), fpOut);
+      aux = getProxElementoLista(aux);
+    }
+  }
+  else if (strcmp(argv[2], "FIM") == 0)
+  {
+    lerListaFim(lp, fpOut);
   }
 
   numPalavrasDiferentes = numItensNaLista(lp);
@@ -107,8 +125,11 @@ int main(int argc, char *argv[])
   libertaLista(lp, libertaItem);
 
   /* -- CLOSE ALL OPEN FILES -- */
+  fclose(fpIn);
+  fclose(fpOut);
 
   /* -- FREE ANY OTHER MEMORY YOU HAVE ALLOCATED -- */
+  free(nomeFicheiroOut);
 
   exit(0);
 }

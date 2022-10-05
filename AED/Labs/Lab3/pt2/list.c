@@ -18,13 +18,12 @@
 
 #include "list.h"
 
-
 /* Linked list  */
-struct _t_lista {
-  Item            this;
+struct _t_lista
+{
+  Item this;
   struct _t_lista *prox;
 };
-
 
 /******************************************************************************
  * iniLista ()
@@ -36,11 +35,10 @@ struct _t_lista {
  * Description: initializes list
  *****************************************************************************/
 
-t_lista  *iniLista(void)
+t_lista *iniLista(void)
 {
   return NULL;
 }
-
 
 /******************************************************************************
  * criaNovoNoLista ()
@@ -53,22 +51,24 @@ t_lista  *iniLista(void)
  *              list
  *****************************************************************************/
 
-t_lista  *criaNovoNoLista (t_lista* lp, Item this, int *err)
+t_lista *criaNovoNoLista(t_lista *lp, Item this, int *err)
 {
   t_lista *novoNo;
 
-  novoNo = (t_lista*) malloc(sizeof(t_lista));
-  if(novoNo!=NULL) {
+  novoNo = (t_lista *)malloc(sizeof(t_lista));
+  if (novoNo != NULL)
+  {
     novoNo->this = this;
     novoNo->prox = lp;
     lp = novoNo;
     *err = 0;
-  } else {
+  }
+  else
+  {
     *err = 1;
   }
   return lp;
 }
-
 
 /******************************************************************************
  * getItemLista ()
@@ -80,11 +80,10 @@ t_lista  *criaNovoNoLista (t_lista* lp, Item this, int *err)
  * Description: returns an Item from the list
  *****************************************************************************/
 
-Item getItemLista (t_lista *p)
+Item getItemLista(t_lista *p)
 {
-  return p -> this;
+  return p->this;
 }
-
 
 /******************************************************************************
  * getProxElementoLista ()
@@ -97,11 +96,11 @@ Item getItemLista (t_lista *p)
  *
  *****************************************************************************/
 
-t_lista *getProxElementoLista(t_lista *p) {
+t_lista *getProxElementoLista(t_lista *p)
+{
 
-  return p -> prox;
+  return p->prox;
 }
-
 
 /******************************************************************************
  * numItensNaLista ()
@@ -114,12 +113,13 @@ t_lista *getProxElementoLista(t_lista *p) {
  *
  *****************************************************************************/
 
-int numItensNaLista(t_lista *lp) {
-  t_lista *aux;  /* auxiliar pointers to travel through the list */
+int numItensNaLista(t_lista *lp)
+{
+  t_lista *aux; /* auxiliar pointers to travel through the list */
   int conta = 0;
   aux = lp;
 
-  for(aux = lp; aux != NULL; aux = aux -> prox)
+  for (aux = lp; aux != NULL; aux = aux->prox)
     conta++;
 
   return conta;
@@ -136,10 +136,12 @@ int numItensNaLista(t_lista *lp) {
  *
  *****************************************************************************/
 
-void libertaLista(t_lista *lp, void freeItem(Item)) {
-  t_lista *aux, *newhead;  /* auxiliar pointers to travel through the list */
+void libertaLista(t_lista *lp, void freeItem(Item))
+{
+  t_lista *aux, *newhead; /* auxiliar pointers to travel through the list */
 
-  for(aux = lp; aux != NULL; aux = newhead) {
+  for (aux = lp; aux != NULL; aux = newhead)
+  {
     newhead = aux->prox;
     freeItem(aux->this);
     free(aux);
