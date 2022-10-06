@@ -48,6 +48,25 @@ void lerListaFim(t_lista *lp, FILE *fpOut, int total)
   return;
 }
 
+int EncontrarMaior(t_lista *lp)
+{
+  t_lista *aux;
+  int cont = 1, localizacao = 1, tamanho = 0;
+  aux = lp;
+  while (aux != NULL)
+  {
+    t_palavra *p = (t_palavra *)getItemLista(aux);
+    if (strlen(getPalavra(p)) > tamanho)
+    {
+      localizacao = cont;
+      tamanho = strlen(getPalavra(p));
+    }
+    aux = getProxElementoLista(aux);
+    cont++;
+  }
+  return localizacao;
+}
+
 /******************************************************************************
  * main ()
  *
@@ -120,6 +139,8 @@ int main(int argc, char *argv[])
   numPalavrasDiferentes = numItensNaLista(lp);
   printf("Number of words = %d, Number of different words = %d\n",
          numTotalPalavras, numPalavrasDiferentes);
+
+  printf("Maior palavra na posicção: %d\n", EncontrarMaior(lp));
 
   /* free allocated memory for list of words */
   libertaLista(lp, libertaItem);
