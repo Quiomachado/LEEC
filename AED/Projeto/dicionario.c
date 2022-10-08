@@ -130,23 +130,23 @@ node *Merge(node *a, node *b)
 /*divide a list em metade*/
 void Split(node *origem, node **front, node **back)
 {
-    node *salta, *lento;
-    lento = origem;
-    salta = origem->next;
+    node *fim, *metade;
+    metade = origem;
+    fim = origem->next;
 
-    while (salta != NULL)
+    while (fim != NULL)
     {
-        salta = salta->next;
-        if (salta != NULL)
+        fim = fim->next;
+        if (fim != NULL)
         {
-            lento = lento->next;
-            salta = salta->next;
+            metade = metade->next;
+            fim = fim->next;
         }
     }
 
     *front = origem;
-    *back = lento->next;
-    lento->next = NULL;
+    *back = metade->next;
+    metade->next = NULL;
 }
 
 /*Imprime o tamanho da linha*/
