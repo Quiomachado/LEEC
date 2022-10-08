@@ -10,6 +10,7 @@ struct node
     struct node *next;
 };
 
+/*Inicializa o nosso dicionario*/
 node **IniDict(node **dict)
 {
     int i;
@@ -34,6 +35,7 @@ node **IniDict(node **dict)
     return dict;
 }
 
+/*recebe o dicionario inicializado e o ficheiro de dicionario lê-o chamando a função InserirPalavra em cada palavra*/
 node **LerDicionario(FILE *fpDic, node **dict)
 {
     char novaPal[100];
@@ -44,6 +46,7 @@ node **LerDicionario(FILE *fpDic, node **dict)
     return dict;
 }
 
+/*Insere cada palavra no dicionario pela ordem que aparecem*/
 node **InserirPalavra(char *palavra, node **dict)
 {
     unsigned int tamanho = strlen(palavra);
@@ -54,13 +57,6 @@ node **InserirPalavra(char *palavra, node **dict)
     {
         fprintf(stderr, "Problema de alocação de memória.\n");
         exit(2);
-    }
-    while (tmp != NULL)
-    {
-        if (strcmp(palavra, tmp->word) < 0)
-            break;
-        aux = tmp;
-        tmp = tmp->next;
     }
     novo->word = (char *)malloc(sizeof(char) * (tamanho + 1));
     if (novo->word == NULL)
@@ -79,23 +75,119 @@ node **InserirPalavra(char *palavra, node **dict)
         novo->next = tmp;
         aux->next = novo;
     }
-    /* if (tmp->previous != NULL)
-    {
-        aux = tmp->previous;
-        aux->next = novo;
-        novo->previous = aux;
-        novo->next = tmp;
-        tmp->previous = novo;
-    }
-    else
-    {
-        novo->previous = NULL;
-        novo->next = tmp;
-        tmp->previous = novo;
-    } */
     return dict;
 }
 
+/*ordena a linha do dicionario por ordem alfabética através de MergeSort*/
+node **OrdenarLinha(int linha, node **dict)
+{
+    MergeSort(&dict[linha]);
+    return dict;
+}
+
+/*Algorítmo de MergeSort*/
+void MergeSort(node **dic)
+{
+    node *head = *dic;
+    node *a, *b;
+
+    if ((head == NULL) || (head->next == NULL))
+    {
+        return;
+    }
+
+    Split(head, &a, &b);
+
+    MergeSort(&a);
+    MergeSort(&b);
+
+    *dic = Merge(a, b);
+}
+
+/*Une as duas metades já organizadas alfabéticamente*/
+node *Merge(node *a, node *b)
+{
+    node *result = NULL;
+
+    if (a == NULL)
+        return (b);
+    else if (b == NULL)
+        return (a);
+
+    if (strcmp(a->word, b->word) < 0)
+    {
+        result = a;
+        result->next = Merge(a->next, b);
+    }
+    else
+    {
+        result = b;
+        result->next = Merge(a, b->next);
+    }
+    return result;
+}
+
+/*divide a list em metade*/
+void Split(node *origem, node **front, node **back)
+{
+    node *salta, *lento;
+    lento = origem;
+    salta = origem->next;
+
+    while (salta != NULL)
+    {
+        salta = salta->next;
+        if (salta != NULL)
+        {
+            lento = lento->next;
+            salta = salta->next;
+        }
+    }
+
+    *front = origem;
+    *back = lento->next;
+    lento->next = NULL;
+}
+
+/*Imprime o tamanho da linha*/
+void ImprimirTamanhoLinha(int linha, node **dict, char *palavra1, FILE *fpOut)
+{
+    int count = -1;
+    node *tmp;
+    tmp = dict[linha];
+    while (tmp != NULL)
+    {
+        count++;
+        tmp = tmp->next;
+    }
+    fprintf(fpOut, "%s %d\n", palavra1, count);
+    return;
+}
+
+/*Imprime a Posicao de cada palavra na sua linha*/
+void ImprimirPosicao(int linha, node **dict, char *palavra1, char *palavra2, FILE *fpOut)
+{
+    int pos1 = 0, pos2 = 0, count = -1;
+    node *tmp;
+    tmp = dict[linha];
+    while (tmp != NULL)
+    {
+        if (strcmp(palavra1, tmp->word) == 0)
+        {
+            pos1 = count;
+        }
+        if (strcmp(palavra2, tmp->word) == 0)
+        {
+            pos2 = count;
+        }
+        count++;
+        tmp = tmp->next;
+    }
+    fprintf(fpOut, "%s %d\n%s %d\n", palavra1, pos1, palavra2, pos2);
+    return;
+}
+
+/*liberta a memoria alocada para o dicionario*/
 void FreeDict(node **dict)
 {
     int i;
