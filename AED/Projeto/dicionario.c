@@ -19,7 +19,17 @@ void IniDict()
     for (i = 0; i < 100; i++)
     {
         dict[i] = (node *)malloc(sizeof(node));
+        if (dict[i] == NULL)
+        {
+            printf("Problema de alocação de memória.\n");
+            exit(2);
+        }
         dict[i]->word = (char *)malloc(sizeof(char));
+        if (dict[i]->word == NULL)
+        {
+            printf("Problema de alocação de memória.\n");
+            exit(2);
+        }
         dict[i]->word[0] = '\0';
     }
 }
@@ -29,6 +39,11 @@ void InserirPalavra(char *palavra)
     unsigned int tamanho = strlen(palavra);
     node *tmp = dict[tamanho];
     node *novo = (node *)malloc(sizeof(node));
+    if (novo == NULL)
+    {
+        printf("Problema de alocação de memória.\n");
+        exit(2);
+    }
     node *aux;
     while (tmp != NULL)
     {
@@ -37,6 +52,11 @@ void InserirPalavra(char *palavra)
         tmp = tmp->next;
     }
     novo->word = (char *)malloc(sizeof(char) * (tamanho + 1));
+    if (novo->word == NULL)
+    {
+        printf("Problema de alocação de memória.\n");
+        exit(2);
+    }
     strcpy(novo->word, palavra);
     aux = tmp->previous;
     aux->next = novo;
