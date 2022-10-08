@@ -3,8 +3,9 @@
 
 typedef struct node node;
 
-void IniDict();
-void InserirPalavra(char *palavra);
-void FreeDict();
+node **IniDict(node **dict);
+node **LerDicionario(FILE *dic, node **dict);
+node **InserirPalavra(char *palavra, node **dict);
+void FreeDict(node **dict);
 
 #endif
