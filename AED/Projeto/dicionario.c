@@ -76,7 +76,7 @@ node **InserirPalavra(char *palavra, node **dict)
 /*ordena a linha do dicionario por ordem alfabética através de MergeSort*/
 node **OrdenarLinha(int linha, node **dict)
 {
-    /* MergeSort(&dict[linha]); */
+    MergeSort(&dict[linha]);
     return dict;
 }
 
