@@ -7,6 +7,7 @@
 struct node
 {
     char *word;
+    int size;
     struct node *next;
 };
 
@@ -31,6 +32,7 @@ node **IniDict(node **dict)
         }
         dict[i]->word[0] = '\0';
         dict[i]->next = NULL;
+        dict[i]->size = 0;
     }
     return dict;
 }
@@ -51,7 +53,6 @@ node **InserirPalavra(char *palavra, node **dict)
 {
     unsigned int tamanho = strlen(palavra);
     node *tmp = dict[tamanho];
-    node *aux = tmp;
     node *novo = (node *)malloc(sizeof(node));
     if (novo == NULL)
     {
@@ -65,23 +66,17 @@ node **InserirPalavra(char *palavra, node **dict)
         exit(2);
     }
     strcpy(novo->word, palavra);
-    if (aux == tmp)
-    {
-        novo->next = tmp;
-        dict[tamanho] = novo;
-    }
-    else
-    {
-        novo->next = tmp;
-        aux->next = novo;
-    }
+    novo->next = tmp;
+    novo->size = dict[tamanho]->size + 1;
+    dict[tamanho]->size = 0;
+    dict[tamanho] = novo;
     return dict;
 }
 
 /*ordena a linha do dicionario por ordem alfabética através de MergeSort*/
 node **OrdenarLinha(int linha, node **dict)
 {
-    MergeSort(&dict[linha]);
+    /* MergeSort(&dict[linha]); */
     return dict;
 }
 
@@ -90,6 +85,8 @@ void MergeSort(node **dic)
 {
     node *head = *dic;
     node *a, *b;
+    double size;
+    size = head->size;
 
     if ((head == NULL) || (head->next == NULL))
     {
@@ -102,6 +99,7 @@ void MergeSort(node **dic)
     MergeSort(&b);
 
     *dic = Merge(a, b);
+    (*dic)->size = size;
 }
 
 /*Une as duas metades já organizadas alfabéticamente*/
@@ -152,22 +150,14 @@ void Split(node *origem, node **front, node **back)
 /*Imprime o tamanho da linha*/
 void ImprimirTamanhoLinha(int linha, node **dict, char *palavra1, FILE *fpOut)
 {
-    int count = -1;
-    node *tmp;
-    tmp = dict[linha];
-    while (tmp != NULL)
-    {
-        count++;
-        tmp = tmp->next;
-    }
-    fprintf(fpOut, "%s %d\n", palavra1, count);
+    fprintf(fpOut, "%s %d\n", palavra1, dict[linha]->size);
     return;
 }
 
 /*Imprime a Posicao de cada palavra na sua linha*/
 void ImprimirPosicao(int linha, node **dict, char *palavra1, char *palavra2, FILE *fpOut)
 {
-    int pos1 = 0, pos2 = 0, count = -1;
+    /* int pos1 = 0, pos2 = 0, count = 0;
     node *tmp;
     tmp = dict[linha];
     while (tmp != NULL)
@@ -183,7 +173,8 @@ void ImprimirPosicao(int linha, node **dict, char *palavra1, char *palavra2, FIL
         count++;
         tmp = tmp->next;
     }
-    fprintf(fpOut, "%s %d\n%s %d\n", palavra1, pos1, palavra2, pos2);
+
+    fprintf(fpOut, "%s %d\n%s %d\n", palavra1, pos1, palavra2, pos2); */
     return;
 }
 
