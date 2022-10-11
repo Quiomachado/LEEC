@@ -15,8 +15,8 @@ struct node
 node **IniDict(node **dict)
 {
     int i;
-    dict = (node **)malloc(sizeof(node *) * 100);
-    for (i = 0; i < 100; i++)
+    dict = (node **)malloc(sizeof(node *) * 30);
+    for (i = 0; i < 30; i++)
     {
         dict[i] = (node *)malloc(sizeof(node));
         if (dict[i] == NULL)
@@ -40,7 +40,7 @@ node **IniDict(node **dict)
 /*recebe o dicionario inicializado e o ficheiro de dicionario lê-o chamando a função InserirPalavra em cada palavra*/
 node **LerDicionario(FILE *fpDic, node **dict)
 {
-    char novaPal[100];
+    char novaPal[30];
     while (fscanf(fpDic, "%s", novaPal) == 1)
     {
         dict = InserirPalavra(novaPal, dict);
@@ -157,7 +157,7 @@ void ImprimirTamanhoLinha(int linha, node **dict, char *palavra1, FILE *fpOut)
 /*Imprime a Posicao de cada palavra na sua linha*/
 void ImprimirPosicao(int linha, node **dict, char *palavra1, char *palavra2, FILE *fpOut)
 {
-    /* int pos1 = 0, pos2 = 0, count = 0;
+    int pos1 = 0, pos2 = 0, count = 0;
     node *tmp;
     tmp = dict[linha];
     while (tmp != NULL)
@@ -174,7 +174,7 @@ void ImprimirPosicao(int linha, node **dict, char *palavra1, char *palavra2, FIL
         tmp = tmp->next;
     }
 
-    fprintf(fpOut, "%s %d\n%s %d\n", palavra1, pos1, palavra2, pos2); */
+    fprintf(fpOut, "%s %d\n%s %d\n", palavra1, pos1, palavra2, pos2);
     return;
 }
 
@@ -183,7 +183,7 @@ void FreeDict(node **dict)
 {
     int i;
     node *tmp;
-    for (i = 0; i < 100; i++)
+    for (i = 0; i < 30; i++)
     {
         while (dict[i] != NULL)
         {

@@ -16,7 +16,7 @@ int main(int argc, char **argv)
     char extOut[] = ".stats";
     node **dict = {NULL};
     FILE *fpDic, *fpPals, *fpOut;
-    char palavra1[100], palavra2[100];
+    char palavra1[30], palavra2[30];
     int num = 1;
     int count = 0;
 
