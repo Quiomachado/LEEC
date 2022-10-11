@@ -75,7 +75,8 @@ int main(int argc, char **argv)
             exit(69);
         dict = OrdenarLinha(strlen(palavra1), dict);
         if (num == 1)
-            ImprimirTamanhoLinha(strlen(palavra1), dict, palavra1, fpOut);
+            continue;
+        /* ImprimirTamanhoLinha(strlen(palavra1), dict, palavra1, fpOut); */
         else if (num == 2)
             ImprimirPosicao(strlen(palavra1), dict, palavra1, palavra2, fpOut);
         count++;
