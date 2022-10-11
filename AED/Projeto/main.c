@@ -18,6 +18,7 @@ int main(int argc, char **argv)
     FILE *fpDic, *fpPals, *fpOut;
     char palavra1[100], palavra2[100];
     int num = 1;
+    int count = 0;
 
     if (argc < 3)
     {
@@ -66,6 +67,10 @@ int main(int argc, char **argv)
     /*ler ficheiro Pals*/
     while (fscanf(fpPals, "%s %s %d", palavra1, palavra2, &num) == 3)
     {
+        if (count > 0)
+        {
+            fprintf(fpOut, "\n");
+        }
         if (strlen(palavra1) != strlen(palavra2))
             exit(69);
         dict = OrdenarLinha(strlen(palavra1), dict);
@@ -73,7 +78,7 @@ int main(int argc, char **argv)
             ImprimirTamanhoLinha(strlen(palavra1), dict, palavra1, fpOut);
         else if (num == 2)
             ImprimirPosicao(strlen(palavra1), dict, palavra1, palavra2, fpOut);
-        fprintf(fpOut, "\n");
+        count++;
     }
 
     /*libertação de memória alocada*/
