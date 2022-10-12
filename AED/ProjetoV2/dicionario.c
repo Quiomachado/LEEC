@@ -9,20 +9,12 @@ int *IniCounters(FILE *fpDic, int *maxSize)
     char novaPal[100];
     int size = 0;
     int *counters = (int *)calloc(1, sizeof(int));
-    if (counters == NULL)
-    {
-        fprintf(stderr, "ERRO de alocacao de memoria.\n");
-    }
 
     while (fscanf(fpDic, "%s", novaPal) == 1)
     {
         if (strlen(novaPal) > size)
         {
             counters = (int *)realloc(counters, sizeof(int) * (strlen(novaPal) + 1));
-            if (counters == NULL)
-            {
-                fprintf(stderr, "ERRO de alocacao de memoria.\n");
-            }
             for (size = size + 1; size <= strlen(novaPal); size++)
                 counters[size] = 0;
             size = strlen(novaPal);
@@ -41,24 +33,12 @@ char ***IniDic(FILE *fpDic, int *counters, int n)
     char ***dic = {NULL};
 
     dic = (char ***)malloc(sizeof(char **) * (n + 1));
-    if (dic == NULL)
-    {
-        fprintf(stderr, "ERRO de alocacao de memoria.\n");
-    }
     for (i = 1; i <= n; i++)
     {
         dic[i] = (char **)malloc(sizeof(char *) * (counters[i] + 1));
-        if (dic[i] == NULL)
-        {
-            fprintf(stderr, "ERRO de alocacao de memoria.\n");
-        }
         for (j = 0; j <= counters[i]; j++)
         {
             dic[i][j] = (char *)malloc(sizeof(char) * (i + 1));
-            if (dic[i][j] == NULL)
-            {
-                fprintf(stderr, "ERRO de alocacao de memoria.\n");
-            }
             dic[i][j][0] = '\0';
         }
     }
