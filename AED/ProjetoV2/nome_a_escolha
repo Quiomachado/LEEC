@@ -3,15 +3,14 @@ Flat profile:
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
  time   seconds   seconds    calls  ms/call  ms/call  name    
- 67.73      1.80     1.80  4320016     0.00     0.00  Search
- 15.05      2.20     0.40                             MyCompare
-  7.90      2.41     0.21                             main
-  3.01      2.49     0.08        1    80.07    80.07  IniDic
-  3.01      2.57     0.08        1    80.07    80.07  LerDicionario
-  2.26      2.63     0.06        1    60.06    60.06  FreeMem
-  0.75      2.65     0.02   719992     0.00     0.00  ImprimirTamanhoDaLinha
-  0.38      2.66     0.01        1    10.01    10.01  IniCounters
-  0.00      2.66     0.00       24     0.00     0.00  Sort
+ 57.99      0.37     0.37                             MyCompare
+ 13.50      0.45     0.09        1    85.08    85.08  LerDicionario
+ 12.71      0.53     0.08        1    80.07    80.07  FreeMem
+ 11.12      0.60     0.07        1    70.07    70.07  IniDic
+  4.77      0.63     0.03    26754     0.00     0.00  Search
+  0.00      0.63     0.00     3673     0.00     0.00  ImprimirTamanhoDaLinha
+  0.00      0.63     0.00       24     0.00     0.00  Sort
+  0.00      0.63     0.00        1     0.00     0.00  IniCounters
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -49,44 +48,44 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 2 byte(s) for 0.38% of 2.66 seconds
+granularity: each sample hit covers 2 byte(s) for 1.59% of 0.63 seconds
 
 index % time    self  children    called     name
                                                  <spontaneous>
-[1]     85.0    0.21    2.05                 main [1]
-                1.80    0.00 4320016/4320016     Search [2]
-                0.08    0.00       1/1           IniDic [4]
-                0.08    0.00       1/1           LerDicionario [5]
-                0.06    0.00       1/1           FreeMem [6]
-                0.02    0.00  719992/719992      ImprimirTamanhoDaLinha [7]
-                0.01    0.00       1/1           IniCounters [8]
-                0.00    0.00      24/24          Sort [9]
------------------------------------------------
-                             37772341             Search [2]
-                1.80    0.00 4320016/4320016     main [1]
-[2]     67.7    1.80    0.00 4320016+37772341 Search [2]
-                             37772341             Search [2]
+[1]     57.9    0.37    0.00                 MyCompare [1]
 -----------------------------------------------
                                                  <spontaneous>
-[3]     15.0    0.40    0.00                 MyCompare [3]
+[2]     42.1    0.00    0.27                 main [2]
+                0.09    0.00       1/1           LerDicionario [3]
+                0.08    0.00       1/1           FreeMem [4]
+                0.07    0.00       1/1           IniDic [5]
+                0.03    0.00   26754/26754       Search [6]
+                0.00    0.00    3673/3673        ImprimirTamanhoDaLinha [7]
+                0.00    0.00      24/24          Sort [8]
+                0.00    0.00       1/1           IniCounters [9]
 -----------------------------------------------
-                0.08    0.00       1/1           main [1]
-[4]      3.0    0.08    0.00       1         IniDic [4]
+                0.09    0.00       1/1           main [2]
+[3]     13.5    0.09    0.00       1         LerDicionario [3]
 -----------------------------------------------
-                0.08    0.00       1/1           main [1]
-[5]      3.0    0.08    0.00       1         LerDicionario [5]
+                0.08    0.00       1/1           main [2]
+[4]     12.7    0.08    0.00       1         FreeMem [4]
 -----------------------------------------------
-                0.06    0.00       1/1           main [1]
-[6]      2.3    0.06    0.00       1         FreeMem [6]
+                0.07    0.00       1/1           main [2]
+[5]     11.1    0.07    0.00       1         IniDic [5]
 -----------------------------------------------
-                0.02    0.00  719992/719992      main [1]
-[7]      0.8    0.02    0.00  719992         ImprimirTamanhoDaLinha [7]
+                              256221             Search [6]
+                0.03    0.00   26754/26754       main [2]
+[6]      4.8    0.03    0.00   26754+256221  Search [6]
+                              256221             Search [6]
 -----------------------------------------------
-                0.01    0.00       1/1           main [1]
-[8]      0.4    0.01    0.00       1         IniCounters [8]
+                0.00    0.00    3673/3673        main [2]
+[7]      0.0    0.00    0.00    3673         ImprimirTamanhoDaLinha [7]
 -----------------------------------------------
-                0.00    0.00      24/24          main [1]
-[9]      0.0    0.00    0.00      24         Sort [9]
+                0.00    0.00      24/24          main [2]
+[8]      0.0    0.00    0.00      24         Sort [8]
+-----------------------------------------------
+                0.00    0.00       1/1           main [2]
+[9]      0.0    0.00    0.00       1         IniCounters [9]
 -----------------------------------------------
 
  This table describes the call tree of the program, and was sorted by
@@ -179,6 +178,6 @@ notice and this notice are preserved.
 
 Index by function name
 
-   [6] FreeMem                 [4] IniDic                  [2] Search
-   [7] ImprimirTamanhoDaLinha  [5] LerDicionario           [9] Sort
-   [8] IniCounters             [3] MyCompare               [1] main
+   [4] FreeMem                 [5] IniDic                  [6] Search
+   [7] ImprimirTamanhoDaLinha  [3] LerDicionario           [8] Sort
+   [9] IniCounters             [1] MyCompare
