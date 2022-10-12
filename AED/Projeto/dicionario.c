@@ -11,12 +11,26 @@ struct node
     struct node *next;
 };
 
+int GetMax(FILE *fpDic)
+{
+    int max = 0;
+    char novaPal[100];
+    while (fscanf(fpDic, "%s", novaPal) == 1)
+    {
+        if (strlen(novaPal) > max)
+        {
+            max = strlen(novaPal);
+        }
+    }
+    return max + 1;
+}
+
 /*Inicializa o nosso dicionario*/
-node **IniDict(node **dict)
+node **IniDict(node **dict, int max)
 {
     int i;
-    dict = (node **)malloc(sizeof(node *) * 30);
-    for (i = 0; i < 30; i++)
+    dict = (node **)malloc(sizeof(node *) * max);
+    for (i = 0; i < max; i++)
     {
         dict[i] = (node *)malloc(sizeof(node));
         if (dict[i] == NULL)
@@ -38,9 +52,9 @@ node **IniDict(node **dict)
 }
 
 /*recebe o dicionario inicializado e o ficheiro de dicionario lê-o chamando a função InserirPalavra em cada palavra*/
-node **LerDicionario(FILE *fpDic, node **dict)
+node **LerDicionario(FILE *fpDic, node **dict, int max)
 {
-    char novaPal[30];
+    char novaPal[max];
     while (fscanf(fpDic, "%s", novaPal) == 1)
     {
         dict = InserirPalavra(novaPal, dict);
@@ -68,7 +82,6 @@ node **InserirPalavra(char *palavra, node **dict)
     strcpy(novo->word, palavra);
     novo->next = tmp;
     novo->size = dict[tamanho]->size + 1;
-    dict[tamanho]->size = 0;
     dict[tamanho] = novo;
     return dict;
 }
@@ -158,7 +171,7 @@ void ImprimirTamanhoLinha(int linha, node **dict, char *palavra1, FILE *fpOut)
 void ImprimirPosicao(int linha, node **dict, char *palavra1, char *palavra2, FILE *fpOut)
 {
     int pos1 = 0, pos2 = 0, count = 0;
-    node *tmp;
+    /* node *tmp;
     tmp = dict[linha];
     while (tmp != NULL)
     {
@@ -172,18 +185,79 @@ void ImprimirPosicao(int linha, node **dict, char *palavra1, char *palavra2, FIL
         }
         count++;
         tmp = tmp->next;
-    }
+    } */
+    pos1 = BinarySearch(dict[linha], palavra1);
+    pos2 = BinarySearch(dict[linha], palavra2);
 
     fprintf(fpOut, "%s %d\n%s %d\n", palavra1, pos1, palavra2, pos2);
     return;
 }
 
+node *Middle(node *start, node *last, int *location)
+{
+    if (start == NULL)
+        return NULL;
+
+    int temp = *location;
+
+    node *slow = start;
+    node *fast = start->next;
+
+    while (fast != last)
+    {
+        fast = fast->next;
+        if (fast != last)
+        {
+            slow = slow->next;
+            temp++;
+            fast = fast->next;
+        }
+    }
+
+    *location = temp;
+
+    return slow;
+}
+
+int BinarySearch(node *head, char *word)
+{
+    node *start = head;
+    node *last = NULL;
+    int location = 0;
+    int sLocation = 0;
+
+    do
+    {
+        node *mid = Middle(start, last, &location);
+
+        if (mid == NULL)
+            return -1;
+
+        if (strcmp(mid->word, word) == 0)
+            return location - 1;
+        else if (strcmp(mid->word, word) < 0)
+        {
+            start = mid->next;
+            location++;
+            sLocation = location;
+        }
+
+        else
+        {
+            last = mid;
+            location = sLocation;
+        }
+    } while (last == NULL || last != start);
+
+    return -1;
+}
+
 /*liberta a memoria alocada para o dicionario*/
-void FreeDict(node **dict)
+void FreeDict(node **dict, int max)
 {
     int i;
     node *tmp;
-    for (i = 0; i < 30; i++)
+    for (i = 0; i < max; i++)
     {
         while (dict[i] != NULL)
         {
