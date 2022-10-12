@@ -16,11 +16,12 @@ int main(int argc, char **argv)
     char extOut[] = ".stats";
     FILE *fpDic, *fpPals, *fpOut;
     char palavra1[30], palavra2[30];
-    int num = 1;
+    int num = 1, i;
     int count = 0;
     char ***dic = {NULL};
     int *counters = NULL;
     int maxSize, location1, location2;
+    int *isSorted;
     int exitProcessing = 0;
 
     if (argc < 3)
@@ -51,6 +52,11 @@ int main(int argc, char **argv)
     /*ler dicionario e criar estrutura*/
     counters = IniCounters(fpDic, &maxSize);
     dic = IniDic(fpDic, counters, maxSize);
+    isSorted = (int *)malloc(sizeof(int) * (maxSize + 1));
+    for (i = 0; i <= maxSize; i++)
+    {
+        isSorted[i] = 0;
+    }
     fclose(fpDic);
     fpDic = fopen(nomeDic, "r");
     if (fpDic == NULL)
@@ -92,7 +98,11 @@ int main(int argc, char **argv)
             fprintf(fpOut, "%s %s %d\n", palavra1, palavra2, num);
             continue;
         }
-        Sort(dic, counters, strlen(palavra1));
+        if (isSorted[strlen(palavra1)] == 0)
+        {
+            Sort(dic, counters, strlen(palavra1));
+            isSorted[strlen(palavra1)] = 1;
+        }
         if (Search(dic[strlen(palavra1)], palavra1, 0, counters[strlen(palavra1)]) == -1 || Search(dic[strlen(palavra2)], palavra2, 0, counters[strlen(palavra2)]) == -1 || (num != 1 && num != 2))
         {
             fprintf(fpOut, "%s %s %d\n", palavra1, palavra2, num);
@@ -115,6 +125,7 @@ int main(int argc, char **argv)
     free(aux);
     fclose(fpPals);
     fclose(fpDic);
+    free(isSorted);
     if (!exitProcessing)
         fclose(fpOut);
     return 0;

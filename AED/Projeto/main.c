@@ -17,7 +17,8 @@ int main(int argc, char **argv)
     node **dict = {NULL};
     FILE *fpDic, *fpPals, *fpOut;
     char palavra1[30], palavra2[30];
-    int num = 1;
+    int num = 1, i;
+    int isSorted[30];
     int count = 0;
 
     if (argc < 3)
@@ -47,6 +48,10 @@ int main(int argc, char **argv)
     /*ler dicionario e criar estrutura*/
     dict = IniDict(dict);
     dict = LerDicionario(fpDic, dict);
+    for (i = 0; i <= 30; i++)
+    {
+        isSorted[i] = 0;
+    }
 
     /*abrir ficheiro pals*/
     fpPals = fopen(nomeFicheiroIn, "r");
@@ -73,10 +78,13 @@ int main(int argc, char **argv)
         }
         if (strlen(palavra1) != strlen(palavra2))
             exit(69);
-        dict = OrdenarLinha(strlen(palavra1), dict);
+        if (isSorted[strlen(palavra1)] == 0)
+        {
+            dict = OrdenarLinha(strlen(palavra1), dict);
+            isSorted[strlen(palavra1)] = 1;
+        }
         if (num == 1)
-            continue;
-        /* ImprimirTamanhoLinha(strlen(palavra1), dict, palavra1, fpOut); */
+            ImprimirTamanhoLinha(strlen(palavra1), dict, palavra1, fpOut);
         else if (num == 2)
             ImprimirPosicao(strlen(palavra1), dict, palavra1, palavra2, fpOut);
         count++;
