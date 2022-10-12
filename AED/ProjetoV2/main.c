@@ -17,7 +17,6 @@ int main(int argc, char **argv)
     FILE *fpDic, *fpPals, *fpOut;
     char palavra1[30], palavra2[30];
     int num = 1, i;
-    int count = 0;
     char ***dic = {NULL};
     int *counters = NULL;
     int maxSize, location1, location2;
@@ -89,10 +88,6 @@ int main(int argc, char **argv)
     /*ler ficheiro Pals*/
     while (fscanf(fpPals, "%s %s %d", palavra1, palavra2, &num) == 3 && !exitProcessing)
     {
-        if (count > 0)
-        {
-            fprintf(fpOut, "\n");
-        }
         if (strlen(palavra1) != strlen(palavra2))
         {
             fprintf(fpOut, "%s %s %d\n", palavra1, palavra2, num);
@@ -116,7 +111,7 @@ int main(int argc, char **argv)
             location2 = Search(dic[strlen(palavra2)], palavra2, 0, counters[strlen(palavra2)]);
             fprintf(fpOut, "%s %d\n%s %d\n", palavra1, location1, palavra2, location2);
         }
-        count++;
+        fprintf(fpOut, "\n");
     }
 
     /*libertação de memória alocada*/
