@@ -61,6 +61,7 @@ int main(int argc, char **argv)
     if (fpDic == NULL)
     {
         FreeMem(dic, counters, maxSize);
+        free(isSorted);
         free(nomeFicheiroOut);
         free(aux);
         return 0;
@@ -72,6 +73,7 @@ int main(int argc, char **argv)
     if (fpPals == NULL)
     {
         FreeMem(dic, counters, maxSize);
+        free(isSorted);
         free(nomeFicheiroOut);
         free(aux);
         fclose(fpDic);
