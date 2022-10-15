@@ -1,0 +1,1 @@
+Na sua área de trabalho encontra-se um ficheiro de texto designado chave.txt contendo uma lista de palavras chave: a primeira linha do ficheiro contém o número de palavras chave, seguido do comprimento máximo de palavra; as restantes linhas correspondem às palavras chave, uma palavra por linha

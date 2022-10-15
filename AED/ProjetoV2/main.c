@@ -95,6 +95,11 @@ int main(int argc, char **argv)
             fprintf(fpOut, "%s %s %d\n", palavra1, palavra2, num);
             continue;
         }
+        if (strlen(palavra1) > maxSize)
+        {
+            fprintf(fpOut, "%s %s %d\n", palavra1, palavra2, num);
+            continue;
+        }
         if (isSorted[strlen(palavra1)] == 0)
         {
             Sort(dic, counters, strlen(palavra1));

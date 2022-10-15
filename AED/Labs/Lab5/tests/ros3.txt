@@ -1,0 +1,300 @@
+**CombiningMultipleModalitiestoDetectLearner'sInterest
+
+We are interested in combining multiple modalities to detect affect. 
+So far, most of the work in affective computing focuses on only a single channel
+ of information. This work extends earlier work by incorporating information from
+ multiple modalities. The problem is posed as a combination of classifiers in a 
+probabilistic framework that naturally explains the concepts of experts and critics.
+ Each channel of data has an expert associated that generates the beliefs about the 
+correct class using only that modality. Probabilistic models of error and the critics,
+ which predict the performance of the individual expert on the current input, are used 
+to combine the experts beliefs about the correct class. We demonstrate the multi-sensor
+ classification scheme on the task of detecting the affective state of interest in 
+children trying to solve a puzzle. The sensory information from the face, the postures
+ and the state of the puzzle are combined in a probabilistic framework and we demonstrate
+ that this method achieves a much better recognition accuracy than classification based 
+on individual channels. Further, the critic-driven averaging , which is a special case 
+of the proposed framework, outperforms all the other classifier combination methods 
+applied to this problem.
+
+
+Detection and Analysis of Driver Stress
+Driving is an ideal test bed for detecting stress in natural situations. Four types of 
+physiological signals (electrocardiogram, electromyogram, respiration, and skin 
+conductivity related to autonomic nervous system activation) were collected in a 
+natural driving situation under various driving conditions. The occurrence of natural 
+stressors was designed into the driving task and validated using driver self-report,
+ real-time, third-party observations, and independently coded video records of road 
+conditions and facial expression. Features reflecting heart-rate variability derived 
+from the adaptive Bayesian spectrum estimation, the rate of skin-conductivity orienting
+ responses, and the spectral characteristics of respiration were extracted from the data.
+ Initial pattern-recognition results show separation for the three types of driving states: 
+rest, city, and highway, and some discrimination within states for cases in which the state
+ precedes or follows a difficult turn-around or toll situation. These results yielded from 
+89-96 percent accuracy in recognizing stress level. We are currently investigating new, 
+advanced means of modeling the driver data.
+
+Gene Expression Data Analysis
+This research aims to classify gene expression data sets into different categories,
+ such as normal vs. cancer. The main challenge is that thousands of genes are measured
+ in the micro-array data, while only a small subset of genes are believed to be relevant
+ for disease classification. We have developed a novel approach called "predictive automatic
+ relevance determination;" this method brings Bayesian tools to bear on the problem of selecting 
+which genes are relevant, and extends our earlier work (with Tom Minka) on the development of
+ the "expectation propagation" algorithm. In our simulations, the new method outperforms several
+ state-of-the-art methods, including support-vector machines with feature selection and 
+relevance-vector machines.
+
+INNER-active Journal
+The purpose of the INNER-active Journal system is to provide a way for users to reconstruct
+ their emotions around events in their lives, and to see how recall of these events affects 
+their physiology. Expressive writing, a task in which the participant is asked to write about
+ extremely emotional events, is presented as a means towards story construction. Previous use 
+of expressive writing has shown profound benefits for both psychological and physical health.
+ In this system, measures of skin conductivity, instantaneous heart rate, and heart stress 
+entropy are used as indicators of activities occurring in the body. Users have the ability to 
+view these signals after taking part in an expressive writing task.
+
+Moral Sensors
+The computer's emerging capacity to communicate an individual's affect raises critical ethical
+ concerns. Additionally, designers of perceptual computer systems face moral decisions about
+ how the information gathered by computers with sensors can be used. As humans, we have ethical
+ considerations that come into play when we observe and report each other's behavior. Computers,
+ as they are currently designed, do not employ such ethical considerations. The subject of this 
+project will be evaluations that assess the ethical acceptability of perceptual computers. 
+The goal is to make a perceptual computer that behaves ethically, in the eyes of its users.
+ More specifically, this project will conduct a series of evaluations of systems that mediate 
+the communication of affect motivated by different ethical philosophies.
+
+Mouse-Behavior Analysis and Adaptive Relational Agents
+The goal of this project is to develop tools to sense and adapt to a user's affective state 
+based on his or her mouse behavior. We are developing algorithms to detect frustration level 
+for use in usability studies. We are also exploring how more permanent personality characteristics
+ and changes in mood are reflected in the user’s mouse behavior. Ultimately, we seek to build 
+adaptive relational agents that tailor their interaction with the user based on these sensed affective states.
+
+Pattern Recognition and Learning
+This project develops basic theories and tools enabling computers to make inferences from data,
+ such as determining a user's affective states. The approach is Bayesian: formulating probabilistic
+ models on the basis of domain knowledge and training data, and then performing inference according
+ to the rules of probability theory. Bayesian approaches have been implemented in the context of
+ curve fitting, mixture-density estimation, principal-components analysis (PCA), automatic 
+relevance determination, and spectral analysis. Current work has yielded a Bayesian spectral 
+analysis tool for nonstationary and non-evenly sampled signals, such as electrocardiogram 
+(EKG) signals, which outperforms other known methods. We have developed a new adaptive Monte 
+Carlo method, which can be applied to any generalized linear model and which greatly speeds up
+ the sampling process. Additionally, we have proposed a new principled way to combine multiple 
+classifiers in a Bayesian framework. Recently, we have developed Bayesian conditional random fields 
+for joint classification of structured data, such as sequences, images, and webs.
+
+Personal Heart-Stress Monitor
+The saying, "if you can't measure it, you can't manage it" may be appropriate for stress.
+ Many people are unaware of their stress level, and of what is good or bad for it. The issue
+ is complicated by the fact that while too much stress is unhealthy, a certain amount of 
+stress can be healthy as it motivates and energizes. The "right" level varies with temperment,
+ task, and other factors, many of which are unknown. There seems to be no data analyzing how
+ stress levels vary for the average healthy individual, over day-to-day activities. We would 
+like to build a device that helps to gather and present data for improving an individual's 
+understanding of both healthy and unhealthy stress in his or her life. The device itself 
+should be comfortable and should not increase the user's stress. (It is noteworthy that stress
+ monitoring is also important in human-computer interaction for testing new designs.) Currently,
+ we are building a new, wireless, stress-mornitoring system by integrating Fitsense's heart-rate
+ sensors and Motorola's iDen cell phone with our heart rate variability estimation algorithm.
+
+Posture Recognition Chair
+We have developed a system that recognizes posture patterns in real time, in an unobtrusive way,
+ from a set of pressure sensors on a chair. This system detects affective states of children in 
+learning situations, such as when the child is interested, or is starting to take frequent breaks
+ and looking bored. Leaning forward for long periods of time toward a computer screen and taking
+ only occasional breaks tends to be a sign of attention (on-task), while slumping in the chair or
+ fidgeting suggests boredom (off-task). The system uses pattern recognition techniques, while 
+watching natural behaviors, to "learn" what behaviors tend to accompany which states. The system
+ thus detects the surface-level behaviors (postures) and their mappings during a learning situation
+ in an unobtrusive manner so that they don't interfere with the natural learning process. Through 
+the chair, we can reliably detect nine static postures, and four temporal patterns associated with 
+affective states.
+
+Robotic Computer
+A robotic computer that moves its monitor "head" and "neck," but that has no explicit face, is
+ being designed to interact with users in a natural way for applications such as learning, 
+rapport-building, interactive teaching, and posture improvement. In all these applications, 
+the robot will need to move in subtle ways that express its state and promote appropriate movements 
+in the user, but that don't distract or annoy. Toward this goal, we are giving the system the 
+ability to recognize subtle expressions as well as the ability to have them.
+
+Sharing Emotions Through Active Expression
+The purpose of the Sharing Emotions Through Active Expression (SETAE) system is to help address
+ emotional needs and develop emotional understanding. SETAE allows users to reflect actively 
+upon the emotions related to their situations through the construction of pictorial narratives.
+ Users will be able to gain new knowledge and understanding about themselves and others through
+ the exploration of authentic and personal experiences. SETAE employs new, common-sense reasoning
+ technology, enabling it to infer affective content from the users' stories. SETAE extracts a 
+similar story from the database and displays it to the users, allowing them to hear real stories,
+ share their feelings and experiences, and reflect upon these in relation to their personal situations.
+ We expect that such reflection can facilitate development of new perspectives on dealing with life’s events.
+
+Wearable Relational Devices for Stress Monitoring
+This research aims to build a system for data collection, annotation, and feedback that is part 
+of a longer-term research plan to gather data to understand more about stress and physiological 
+signals involved in its expression. The first phase consists of building a wearable apparatus for 
+gathering data. The challenge here is getting as many accurate labels (annotations) from the user
+ as possible, while he or she goes about natural daily activities. The problem is that getting such 
+annotations is disruptive, and is itself likely to increase stress, which can interfere with the 
+signals being measured, and make users less likely to collect a lot of data. The hypothesis is that
+ some ways of interrupting would be less stressful than others. Thus, the second phase focuses on 
+implementing different means of interrupting the user for annotations. These ways will be informed 
+by prior results on both relational and attentional strategies. Overall, this research should 
+contribute not only a new system for gathering annotations useful for studies of stress, but also 
+to provide new insights into the value of using relational/attentional strategies in a task that 
+involves a large number of interruptions.
+
+**CombiningMultipleModalitiestoDetectLearner'sInterest
+
+We are interested in combining multiple modalities to detect affect. 
+So far, most of the work in affective computing focuses on only a single channel
+ of information. This work extends earlier work by incorporating information from
+ multiple modalities. The problem is posed as a combination of classifiers in a 
+probabilistic framework that naturally explains the concepts of experts and critics.
+ Each channel of data has an expert associated that generates the beliefs about the 
+correct class using only that modality. Probabilistic models of error and the critics,
+ which predict the performance of the individual expert on the current input, are used 
+to combine the experts beliefs about the correct class. We demonstrate the multi-sensor
+ classification scheme on the task of detecting the affective state of interest in 
+children trying to solve a puzzle. The sensory information from the face, the postures
+ and the state of the puzzle are combined in a probabilistic framework and we demonstrate
+ that this method achieves a much better recognition accuracy than classification based 
+on individual channels. Further, the critic-driven averaging , which is a special case 
+of the proposed framework, outperforms all the other classifier combination methods 
+applied to this problem.
+
+
+Detection and Analysis of Driver Stress
+Driving is an ideal test bed for detecting stress in natural situations. Four types of 
+physiological signals (electrocardiogram, electromyogram, respiration, and skin 
+conductivity related to autonomic nervous system activation) were collected in a 
+natural driving situation under various driving conditions. The occurrence of natural 
+stressors was designed into the driving task and validated using driver self-report,
+ real-time, third-party observations, and independently coded video records of road 
+conditions and facial expression. Features reflecting heart-rate variability derived 
+from the adaptive Bayesian spectrum estimation, the rate of skin-conductivity orienting
+ responses, and the spectral characteristics of respiration were extracted from the data.
+ Initial pattern-recognition results show separation for the three types of driving states: 
+rest, city, and highway, and some discrimination within states for cases in which the state
+ precedes or follows a difficult turn-around or toll situation. These results yielded from 
+89-96 percent accuracy in recognizing stress level. We are currently investigating new, 
+advanced means of modeling the driver data.
+
+Gene Expression Data Analysis
+This research aims to classify gene expression data sets into different categories,
+ such as normal vs. cancer. The main challenge is that thousands of genes are measured
+ in the micro-array data, while only a small subset of genes are believed to be relevant
+ for disease classification. We have developed a novel approach called "predictive automatic
+ relevance determination;" this method brings Bayesian tools to bear on the problem of selecting 
+which genes are relevant, and extends our earlier work (with Tom Minka) on the development of
+ the "expectation propagation" algorithm. In our simulations, the new method outperforms several
+ state-of-the-art methods, including support-vector machines with feature selection and 
+relevance-vector machines.
+
+INNER-active Journal
+The purpose of the INNER-active Journal system is to provide a way for users to reconstruct
+ their emotions around events in their lives, and to see how recall of these events affects 
+their physiology. Expressive writing, a task in which the participant is asked to write about
+ extremely emotional events, is presented as a means towards story construction. Previous use 
+of expressive writing has shown profound benefits for both psychological and physical health.
+ In this system, measures of skin conductivity, instantaneous heart rate, and heart stress 
+entropy are used as indicators of activities occurring in the body. Users have the ability to 
+view these signals after taking part in an expressive writing task.
+
+Moral Sensors
+The computer's emerging capacity to communicate an individual's affect raises critical ethical
+ concerns. Additionally, designers of perceptual computer systems face moral decisions about
+ how the information gathered by computers with sensors can be used. As humans, we have ethical
+ considerations that come into play when we observe and report each other's behavior. Computers,
+ as they are currently designed, do not employ such ethical considerations. The subject of this 
+project will be evaluations that assess the ethical acceptability of perceptual computers. 
+The goal is to make a perceptual computer that behaves ethically, in the eyes of its users.
+ More specifically, this project will conduct a series of evaluations of systems that mediate 
+the communication of affect motivated by different ethical philosophies.
+
+Mouse-Behavior Analysis and Adaptive Relational Agents
+The goal of this project is to develop tools to sense and adapt to a user's affective state 
+based on his or her mouse behavior. We are developing algorithms to detect frustration level 
+for use in usability studies. We are also exploring how more permanent personality characteristics
+ and changes in mood are reflected in the user’s mouse behavior. Ultimately, we seek to build 
+adaptive relational agents that tailor their interaction with the user based on these sensed affective states.
+
+Pattern Recognition and Learning
+This project develops basic theories and tools enabling computers to make inferences from data,
+ such as determining a user's affective states. The approach is Bayesian: formulating probabilistic
+ models on the basis of domain knowledge and training data, and then performing inference according
+ to the rules of probability theory. Bayesian approaches have been implemented in the context of
+ curve fitting, mixture-density estimation, principal-components analysis (PCA), automatic 
+relevance determination, and spectral analysis. Current work has yielded a Bayesian spectral 
+analysis tool for nonstationary and non-evenly sampled signals, such as electrocardiogram 
+(EKG) signals, which outperforms other known methods. We have developed a new adaptive Monte 
+Carlo method, which can be applied to any generalized linear model and which greatly speeds up
+ the sampling process. Additionally, we have proposed a new principled way to combine multiple 
+classifiers in a Bayesian framework. Recently, we have developed Bayesian conditional random fields 
+for joint classification of structured data, such as sequences, images, and webs.
+
+Personal Heart-Stress Monitor
+The saying, "if you can't measure it, you can't manage it" may be appropriate for stress.
+ Many people are unaware of their stress level, and of what is good or bad for it. The issue
+ is complicated by the fact that while too much stress is unhealthy, a certain amount of 
+stress can be healthy as it motivates and energizes. The "right" level varies with temperment,
+ task, and other factors, many of which are unknown. There seems to be no data analyzing how
+ stress levels vary for the average healthy individual, over day-to-day activities. We would 
+like to build a device that helps to gather and present data for improving an individual's 
+understanding of both healthy and unhealthy stress in his or her life. The device itself 
+should be comfortable and should not increase the user's stress. (It is noteworthy that stress
+ monitoring is also important in human-computer interaction for testing new designs.) Currently,
+ we are building a new, wireless, stress-mornitoring system by integrating Fitsense's heart-rate
+ sensors and Motorola's iDen cell phone with our heart rate variability estimation algorithm.
+
+Posture Recognition Chair
+We have developed a system that recognizes posture patterns in real time, in an unobtrusive way,
+ from a set of pressure sensors on a chair. This system detects affective states of children in 
+learning situations, such as when the child is interested, or is starting to take frequent breaks
+ and looking bored. Leaning forward for long periods of time toward a computer screen and taking
+ only occasional breaks tends to be a sign of attention (on-task), while slumping in the chair or
+ fidgeting suggests boredom (off-task). The system uses pattern recognition techniques, while 
+watching natural behaviors, to "learn" what behaviors tend to accompany which states. The system
+ thus detects the surface-level behaviors (postures) and their mappings during a learning situation
+ in an unobtrusive manner so that they don't interfere with the natural learning process. Through 
+the chair, we can reliably detect nine static postures, and four temporal patterns associated with 
+affective states.
+
+Robotic Computer
+A robotic computer that moves its monitor "head" and "neck," but that has no explicit face, is
+ being designed to interact with users in a natural way for applications such as learning, 
+rapport-building, interactive teaching, and posture improvement. In all these applications, 
+the robot will need to move in subtle ways that express its state and promote appropriate movements 
+in the user, but that don't distract or annoy. Toward this goal, we are giving the system the 
+ability to recognize subtle expressions as well as the ability to have them.
+
+Sharing Emotions Through Active Expression
+The purpose of the Sharing Emotions Through Active Expression (SETAE) system is to help address
+ emotional needs and develop emotional understanding. SETAE allows users to reflect actively 
+upon the emotions related to their situations through the construction of pictorial narratives.
+ Users will be able to gain new knowledge and understanding about themselves and others through
+ the exploration of authentic and personal experiences. SETAE employs new, common-sense reasoning
+ technology, enabling it to infer affective content from the users' stories. SETAE extracts a 
+similar story from the database and displays it to the users, allowing them to hear real stories,
+ share their feelings and experiences, and reflect upon these in relation to their personal situations.
+ We expect that such reflection can facilitate development of new perspectives on dealing with life’s events.
+
+Wearable Relational Devices for Stress Monitoring
+This research aims to build a system for data collection, annotation, and feedback that is part 
+of a longer-term research plan to gather data to understand more about stress and physiological 
+signals involved in its expression. The first phase consists of building a wearable apparatus for 
+gathering data. The challenge here is getting as many accurate labels (annotations) from the user
+ as possible, while he or she goes about natural daily activities. The problem is that getting such 
+annotations is disruptive, and is itself likely to increase stress, which can interfere with the 
+signals being measured, and make users less likely to collect a lot of data. The hypothesis is that
+ some ways of interrupting would be less stressful than others. Thus, the second phase focuses on 
+implementing different means of interrupting the user for annotations. These ways will be informed 
+by prior results on both relational and attentional strategies. Overall, this research should 
+contribute not only a new system for gathering annotations useful for studies of stress, but also 
+to provide new insights into the value of using relational/attentional strategies in a task that 
+involves a large number of interruptions.
+

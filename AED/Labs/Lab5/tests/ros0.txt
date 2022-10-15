@@ -1,0 +1,39 @@
+Biography: 
+Rosalind W. Picard is founder and director of the Affective Computing Research Group at the 
+Massachusetts Institute of Technology (MIT) Media Laboratory and is co-director of the Things 
+That Think Consortium , the largest industrial sponsorship organization at the lab. She holds 
+a Bachelors in Electrical Engineering with highest honors from the Georgia Institute of Technology,
+ and Masters and Doctorate degrees, both in Electrical Engineering and Computer Science, from 
+the Massachusetts Institute of Technology (MIT). She has been a member of the faculty at the MIT
+ Media Laboratory since 1991, with tenure since 1998. Prior to completing her doctorate at MIT,
+ she was a Member of the Technical Staff at AT&T Bell Laboratories where she designed VLSI chips 
+for digital signal processing and developed new methods of image compression and analysis. 
+
+The author of over a hundred peer-reviewed scientific articles in multidimensional signal modeling,
+ computer vision, pattern recognition, machine learning, and human-computer interaction, 
+Picard is known internationally for pioneering research in affective computing and, prior to that,
+for pioneering research in content-based image and video retrieval. She is recipient (with Tom Minka) 
+of a best paper prize for work on machine learning with multiple models (1998) and is recipient 
+(with Barry Kort and Rob Reilly) of a "best theory paper" prize for their work on affect in human 
+learning (2001). Her award-winning book, Affective Computing, (MIT Press, 1997) lays the groundwork
+ for giving machines the skills of emotional intelligence. She and her students have designed and
+ developed a variety of new sensors, algorithms, and systems for sensing, recognizing, and responding 
+respectfully to human affective information, with applications in human and machine learning, health,
+ and human-computer interaction. 
+
+Dr. Picard has served on many science and engineering program committees, editorial boards, and review
+ panels, and is presently serving on the Editorial Board of User Modeling and User-Adapted Interaction:
+ The Journal of Personalization Research, as well as on the advisory boards for the National Science
+ Foundation's division of Computers in Science and Engineering (CISE) and for the Georgia Tech College 
+of Computing. 
+
+Picard works closely with industry, and has consulted with companies such as Apple, AT&T, BT, HP,
+ i.Robot, and Motorola. She has delivered keynote presentations or invited plenary talks at over
+ fifty science or technology events, and distinguished lectures and colloquia at dozens of universities 
+and research labs internationally. Her group's work has been featured in national and international forums
+ for the general public, such as The New York Times, The London Independent, Scientific American Frontiers, 
+NPR's Tech Nation and The Connection, ABC's Nightline and World News Tonight with Peter Jennings, Time,
+ Vogue, Voice of America Radio, New Scientist, and BBC's "The Works" and "The Big Byte." Picard lives in 
+Newton, Massachusetts with her husband and three energetic sons. 
+
+

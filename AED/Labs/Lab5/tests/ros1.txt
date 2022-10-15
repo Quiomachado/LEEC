@@ -1,0 +1,25 @@
+Affective Computing is computing that relates to, arises from, or deliberately influences emotions
+
+Our research is aimed at giving machines skills of emotional intelligence, 
+including the ability to recognize, model, and understand human emotion,
+ to appropriately communicate emotion, and to respond to it effectively. 
+We are also interested in developing technologies to assist in the development 
+of human emotional intelligence. 
+
+Our approach, grounded in findings from cognitive science, psychology, 
+neuroscience, medicine, psychophysiology, sociology, and ethics, is to 
+develop engineering tools for measuring, modeling, reasoning about, and 
+responding to affect. Thus, we develop new sensors, algorithms, systems,
+ and theories that enable new forms of machine intelligence as well as
+ new forms of human understanding. 
+
+Many of the challenges we face cannot be solved with existing engineering
+ tools; consequently, we also work at the frontiers of research in machine
+ learning, pattern recognition, signal processing, computer vision, 
+speech analysis, sensor design, human-centered and value-centered design, and more. 
+
+Applications include the development of intelligent human-computer systems
+ that learn from natural interaction, wearable computers for health and fitness,
+ sensors for measuring and reducing frustration in new products, tools for 
+human expression, and the development of new computational theories of affect and learning. 
+
