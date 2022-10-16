@@ -67,8 +67,11 @@ void sort(Item arr[], int l, int r, int (*less)(Item, Item)) /* BUBLE SORT */
             arr[i] = arr[i + 1];
             arr[i + 1] = tmp;
 
+            OP_CNT += 4;
+
             swapped = 1;
          }
+         OP_CNT += 2;
       }
       j++;
    }
@@ -126,23 +129,23 @@ int main(int argc, char **argv)
    {
 
       if (sentido == ascending)
-         sort((Item)&wordtab, 0, numWords, LessAlphabetic);
+         sort((Item)wordtab, 0, numWords - 1, LessAlphabetic);
       else if (sentido == descending)
-         sort((Item)&wordtab, 0, numWords, MoreAlphabetic);
+         sort((Item)wordtab, 0, numWords - 1, MoreAlphabetic);
    }
    else if (criterio == occurrences)
    {
       if (sentido == ascending)
-         sort((Item)&wordtab, 0, numWords, LessNumUses);
+         sort((Item)wordtab, 0, numWords - 1, LessNumUses);
       else if (sentido == descending)
-         sort((Item)&wordtab, 0, numWords, MoreNumUses);
+         sort((Item)wordtab, 0, numWords - 1, MoreNumUses);
    }
    else if (criterio == length)
    {
       if (sentido == ascending)
-         sort((Item)&wordtab, 0, numWords, LessLength);
+         sort((Item)wordtab, 0, numWords - 1, LessLength);
       else if (sentido == descending)
-         sort((Item)&wordtab, 0, numWords, MoreLength);
+         sort((Item)wordtab, 0, numWords - 1, MoreLength);
    }
 
    /* ---------------------------------------- */
