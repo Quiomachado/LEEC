@@ -160,6 +160,7 @@ int main(int argc, char *argv[])
   int nv, ne; /* V and E counts */
   int n1, n2, wt;
   int sn;
+  int degree;
   char extIn[] = ".edge";
   char extOut[] = ".ladj";
   char *nomeFicheiroIn, *nomeFicheiroOut;
@@ -255,6 +256,20 @@ int main(int argc, char *argv[])
   /* Compute de degree of every nome and the average edge density */
 
   /* -----------  COMPLETE --------------- */
+  fprintf(stdout, "Average density: %f\n", (float)ne * 2 / nv);
+  for (i = 0; i < nv; i++)
+  {
+    lp = listv[i];
+    degree = 0;
+    while (lp != NULL)
+    {
+      pint1 = (twint *)getItemLinkedList(lp);
+      lp = getNextNodeLinkedList(lp);
+
+      degree++;
+    }
+    fprintf(stdout, "node %d degree: %d\n", i, degree);
+  }
 
   /* open output file */
   fpOut = fopen(nomeFicheiroOut, "w");
