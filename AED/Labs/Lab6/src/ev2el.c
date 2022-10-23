@@ -114,18 +114,26 @@ void doBFS(LinkedList **listv, int sn, int nv)
   for (; numInqueue < nv;)
   {
     /* get first element in queue, tells us node being visited */
-    Ns = (NodeS *)malloc(sizeof(NodeS));
+    Ns = (NodeS *)getfirstQueue(BFSqueue);
     if (Ns == ((NodeS *)NULL))
-      break;
+      break; /*queue empty*/
     /* process that node's adjacency list */
-    lp = listv[numInqueue];
+    lp = listv[Ns->node];
     while (lp != NULL)
     {
       /* for every element in the adjacency list */
       /* check if it has been queued; if not, put it in the queue */
       /* and print it to stdout */
 
+      /* -----------  COMPLETE --------------- */
       pint = (twint *)getItemLinkedList(lp);
+      if (inqueue[pint->n2] == 0)
+      {
+        inqueue[pint->n2] = 1;
+        numInqueue++;
+        insertQueue(BFSqueue, (Item)&pint->n2);
+        fprintf(stdout, "%d ", pint->n2);
+      }
 
       lp = getNextNodeLinkedList(lp);
     }
@@ -152,6 +160,7 @@ int main(int argc, char *argv[])
   int nv, ne; /* V and E counts */
   int n1, n2, wt;
   int sn;
+  int degree;
   char extIn[] = ".edge";
   char extOut[] = ".ladj";
   char *nomeFicheiroIn, *nomeFicheiroOut;
@@ -240,13 +249,27 @@ int main(int argc, char *argv[])
     }
 
     /*********** INSERT EDGE STRUCTURES IN EACH APPROPRIATE LIST ***********/
-    listv[n1] = insertUnsortedLinkedList(getNextNodeLinkedList(listv[n1]), (Item)pint1);
-    listv[n2] = insertUnsortedLinkedList(getNextNodeLinkedList(listv[n2]), (Item)pint2);
+    listv[n1] = insertUnsortedLinkedList(listv[n1], (Item)pint1);
+    listv[n2] = insertUnsortedLinkedList(listv[n2], (Item)pint2);
   }
 
   /* Compute de degree of every nome and the average edge density */
 
   /* -----------  COMPLETE --------------- */
+  fprintf(stdout, "Average density: %f\n", (float)ne * 2 / nv);
+  for (i = 0; i < nv; i++)
+  {
+    lp = listv[i];
+    degree = 0;
+    while (lp != NULL)
+    {
+      pint1 = (twint *)getItemLinkedList(lp);
+      lp = getNextNodeLinkedList(lp);
+
+      degree++;
+    }
+    fprintf(stdout, "node %d degree: %d\n", i, degree);
+  }
 
   /* open output file */
   fpOut = fopen(nomeFicheiroOut, "w");
@@ -266,9 +289,9 @@ int main(int argc, char *argv[])
       pint1 = (twint *)getItemLinkedList(lp);
       lp = getNextNodeLinkedList(lp);
       /* print the node and the respective weight */
-      /* -----------  COMPLETE --------------- */
+      fprintf(fpOut, "%d:%d ", pint1->n2, pint1->wt);
     }
-    fprintf(fpOut, " -1\n");
+    fprintf(fpOut, "-1\n");
   }
 
   /* -- close all open files -- */
