@@ -20,13 +20,12 @@
  *
  *****************************************************************************/
 
-
 #include "defs.h"
 
 typedef struct _queue Queue;
 
-Queue *newQueue(int size);                 /* creates empty queue of size elements */
-Item getfirstQueue(Queue* queue);          /* get first element of the queue */
-int insertQueue(Queue* queue, Item item);  /* insertion at the end of queue */
-int isemptyQueue(Queue*queue);             /* check if queue is empty */
-void freeQueue(Queue *queue, void (* freeItemFnt)(Item));
+Queue *newQueue(int size);                /* creates empty queue of size elements */
+Item getfirstQueue(Queue *queue);         /* get first element of the queue */
+int insertQueue(Queue *queue, Item item); /* insertion at the end of queue */
+int isemptyQueue(Queue *queue);           /* check if queue is empty */
+void freeQueue(Queue *queue, void (*freeItemFnt)(Item));

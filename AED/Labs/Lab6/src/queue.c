@@ -27,21 +27,19 @@
 
 #include "queue.h"
 
-
-typedef struct _queueElem {
+typedef struct _queueElem
+{
   Item elem;
 } QueueElem;
 
-
-struct _queue {
+struct _queue
+{
   int size;
   int head;
   int tail;
   int elem;
   QueueElem *qt;
 };
-
-
 
 /******************************************************************************
  * newQueue()
@@ -59,23 +57,24 @@ Queue *newQueue(int size)
 {
   Queue *queue;
 
-  queue = (Queue*) malloc(sizeof(Queue));
-  if (queue == ((Queue*) NULL)) {
-    return((Queue*)NULL);
+  queue = (Queue *)malloc(sizeof(Queue));
+  if (queue == ((Queue *)NULL))
+  {
+    return ((Queue *)NULL);
   }
 
-  queue->qt = (QueueElem*) malloc(size * sizeof(QueueElem));
-  if (queue->qt == ((QueueElem*) NULL)) {
-    return((Queue*)NULL);
+  queue->qt = (QueueElem *)malloc(size * sizeof(QueueElem));
+  if (queue->qt == ((QueueElem *)NULL))
+  {
+    return ((Queue *)NULL);
   }
   queue->head = 0;
   queue->tail = -1;
   queue->size = size;
   queue->elem = 0;
 
-  return(queue);
+  return (queue);
 }
-
 
 /******************************************************************************
  * getfirstQueue()
@@ -94,8 +93,9 @@ Item getfirstQueue(Queue *queue)
   Item first;
 
   /* are there any elements in queue? */
-  if (queue->elem == 0) {
-    return((Item)NULL);
+  if (queue->elem == 0)
+  {
+    return ((Item)NULL);
   }
   /* queue not empty */
   first = queue->qt[queue->head].elem;
@@ -103,14 +103,14 @@ Item getfirstQueue(Queue *queue)
   queue->elem--;
 
   /* for simplicity, not really necessary */
-  if (queue->elem == 0) {
+  if (queue->elem == 0)
+  {
     queue->head = 0;
     queue->tail = -1;
   }
 
   return (first);
 }
-
 
 /******************************************************************************
  * insertQueue()
@@ -131,16 +131,15 @@ int insertQueue(Queue *queue, Item elem)
 
   /* check if queue is full */
   if (queue->elem == queue->size)
-    return(-1);
+    return (-1);
 
   /* we have space, insert */
   queue->qt[location].elem = elem;
   queue->tail = location;
   queue->elem++;
 
-  return(0);
+  return (0);
 }
-
 
 /******************************************************************************
  * isemptyQueue()
@@ -156,11 +155,10 @@ int insertQueue(Queue *queue, Item elem)
 int isemptyQueue(Queue *queue)
 {
   if (queue->elem == queue->size)
-    return(1);
+    return (1);
   else
     return (0);
 }
-
 
 /******************************************************************************
  * freeQueue()
@@ -173,12 +171,13 @@ int isemptyQueue(Queue *queue)
  *
  *****************************************************************************/
 
-void freeQueue(Queue *queue, void (* freeItemFnt)(Item))
+void freeQueue(Queue *queue, void (*freeItemFnt)(Item))
 {
   int i, loc;
 
-  for (loc = queue->head, i = 0; i < queue->elem; i++) {
-    loc = (loc+1) & queue->size;
+  for (loc = queue->head, i = 0; i < queue->elem; i++)
+  {
+    loc = (loc + 1) & queue->size;
     freeItemFnt((Item)queue->qt[loc].elem);
   }
   free(queue->qt);
@@ -186,5 +185,3 @@ void freeQueue(Queue *queue, void (* freeItemFnt)(Item))
 
   return;
 }
-
-

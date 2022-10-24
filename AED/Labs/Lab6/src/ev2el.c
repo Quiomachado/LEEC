@@ -83,6 +83,18 @@ void memoryError(char *msg)
  *              reachable through listv and prints nodes as it finds them
  *****************************************************************************/
 
+void freeTwint(Item pint)
+{
+  twint *temp;
+  temp = (twint *)pint;
+  free(temp);
+}
+
+void freeNodeS(Item pint)
+{
+  return;
+}
+
 void doBFS(LinkedList **listv, int sn, int nv)
 {
   int numInqueue = 0, ni;
@@ -131,7 +143,7 @@ void doBFS(LinkedList **listv, int sn, int nv)
       {
         inqueue[pint->n2] = 1;
         numInqueue++;
-        insertQueue(BFSqueue, (Item)&pint->n2);
+        insertQueue(BFSqueue, (Item)&fakeNodes[pint->n2]);
         fprintf(stdout, "%d ", pint->n2);
       }
 
@@ -139,6 +151,10 @@ void doBFS(LinkedList **listv, int sn, int nv)
     }
   }
   fprintf(stdout, "\n");
+
+  freeQueue(BFSqueue, freeNodeS);
+  free(inqueue);
+  free(fakeNodes);
 
   return;
 }
@@ -314,6 +330,13 @@ int main(int argc, char *argv[])
   doBFS(listv, sn, nv);
 
   /* -- free any memory you have allocated -- */
+
+  for (i = 0; i < ne; i++)
+  {
+    freeLinkedList(listv[i], freeTwint);
+  }
+  free(listv);
+  free(nomeFicheiroOut);
 
   exit(0);
 }
