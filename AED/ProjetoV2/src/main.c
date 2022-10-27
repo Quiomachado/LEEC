@@ -128,7 +128,7 @@ int main(int argc, char **argv)
             Sort(dic, counters, strlen(palavra1));
             isSorted[strlen(palavra1)] = 1;
         }
-        if (Search(dic[strlen(palavra1)], palavra1, 0, counters[strlen(palavra1)]) == -1 || Search(dic[strlen(palavra2)], palavra2, 0, counters[strlen(palavra2)]) == -1 || (num != 1 && num != 2))
+        if (Search(dic[strlen(palavra1)], palavra1, 0, counters[strlen(palavra1)]) == -1 || Search(dic[strlen(palavra2)], palavra2, 0, counters[strlen(palavra2)]) == -1)
         {
             fprintf(fpOut, "%s -1\n%s\n", palavra1, palavra2);
             continue;
