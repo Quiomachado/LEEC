@@ -110,14 +110,6 @@ int main(int argc, char **argv)
             fprintf(fpOut, "%s %s %d\n", palavra1, palavra2, num);
             continue;
         }
-        if (num == 1)
-            ImprimirTamanhoDaLinha(strlen(palavra1), counters, palavra1, fpOut);
-        else if (num == 2)
-        {
-            location1 = Search(dic[strlen(palavra1)], palavra1, 0, counters[strlen(palavra1)]);
-            location2 = Search(dic[strlen(palavra2)], palavra2, 0, counters[strlen(palavra2)]);
-            fprintf(fpOut, "%s %d\n%s %d\n", palavra1, location1, palavra2, location2);
-        }
         fprintf(fpOut, "\n");
     }
 
