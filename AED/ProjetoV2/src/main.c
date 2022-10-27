@@ -6,14 +6,13 @@
 
 void Usage(char *nomeProg)
 {
-    printf("Usage: %s <nome1>.dict <nome2>.pals\n", nomeProg);
-    exit(1);
+    exit(0);
 }
 
 int main(int argc, char **argv)
 {
     char *nomeFicheiroIn, *nomeFicheiroOut, *nomeDic, *aux;
-    char extOut[] = ".stats";
+    char extOut[] = ".paths";
     FILE *fpDic, *fpPals, *fpOut;
     char palavra1[30], palavra2[30];
     int num = 1, i;
@@ -92,12 +91,12 @@ int main(int argc, char **argv)
     {
         if (strlen(palavra1) != strlen(palavra2))
         {
-            fprintf(fpOut, "%s %s %d\n", palavra1, palavra2, num);
+            fprintf(fpOut, "%s -1\n%s\n", palavra1, palavra2);
             continue;
         }
         if (strlen(palavra1) > maxSize)
         {
-            fprintf(fpOut, "%s %s %d\n", palavra1, palavra2, num);
+            fprintf(fpOut, "%s -1\n%s\n", palavra1, palavra2);
             continue;
         }
         if (isSorted[strlen(palavra1)] == 0)
@@ -107,7 +106,7 @@ int main(int argc, char **argv)
         }
         if (Search(dic[strlen(palavra1)], palavra1, 0, counters[strlen(palavra1)]) == -1 || Search(dic[strlen(palavra2)], palavra2, 0, counters[strlen(palavra2)]) == -1 || (num != 1 && num != 2))
         {
-            fprintf(fpOut, "%s %s %d\n", palavra1, palavra2, num);
+            fprintf(fpOut, "%s -1\n%s\n", palavra1, palavra2);
             continue;
         }
         fprintf(fpOut, "\n");
