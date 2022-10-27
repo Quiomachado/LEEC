@@ -113,11 +113,6 @@ int main(int argc, char **argv)
     /*ler ficheiro Pals*/
     while (fscanf(fpPals, "%s %s %d", palavra1, palavra2, &num) == 3 && !exitProcessing)
     {
-        if (strlen(palavra1) != strlen(palavra2))
-        {
-            fprintf(fpOut, "%s -1\n%s\n", palavra1, palavra2);
-            continue;
-        }
         if (strlen(palavra1) > maxSize)
         {
             fprintf(fpOut, "%s -1\n%s\n", palavra1, palavra2);
