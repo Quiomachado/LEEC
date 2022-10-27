@@ -172,7 +172,7 @@ void ImprimirPosicao(int linha, node **dict, char *palavra1, char *palavra2, FIL
 {
     int pos1 = 0, pos2 = 0, count = 0;
 
-    /* node *tmp;
+    node *tmp;
     tmp = dict[linha];
     while (tmp != NULL)
     {
@@ -188,7 +188,7 @@ void ImprimirPosicao(int linha, node **dict, char *palavra1, char *palavra2, FIL
         tmp = tmp->next;
         if (pos1 != 0 && pos2 != 0)
             return;
-    } */
+    }
 
     /* pos1 = BinarySearch(dict[linha], palavra1);
     pos2 = BinarySearch(dict[linha], palavra2); */
