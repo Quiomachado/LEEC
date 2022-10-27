@@ -19,7 +19,6 @@ int main(int argc, char **argv)
     char *palavra1, *palavra2;
     int num = 1, i, maxSize;
     int *isSorted;
-    int count = 0;
 
     if (argc < 3)
     {
@@ -88,12 +87,16 @@ int main(int argc, char **argv)
     /*ler ficheiro Pals*/
     while (fscanf(fpPals, "%s %s %d", palavra1, palavra2, &num) == 3)
     {
-        if (count > 0)
-        {
-            fprintf(fpOut, "\n");
-        }
         if (strlen(palavra1) != strlen(palavra2))
-            exit(69);
+        {
+            fprintf(fpOut, "%s %s %d\n", palavra1, palavra2, num);
+            continue;
+        }
+        if (strlen(palavra1) > maxSize)
+        {
+            fprintf(fpOut, "%s %s %d\n", palavra1, palavra2, num);
+            continue;
+        }
         if (isSorted[strlen(palavra1)] == 0)
         {
             dict = OrdenarLinha(strlen(palavra1), dict);
@@ -103,7 +106,7 @@ int main(int argc, char **argv)
             ImprimirTamanhoLinha(strlen(palavra1), dict, palavra1, fpOut);
         else if (num == 2)
             ImprimirPosicao(strlen(palavra1), dict, palavra1, palavra2, fpOut);
-        count++;
+        fprintf(fpOut, "\n");
     }
 
     /*libertação de memória alocada*/
