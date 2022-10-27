@@ -4,11 +4,6 @@
 
 #include "dicionario.h"
 
-void Usage(char *nomeProg)
-{
-    exit(0);
-}
-
 int main(int argc, char **argv)
 {
     char *nomeFicheiroIn, *nomeFicheiroOut, *nomeDic, *aux;
@@ -16,20 +11,49 @@ int main(int argc, char **argv)
     FILE *fpDic, *fpPals, *fpOut;
     char palavra1[30], palavra2[30];
     int num = 1, i;
+    char *token;
     char ***dic = {NULL};
     int *counters = NULL;
     int maxSize, location1, location2;
     int *isSorted;
-    int exitProcessing = 0;
+    int exitProcessing = 0, count = 0;
 
     if (argc < 3)
     {
-        Usage(argv[0]);
+        exit(0);
     }
 
     /*criacao de strings com os nomes dos ficheiros*/
     nomeDic = argv[1];
     nomeFicheiroIn = argv[2];
+    token = strtok(nomeDic, ".");
+    count = 1;
+    while (token != NULL)
+    {
+        token = strtok(NULL, ".");
+        count++;
+        if (count == 2 && token != NULL)
+        {
+            if (strcmp(token, "dict") != 0)
+                exit(0);
+        }
+    }
+    if (count > 3 || (count == 2 && token == NULL))
+        exit(0);
+    token = strtok(nomeFicheiroIn, ".");
+    count = 1;
+    while (token != NULL)
+    {
+        token = strtok(NULL, ".");
+        count++;
+        if (count == 2 && token != NULL)
+        {
+            if (strcmp(token, "pals") != 0)
+                exit(0);
+        }
+    }
+    if (count > 3 || (count == 2 && token == NULL))
+        exit(0);
     aux = (char *)malloc(sizeof(char) * (strlen(nomeFicheiroIn) + 1));
     strcpy(aux, nomeFicheiroIn);
     aux[strlen(aux) - 5] = '\0';
