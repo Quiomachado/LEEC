@@ -1,25 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "LinkedList.h"
 
 struct LinkedListStruct
 {
-    Item data;
+    Item this;
     LinkedList *next;
 };
 
-LinkedList *initList(void)
+LinkedList *initLinkedList(void)
 {
     return NULL;
 }
 
-void freeLinkedList(LinkedList *first, void (*freeItem)(Item))
+void FreeLinkedLIst(LinkedList *first, void (*freeItemFnt)(Item))
 {
     LinkedList *aux, *next;
 
-    aux = first;
-    while (aux != NULL)
+    for (aux = first; aux != NULL; aux = next)
     {
         next = aux->next;
-        freeItem(aux->data);
+        freeItemFnt(aux->this);
         free(aux);
     }
     return;
@@ -27,58 +29,24 @@ void freeLinkedList(LinkedList *first, void (*freeItem)(Item))
 
 LinkedList *getNextNodeLinkedList(LinkedList *node)
 {
-    if (node == NULL)
-        return NULL;
-    return (node->next);
+    return ((node == NULL) ? NULL : node->next);
 }
 
-LinkedList *getDataLinkedList(LinkedList *node)
+Item getItemLinkedList(LinkedList *node)
 {
-    if (node == NULL)
-        return NULL;
-    return (node->data);
+    return ((node == NULL) ? NULL : node->this);
 }
 
-LinkedList *insertAlpha(LinkedList *head, Item item, int (*compareItems)(Item it1, Item it2))
+LinkedList *insertUnsortedLinkedList(LinkedList *next, Item this)
 {
-    LinkedList *new, *aux;
+    LinkedList *new;
 
-    new = (LinkedList *)calloc(1, sizeof(LinkedList));
+    new = (LinkedList *)malloc(sizeof(LinkedList));
     if (new == NULL)
-        return NULL;
+        exit(0);
 
-    new->data = item;
-    new->next = NULL;
+    new->this = this;
+    new->next = next;
 
-    if (head == NULL)
-    {
-        return new;
-    }
-
-    if (compareItems(item, head->data) <= 0)
-    {
-        new->next = head;
-        return new;
-    }
-
-    aux = head;
-    while (aux != NULL)
-    {
-        if (aux->next != NULL)
-        {
-            if (compareItems(item, aux->next->data) <= 0)
-            {
-                new->next = aux->next;
-                aux->next = new;
-                return head;
-            }
-        }
-        else
-        {
-            aux->next = new;
-            return head;
-        }
-        aux = aux->next;
-    }
-    return NULL;
+    return new;
 }

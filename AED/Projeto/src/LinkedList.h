@@ -1,17 +1,14 @@
-#ifndef _LINKEDLIST_H
-#define _LINKEDLIST_H_
+#ifndef LINKEDLISTHEADER
+#define LINKEDLISTHEADER
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "defs.h"
 
 typedef struct LinkedListStruct LinkedList;
 
-LinkedList *initList(void);
-void freeLinkedList(LinkedList *first, void (*freeItem)(Item));
+LinkedList *initLinkedList(void);
+void FreeLinkedLIst(LinkedList *first, void (*freeItemFnt)(Item));
 LinkedList *getNextNodeLinkedList(LinkedList *node);
-LinkedList *getDataLinkedList(LinkedList *node);
-LinkedList *insertAlpha(LinkedList *head, Item item, int (*compareItems)(Item it1, Item it2));
+Item getItemLinkedList(LinkedList *node);
+LinkedList *insertUnsortedLinkedList(LinkedList *next, Item this);
 
 #endif
