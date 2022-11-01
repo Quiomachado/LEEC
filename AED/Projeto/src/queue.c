@@ -41,15 +41,9 @@ int PQempty()
     return 0;
 }
 
-Item PQdelmin()
+Item PQdelMax()
 {
     Item del;
-    int i;
-    del = queue[0].elem;
-    for (i = 1; i < free; i++)
-    {
-        queue[i - 1] = queue[i];
-    }
-    free--;
+    del = queue[--free].elem;
     return del;
 }
