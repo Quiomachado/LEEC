@@ -6,10 +6,12 @@
 
 #include "defs.h"
 
-typedef struct _wordWt
-{
-    char *word;
-    int wt;
-} twint;
+typedef struct _queueElem QueueElem;
+
+void PQinit(int Size);
+void PQinsert(int pos, int wt);
+int PQempty();
+int PQdelMax();
+void PQdec(int Idx, int nWt);
 
 #endif
