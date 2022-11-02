@@ -14,11 +14,11 @@ typedef struct tStruct
     int wt;
 } twint;
 
-int *GetMaxSubs(int *subs, FILE *fpPals, int maxSize, int **pCounter)
+int *GetMaxSubs(FILE *fpPals, int maxSize, int **pCounter)
 {
     char *trash = NULL;
     int len, tmp;
-    subs = (int *)calloc(1, sizeof(int) * maxSize);
+    int subs[maxSize];
     if (subs == NULL)
         exit(0);
     *pCounter = (int *)calloc(1, sizeof(int) * maxSize);
@@ -32,6 +32,7 @@ int *GetMaxSubs(int *subs, FILE *fpPals, int maxSize, int **pCounter)
         if (subs[len] > tmp)
             subs[len] = tmp;
     }
+    printf("WTF\n");
     return subs;
 }
 
@@ -126,34 +127,6 @@ int main(int argc, char **argv)
     /*criacao de strings com os nomes dos ficheiros*/
     nomeDic = argv[1];
     nomeFicheiroIn = argv[2];
-    token = strtok(nomeDic, ".");
-    count = 1;
-    while (token != NULL)
-    {
-        token = strtok(NULL, ".");
-        count++;
-        if (count == 2 && token != NULL)
-        {
-            if (strcmp(token, "dict") != 0)
-                exit(0);
-        }
-    }
-    if (count > 3 || (count == 2 && token == NULL))
-        exit(0);
-    token = strtok(nomeFicheiroIn, ".");
-    count = 1;
-    while (token != NULL)
-    {
-        token = strtok(NULL, ".");
-        count++;
-        if (count == 2 && token != NULL)
-        {
-            if (strcmp(token, "pals") != 0)
-                exit(0);
-        }
-    }
-    if (count > 3 || (count == 2 && token == NULL))
-        exit(0);
     aux = (char *)malloc(sizeof(char) * (strlen(nomeFicheiroIn) + 1));
     strcpy(aux, nomeFicheiroIn);
     aux[strlen(aux) - 5] = '\0';
@@ -204,7 +177,7 @@ int main(int argc, char **argv)
     }
 
     /*Get Max Num Of Subs Per Letter and reopen Pals*/
-    subs = GetMaxSubs(subs, fpPals, maxSize, &pCounter);
+    subs = GetMaxSubs(fpPals, maxSize, &pCounter);
     fclose(fpPals);
     fpPals = fopen(nomeFicheiroIn, "r");
     if (fpPals == NULL)

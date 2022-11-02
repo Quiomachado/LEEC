@@ -1,11 +1,11 @@
 CC = gcc
 CFLAGS=-Wall -std=c99 -g
 
-wrdmttns: main.o dicionario.o LinkedList.o queue.o
-		$(CC) $(CFLAGS) -o wrdmttns main.o dicionario.o LinkedList.o queue.o
+wrdmttns: wrdmttns.o dicionario.o LinkedList.o queue.o
+		$(CC) $(CFLAGS) -o wrdmttns wrdmttns.o dicionario.o LinkedList.o queue.o
 
-main.o: main.c dicionario.h
-		$(CC) -c $(CFLAGS) main.c
+wrdmttns.o: wrdmttns.c dicionario.h
+		$(CC) -c $(CFLAGS) wrdmttns.c
 
 dicionario.o: dicionario.c dicionario.h
 		$(CC) -c $(CFLAGS) dicionario.c

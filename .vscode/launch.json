@@ -5,7 +5,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "args": ["/home/quio/LEEC/AED/Labs/Lab5/tests/chave0.txt"],
+            "args": ["/home/quio/LEEC/AED/Projeto/tests/dicts/portugues.dict", "/home/quio/LEEC/AED/Projeto/tests/Primeiros/primeiros01.pals"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

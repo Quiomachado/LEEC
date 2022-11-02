@@ -84,14 +84,18 @@ int PQdelMax()
 
 void PQdec(int Idx, int nWt)
 {
-    if (nWt < queue[Idx].wt)
+    int tmp;
+    for (tmp = 0; tmp < clear; tmp++)
+        if (queue[tmp].pos == Idx)
+            break;
+    if (nWt < queue[tmp].wt)
     {
-        queue[Idx].wt = nWt;
-        FixUp(Idx);
+        queue[tmp].wt = nWt;
+        FixUp(tmp);
     }
-    else if (nWt > queue[Idx].wt)
+    else if (nWt > queue[tmp].wt)
     {
-        queue[Idx].wt = nWt;
-        FixDown(Idx);
+        queue[tmp].wt = nWt;
+        FixDown(tmp);
     }
 }
