@@ -18,7 +18,8 @@ int *GetMaxSubs(FILE *fpPals, int maxSize, int **pCounter)
 {
     char *trash = NULL;
     int len, tmp;
-    int subs[maxSize];
+    int *subs;
+    subs = (int *)malloc(sizeof(int) * maxSize);
     if (subs == NULL)
         exit(0);
     *pCounter = (int *)calloc(1, sizeof(int) * maxSize);
