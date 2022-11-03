@@ -20,13 +20,13 @@ int *GetMaxSubs(FILE *fpPals, int maxSize, int **pCounter)
     int len, tmp, i;
     int *subs;
     int *pc;
-    subs = (int *)malloc(sizeof(int) * maxSize);
+    subs = (int *)malloc(sizeof(int) * (maxSize + 1));
     if (subs == NULL)
         exit(0);
-    pc = (int *)malloc(sizeof(int) * maxSize);
+    pc = (int *)malloc(sizeof(int) * (maxSize + 1));
     if (pc == NULL)
         exit(0);
-    for (i = 0; i < maxSize; i++)
+    for (i = 0; i <= maxSize; i++)
     {
         subs[i] = 0;
         pc[i] = 0;
@@ -45,10 +45,9 @@ int *GetMaxSubs(FILE *fpPals, int maxSize, int **pCounter)
     return subs;
 }
 
-int DiffChars(char *A, char *B)
+int DiffChars(char *A, char *B, int len)
 {
-    int count, i, len;
-    len = strlen(A);
+    int count, i;
     count = 0;
     for (i = 0; i < len; i++)
     {
@@ -117,15 +116,14 @@ int main(int argc, char **argv)
     FILE *fpDic, *fpPals, *fpOut;
     char palavra1[30], palavra2[30];
     int num = 1, i, k, j, wt;
-    char *token;
     char ***dic = {NULL};
     int *counters = NULL;
     int *subs = NULL;
     int *pCounter = NULL;
     int maxSize, len, loc1, loc2;
     int *isSorted;
-    int exitProcessing = 0, count = 0;
-    twint *new;
+    int exitProcessing = 0;
+    twint *n1, *n2;
     LinkedList ***listv = {NULL};
 
     if (argc < 3)
@@ -200,10 +198,10 @@ int main(int argc, char **argv)
     }
 
     /*Criar Grafos*/
-    listv = (LinkedList ***)calloc(1, sizeof(LinkedList **) * maxSize);
+    listv = (LinkedList ***)calloc(1, sizeof(LinkedList **) * (maxSize + 1));
     if (listv == NULL)
         exit(0);
-    for (i = 1; i < maxSize; i++)
+    for (i = 1; i <= maxSize; i++)
     {
         if (pCounter[i])
         {
@@ -214,18 +212,22 @@ int main(int argc, char **argv)
             {
                 if (listv[i][k] == NULL)
                     listv[i][k] = initLinkedList();
-                for (j = 0; j < counters[i]; j++)
+                for (j = k + 1; j < counters[i]; j++)
                 {
-                    if (j == k)
+                    if ((wt = DiffChars(dic[i][k], dic[i][j], i)) > subs[i])
                         continue;
-                    if ((wt = DiffChars(dic[i][k], dic[i][j])) > subs[i])
-                        continue;
-                    new = (twint *)malloc(sizeof(twint));
-                    if (new == NULL)
+                    n1 = (twint *)malloc(sizeof(twint));
+                    if (n1 == NULL)
                         exit(0);
-                    new->pos = j;
-                    new->wt = (wt * wt);
-                    listv[i][k] = insertUnsortedLinkedList(listv[i][k], (Item) new);
+                    n1->pos = j;
+                    n1->wt = (wt * wt);
+                    listv[i][k] = insertUnsortedLinkedList(listv[i][k], (Item)n1);
+                    n2 = (twint *)malloc(sizeof(twint));
+                    if (n2 == NULL)
+                        exit(0);
+                    n2->pos = k;
+                    n2->wt = (wt * wt);
+                    listv[i][j] = insertUnsortedLinkedList(listv[i][j], (Item)n2);
                 }
             }
         }
