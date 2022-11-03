@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS=-Wall -std=c99 -g -pg
+CFLAGS=-Wall -std=c99 -g
 
 wrdmttns: wrdmttns.o dicionario.o LinkedList.o queue.o
 		$(CC) $(CFLAGS) -o wrdmttns wrdmttns.o dicionario.o LinkedList.o queue.o

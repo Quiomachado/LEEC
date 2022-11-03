@@ -36,8 +36,7 @@ int *GetMaxSubs(FILE *fpPals, int maxSize, int **pCounter)
         len = strlen(trash1);
         if (len > maxSize)
             continue;
-        if (pc[len] == 0)
-            pc[len] = 1;
+        pc[len]++;
         if (subs[len] < tmp)
             subs[len] = tmp;
     }
@@ -61,7 +60,7 @@ double Dijkstra(LinkedList **A, int nv, int s, int f, int mSub)
 {
     LinkedList *t;
     twint *tmp;
-    int v, w;
+    int v, w, flag = 0;
     int *st;
     double *wt;
     double finalWt;
@@ -82,10 +81,15 @@ double Dijkstra(LinkedList **A, int nv, int s, int f, int mSub)
     PQinsert(s, wt[s]);
     wt[s] = 0;
     PQdec(s, wt[0]);
-    while (!PQempty())
+    while (!PQempty() && flag == 0)
     {
         if (wt[v = PQdelMax()] != maxWT)
         {
+            if (v == f)
+            {
+                flag = 1;
+                break;
+            }
             for (t = A[v]; t != NULL; getNextNodeLinkedList(t))
             {
                 tmp = (twint *)getItemLinkedList(t);
@@ -203,7 +207,7 @@ int main(int argc, char **argv)
         exit(0);
     for (i = 1; i <= maxSize; i++)
     {
-        if (pCounter[i])
+        if (pCounter[i] > 0)
         {
             listv[i] = (LinkedList **)calloc(1, sizeof(LinkedList *) * counters[i]);
             if (listv[i] == NULL)
