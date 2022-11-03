@@ -16,24 +16,32 @@ typedef struct tStruct
 
 int *GetMaxSubs(FILE *fpPals, int maxSize, int **pCounter)
 {
-    char *trash = NULL;
-    int len, tmp;
+    char trash1[30], trash2[30];
+    int len, tmp, i;
     int *subs;
+    int *pc;
     subs = (int *)malloc(sizeof(int) * maxSize);
     if (subs == NULL)
         exit(0);
-    *pCounter = (int *)calloc(1, sizeof(int) * maxSize);
-    while (fscanf(fpPals, "%s %s %d", trash, trash, &tmp) == 3)
+    pc = (int *)malloc(sizeof(int) * maxSize);
+    if (pc == NULL)
+        exit(0);
+    for (i = 0; i < maxSize; i++)
     {
-        len = strlen(trash);
+        subs[i] = 0;
+        pc[i] = 0;
+    }
+    while (fscanf(fpPals, "%s %s %d", trash1, trash2, &tmp) == 3)
+    {
+        len = strlen(trash1);
         if (len > maxSize)
             continue;
-        if (!(*pCounter[len]))
-            *pCounter[len] = 1;
-        if (subs[len] > tmp)
+        if (pc[len] == 0)
+            pc[len] = 1;
+        if (subs[len] < tmp)
             subs[len] = tmp;
     }
-    printf("WTF\n");
+    *pCounter = pc;
     return subs;
 }
 
@@ -264,6 +272,8 @@ int main(int argc, char **argv)
     fclose(fpPals);
     fclose(fpDic);
     free(isSorted);
+    free(pCounter);
+    free(subs);
     if (!exitProcessing)
         fclose(fpOut);
     return 0;
