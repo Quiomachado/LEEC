@@ -64,7 +64,7 @@ void Dijkstra(LinkedList **A, int nv, int s, int f, int mSub, double **tmpW, int
     if (wt == NULL)
         exit(0);
 
-    acervo = PQinit(acervo, nv);
+    acervo = PQinit(nv);
     for (v = 0; v < nv; v++)
     {
         st[v] = -1;

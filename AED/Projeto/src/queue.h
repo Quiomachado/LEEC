@@ -9,7 +9,7 @@
 typedef struct _queueElem QueueElem;
 typedef struct heapS heap;
 
-heap *PQinit(heap *acervo, int Size);
+heap *PQinit(int Size);
 heap *PQinsert(heap *acervo, int pos, int wt);
 int PQempty(heap *acervo);
 int PQdelMax(heap **acervo);

@@ -52,8 +52,9 @@ heap *FixDown(heap *acervo, int Idx)
     return acervo;
 }
 
-heap *PQinit(heap *acervo, int Size)
+heap *PQinit(int Size)
 {
+    heap *acervo = NULL;
     acervo = (heap *)malloc(sizeof(heap));
     if (acervo == NULL)
         exit(0);
