@@ -272,6 +272,8 @@ int main(int argc, char **argv)
             Dijkstra(listv[len], counters[len], loc1, loc2, (num * num), &wts, &st);
             final = 0;
             shortestPath(listv[len], loc2, st, wts, dic[len], fpOut, &final, loc1);
+            free(wts);
+            free(st);
             pCounter[len]--;
             if (pCounter[len] <= 0)
             {
@@ -288,8 +290,6 @@ int main(int argc, char **argv)
     free(nomeFicheiroOut);
     free(aux);
     free(listv);
-    free(wts);
-    free(st);
     fclose(fpPals);
     fclose(fpDic);
     free(isSorted);
