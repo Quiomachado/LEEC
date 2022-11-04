@@ -29,7 +29,7 @@ void FreeLinkedLIst(LinkedList *first)
 
 LinkedList *getNextNodeLinkedList(LinkedList *node)
 {
-    return ((node == NULL) ? NULL : node->next);
+    return (node->next);
 }
 
 int getWt(LinkedList *node)

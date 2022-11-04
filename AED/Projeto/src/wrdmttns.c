@@ -51,8 +51,8 @@ int DiffChars(char *A, char *B, int len)
 double Dijkstra(LinkedList **A, int nv, int s, int f, int mSub)
 {
     LinkedList *t;
-    int tmp;
-    int v, w, flag = 0;
+    int tmpPos, tmpWt;
+    int v, w;
     int *st;
     double *wt;
     double finalWt;
@@ -73,27 +73,29 @@ double Dijkstra(LinkedList **A, int nv, int s, int f, int mSub)
     }
     wt[s] = 0;
     acervo = PQinsert(acervo, s, wt[s]);
-    while (!PQempty(acervo) && !flag)
+    while (!PQempty(acervo))
     {
-        if (wt[v = PQdelMax(&acervo)] != maxWT)
+        v = PQdelMax(&acervo);
+        if (v == f)
+            break;
+        for (t = A[v]; t != NULL; t = getNextNodeLinkedList(t))
         {
-            if (v == f)
+            tmpWt = getWt(t);
+            tmpPos = getpos(t);
+            /* printf("%d\n", tmpPos); */
+            if (tmpWt > mSub)
+                continue;
+            if (wt[w = tmpPos] == maxWT)
             {
-                flag = 1;
-                break;
+                wt[w] = wt[v] + tmpWt;
+                st[w] = v;
+                acervo = PQinsert(acervo, w, wt[w]);
             }
-            for (t = A[v]; t != NULL; getNextNodeLinkedList(t))
+            else if (wt[w] > wt[v] + tmpWt)
             {
-                tmp = getWt(t);
-                if (tmp > mSub)
-                    continue;
-                acervo = PQinsert(acervo, getpos(t), wt[getpos(t)]);
-                if (wt[w = getpos(t)] > wt[v] + tmp)
-                {
-                    wt[w] = wt[v] + tmp;
-                    acervo = PQdec(acervo, w, wt[w]);
-                    st[w] = v;
-                }
+                wt[w] = wt[v] + tmpWt;
+                acervo = PQdec(acervo, w, wt[w]);
+                st[w] = v;
             }
         }
     }
@@ -117,9 +119,10 @@ int main(int argc, char **argv)
     int *counters = NULL;
     int *subs = NULL;
     int *pCounter = NULL;
-    int maxSize, len, loc1, loc2;
+    int maxSize, len, loc1, loc2, counter = 0;
     int *isSorted;
     LinkedList ***listv = {NULL};
+    LinkedList *tmp = NULL;
 
     if (argc < 3)
     {
@@ -238,14 +241,14 @@ int main(int argc, char **argv)
                         listv[len][k] = initLinkedList();
                     for (j = k + 1; j < counters[len]; j++)
                     {
-                        if ((wt = DiffChars(dic[len][k], dic[len][j], len)) > subs[len])
+                        if ((wt = DiffChars(dic[len][k], dic[len][j], len + 1)) > subs[len])
                             continue;
                         listv[len][k] = insertUnsortedLinkedList(listv[len][k], j, (wt * wt));
                         listv[len][j] = insertUnsortedLinkedList(listv[len][j], k, (wt * wt));
                     }
                 }
             }
-            printf("%f\n", Dijkstra(listv[len], counters[len], loc1, loc2, num));
+            printf("%f\n", Dijkstra(listv[len], counters[len], loc1, loc2, (num * num)));
             pCounter[len]--;
             if (pCounter[len] <= 0)
             {
@@ -254,7 +257,11 @@ int main(int argc, char **argv)
                 free(listv[len]);
             }
         }
-
+        /* counter = 0;
+        for (tmp = listv[len][loc1]; tmp != NULL; tmp = getNextNodeLinkedList(tmp))
+            printf("%d\n", getpos(tmp));
+        printf("\n");
+        printf("%d\n", counter); */
         fprintf(fpOut, "\n");
     }
 

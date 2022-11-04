@@ -24,30 +24,32 @@ void exch(QueueElem A, QueueElem B)
     return;
 }
 
-void FixUp(heap *acervo, int Idx)
+heap *FixUp(heap *acervo, int Idx)
 {
     while (Idx > 0 && (acervo->queue[(Idx - 1) / 2].wt < acervo->queue[Idx].wt))
     {
         exch(acervo->queue[Idx], acervo->queue[(Idx - 1) / 2]);
         Idx = (Idx - 1) / 2;
     }
+    return acervo;
 }
 
-void FixDown(heap *acervo, int Idx)
+heap *FixDown(heap *acervo, int Idx)
 {
     int Child;
-    int N = (acervo->clear) - 1;
+    int N = (acervo->clear) - 2;
 
     while (2 * Idx < N)
     {
         Child = 2 * Idx + 1;
-        if (Child < N && (acervo->queue[Child].wt < acervo->queue[Child + 1].wt))
+        if (Child < N && (acervo->queue[Child].wt > acervo->queue[Child + 1].wt))
             Child++;
-        if (!(acervo->queue[Idx].wt < acervo->queue[Child].wt))
+        if (!(acervo->queue[Idx].wt > acervo->queue[Child].wt))
             break;
         exch(acervo->queue[Idx], acervo->queue[Child]);
         Idx = Child;
     }
+    return acervo;
 }
 
 heap *PQinit(heap *acervo, int Size)
@@ -71,7 +73,7 @@ heap *PQinsert(heap *acervo, int pos, int wt)
     if (((acervo->clear) + 1) < acervo->hsize)
     {
         acervo->queue[acervo->clear] = A;
-        FixUp(acervo, acervo->clear);
+        acervo = FixUp(acervo, acervo->clear);
         acervo->clear++;
     }
     return acervo;
@@ -87,7 +89,7 @@ int PQempty(heap *acervo)
 int PQdelMax(heap **acervo)
 {
     exch((*acervo)->queue[0], (*acervo)->queue[(*acervo)->clear - 1]);
-    FixDown(*acervo, 0);
+    *acervo = FixDown(*acervo, 0);
     return (*acervo)->queue[--((*acervo)->clear)].pos;
 }
 
@@ -100,12 +102,12 @@ heap *PQdec(heap *acervo, int Idx, int nWt)
     if (nWt < acervo->queue[tmp].wt)
     {
         acervo->queue[tmp].wt = nWt;
-        FixUp(acervo, tmp);
+        acervo = FixUp(acervo, tmp);
     }
     else if (nWt > acervo->queue[tmp].wt)
     {
         acervo->queue[tmp].wt = nWt;
-        FixDown(acervo, tmp);
+        acervo = FixDown(acervo, tmp);
     }
     return acervo;
 }
