@@ -71,7 +71,7 @@ void Dijkstra(LinkedList **A, int nv, int s, int f, int mSub, double **tmpW, int
         wt[v] = maxWT;
     }
     wt[s] = 0;
-    st[s] = -2;
+    st[s] = -1;
     acervo = PQinsert(acervo, s, wt[s]);
     while (!PQempty(acervo))
     {
@@ -97,13 +97,12 @@ void Dijkstra(LinkedList **A, int nv, int s, int f, int mSub, double **tmpW, int
                 st[w] = v;
             }
         }
-
-        *tmpSt = st;
-        *tmpW = wt;
-
-        PQFree(acervo);
-        return;
     }
+    *tmpSt = st;
+    *tmpW = wt;
+
+    PQFree(acervo);
+    return;
 }
 
 void shortestPath(LinkedList **Graph, int son, int *st, double *wt, char **dic, FILE *fpOut, int *dist, int s)
