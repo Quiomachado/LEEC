@@ -86,6 +86,8 @@ void Dijkstra(LinkedList **A, int nv, int s, int f, int mSub, double **tmpW, int
                 continue;
             if (wt[w = tmpPos] == maxWT)
             {
+                if (w == s)
+                    printf("A\n");
                 wt[w] = wt[v] + tmpWt;
                 st[w] = v;
                 acervo = PQinsert(acervo, w, wt[w]);

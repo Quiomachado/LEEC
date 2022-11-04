@@ -104,11 +104,6 @@ heap *PQdec(heap *acervo, int Idx, int nWt)
         acervo->queue[tmp].wt = nWt;
         acervo = FixUp(acervo, tmp);
     }
-    else if (nWt > acervo->queue[tmp].wt)
-    {
-        acervo->queue[tmp].wt = nWt;
-        acervo = FixDown(acervo, tmp);
-    }
     return acervo;
 }
 
