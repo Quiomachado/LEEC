@@ -237,6 +237,10 @@ int main(int argc, char **argv)
             fprintf(fpOut, "%s -1\n%s\n", palavra1, palavra2);
             continue;
         }
+        if (num == 0)
+        {
+            fprintf(fpOut, "%s %d\n%s\n", palavra1, num, palavra2);
+        }
         if (isSorted[len] == 0)
         {
             Sort(dic, counters, len);
