@@ -71,6 +71,7 @@ void Dijkstra(LinkedList **A, int nv, int s, int f, int mSub, double **tmpW, int
         wt[v] = maxWT;
     }
     wt[s] = 0;
+    st[s] = -2;
     acervo = PQinsert(acervo, s, wt[s]);
     while (!PQempty(acervo))
     {
@@ -96,19 +97,19 @@ void Dijkstra(LinkedList **A, int nv, int s, int f, int mSub, double **tmpW, int
                 st[w] = v;
             }
         }
+
+        *tmpSt = st;
+        *tmpW = wt;
+
+        PQFree(acervo);
+        return;
     }
-
-    *tmpSt = st;
-    *tmpW = wt;
-
-    PQFree(acervo);
-    return;
 }
 
-void shortestPath(LinkedList **Graph, int son, int *st, double *wt, char **dic, FILE *fpOut, int *dist)
+void shortestPath(LinkedList **Graph, int son, int *st, double *wt, char **dic, FILE *fpOut, int *dist, int s)
 {
     LinkedList *aux;
-    if (st[son] == -1)
+    if (st[son] == st[s])
     {
         fprintf(fpOut, "%s %d\n", dic[son], *dist);
         return;
@@ -119,8 +120,8 @@ void shortestPath(LinkedList **Graph, int son, int *st, double *wt, char **dic, 
         {
             (*dist) += getWt(aux);
             son = st[son];
-            shortestPath(Graph, son, st, wt, dic, fpOut, dist);
-            fprintf(fpOut, "%s\n", dic[son]);
+            shortestPath(Graph, son, st, wt, dic, fpOut, dist, s);
+            fprintf(fpOut, "%s\n", dic[getpos(aux)]);
             break;
         }
     }
@@ -269,7 +270,7 @@ int main(int argc, char **argv)
             }
             Dijkstra(listv[len], counters[len], loc1, loc2, (num * num), &wts, &st);
             final = 0;
-            shortestPath(listv[len], loc2, st, wts, dic[len], fpOut, &final);
+            shortestPath(listv[len], loc2, st, wts, dic[len], fpOut, &final, loc1);
             pCounter[len]--;
             if (pCounter[len] <= 0)
             {
