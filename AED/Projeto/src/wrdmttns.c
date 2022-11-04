@@ -8,32 +8,26 @@
 
 static double maxWT = 1000000000000000;
 
-typedef struct tStruct
-{
-    int pos;
-    int wt;
-} twint;
-
 int *GetMaxSubs(FILE *fpPals, int maxSize, int **pCounter)
 {
     char trash1[30], trash2[30];
     int len, tmp, i;
     int *subs;
     int *pc;
-    subs = (int *)malloc(sizeof(int) * (maxSize + 1));
+    subs = (int *)malloc(sizeof(int) * maxSize);
     if (subs == NULL)
         exit(0);
-    pc = (int *)malloc(sizeof(int) * (maxSize + 1));
+    pc = (int *)malloc(sizeof(int) * maxSize);
     if (pc == NULL)
         exit(0);
-    for (i = 0; i <= maxSize; i++)
+    for (i = 0; i < maxSize; i++)
     {
         subs[i] = 0;
         pc[i] = 0;
     }
     while (fscanf(fpPals, "%s %s %d", trash1, trash2, &tmp) == 3)
     {
-        len = strlen(trash1);
+        len = strlen(trash1) - 1;
         if (len > maxSize)
             continue;
         pc[len]++;
@@ -59,11 +53,12 @@ int DiffChars(char *A, char *B, int len)
 double Dijkstra(LinkedList **A, int nv, int s, int f, int mSub)
 {
     LinkedList *t;
-    twint *tmp;
-    int v, w, flag = 0;
+    int tmp;
+    int v, w;
     int *st;
     double *wt;
     double finalWt;
+    heap *acervo = NULL;
 
     st = (int *)malloc(sizeof(int) * nv);
     if (st == NULL)
@@ -72,34 +67,30 @@ double Dijkstra(LinkedList **A, int nv, int s, int f, int mSub)
     if (wt == NULL)
         exit(0);
 
-    PQinit(nv);
+    acervo = PQinit(acervo, nv);
     for (v = 0; v < nv; v++)
     {
         st[v] = -1;
         wt[v] = maxWT;
     }
-    PQinsert(s, wt[s]);
     wt[s] = 0;
-    PQdec(s, wt[0]);
-    while (!PQempty() && flag == 0)
+    acervo = PQinsert(acervo, s, wt[s]);
+    while (!PQempty(acervo))
     {
-        if (wt[v = PQdelMax()] != maxWT)
+        if (wt[v = PQdelMax(&acervo)] != maxWT)
         {
             if (v == f)
-            {
-                flag = 1;
                 break;
-            }
             for (t = A[v]; t != NULL; getNextNodeLinkedList(t))
             {
-                tmp = (twint *)getItemLinkedList(t);
-                if (tmp->wt > mSub)
+                tmp = getWt(t);
+                if (tmp > mSub)
                     continue;
-                PQinsert(tmp->pos, wt[tmp->pos]);
-                if (wt[w = tmp->pos] > wt[v] + tmp->wt)
+                acervo = PQinsert(acervo, getpos(t), wt[getpos(t)]);
+                if (wt[w = tmp] > wt[v] + tmp)
                 {
-                    wt[w] = wt[v] + tmp->wt;
-                    PQdec(w, wt[w]);
+                    wt[w] = wt[v] + tmp;
+                    acervo = PQdec(acervo, w, wt[w]);
                     st[w] = v;
                 }
             }
@@ -108,6 +99,7 @@ double Dijkstra(LinkedList **A, int nv, int s, int f, int mSub)
     finalWt = wt[f];
     free(st);
     free(wt);
+    PQFree(acervo);
     if (finalWt == maxWT)
         return -1;
     return finalWt;
@@ -126,8 +118,6 @@ int main(int argc, char **argv)
     int *pCounter = NULL;
     int maxSize, len, loc1, loc2;
     int *isSorted;
-    int exitProcessing = 0;
-    twint *n1, *n2;
     LinkedList ***listv = {NULL};
 
     if (argc < 3)
@@ -158,8 +148,8 @@ int main(int argc, char **argv)
     /*ler dicionario e criar estrutura*/
     counters = IniCounters(fpDic, &maxSize);
     dic = IniDic(fpDic, counters, maxSize);
-    isSorted = (int *)malloc(sizeof(int) * (maxSize + 1));
-    for (i = 0; i <= maxSize; i++)
+    isSorted = (int *)malloc(sizeof(int) * maxSize);
+    for (i = 0; i < maxSize; i++)
     {
         isSorted[i] = 0;
     }
@@ -202,59 +192,28 @@ int main(int argc, char **argv)
     }
 
     /*Criar Grafos*/
-    listv = (LinkedList ***)calloc(1, sizeof(LinkedList **) * (maxSize + 1));
+    listv = (LinkedList ***)calloc(1, sizeof(LinkedList **) * maxSize);
     if (listv == NULL)
         exit(0);
-    for (i = 1; i <= maxSize; i++)
-    {
-        if (pCounter[i] > 0)
-        {
-            listv[i] = (LinkedList **)calloc(1, sizeof(LinkedList *) * counters[i]);
-            if (listv[i] == NULL)
-                exit(0);
-            for (k = 0; k < counters[i]; k++)
-            {
-                if (listv[i][k] == NULL)
-                    listv[i][k] = initLinkedList();
-                for (j = k + 1; j < counters[i]; j++)
-                {
-                    if ((wt = DiffChars(dic[i][k], dic[i][j], i)) > subs[i])
-                        continue;
-                    n1 = (twint *)malloc(sizeof(twint));
-                    if (n1 == NULL)
-                        exit(0);
-                    n1->pos = j;
-                    n1->wt = (wt * wt);
-                    listv[i][k] = insertUnsortedLinkedList(listv[i][k], (Item)n1);
-                    n2 = (twint *)malloc(sizeof(twint));
-                    if (n2 == NULL)
-                        exit(0);
-                    n2->pos = k;
-                    n2->wt = (wt * wt);
-                    listv[i][j] = insertUnsortedLinkedList(listv[i][j], (Item)n2);
-                }
-            }
-        }
-    }
 
     /*abir ficheiro de saida*/
     fpOut = fopen(nomeFicheiroOut, "w");
     if (fpOut == NULL)
     {
-        exitProcessing = 1;
+        exit(0);
     }
 
     /*ler ficheiro Pals*/
-    while (fscanf(fpPals, "%s %s %d", palavra1, palavra2, &num) == 3 && !exitProcessing)
+    while (fscanf(fpPals, "%s %s %d", palavra1, palavra2, &num) == 3)
     {
-        len = strlen(palavra1);
+        len = strlen(palavra1) - 1;
         if (len > maxSize || num < 0)
         {
             fprintf(fpOut, "%s -1\n%s\n", palavra1, palavra2);
             continue;
         }
-        loc1 = Search(dic[len], palavra1, 0, counters[len]);
-        loc2 = Search(dic[len], palavra2, 0, counters[len]);
+        loc1 = Search(dic[len], palavra1, 0, counters[len] - 1);
+        loc2 = Search(dic[len], palavra2, 0, counters[len] - 1);
         if (isSorted[len] == 0)
         {
             Sort(dic, counters, len);
@@ -265,8 +224,35 @@ int main(int argc, char **argv)
             fprintf(fpOut, "%s -1\n%s\n", palavra1, palavra2);
             continue;
         }
-
-        printf("%f\n", Dijkstra(listv[len], counters[len], loc1, loc2, num));
+        if (pCounter[len] > 0)
+        {
+            if (listv[len] == NULL)
+            {
+                listv[len] = (LinkedList **)calloc(1, sizeof(LinkedList *) * counters[len]);
+                if (listv[len] == NULL)
+                    exit(0);
+                for (k = 0; k < counters[len]; k++)
+                {
+                    if (listv[len][k] == NULL)
+                        listv[len][k] = initLinkedList();
+                    for (j = k + 1; j < counters[len]; j++)
+                    {
+                        if ((wt = DiffChars(dic[len][k], dic[len][j], len)) > subs[len])
+                            continue;
+                        listv[len][k] = insertUnsortedLinkedList(listv[len][k], j, (wt * wt));
+                        listv[len][j] = insertUnsortedLinkedList(listv[len][j], k, (wt * wt));
+                    }
+                }
+            }
+            printf("%f\n", Dijkstra(listv[len], counters[len], loc1, loc2, num));
+            pCounter[len]--;
+            if (pCounter[len] <= 0)
+            {
+                for (i = 0; i < counters[len]; i++)
+                    FreeLinkedLIst(listv[len][i]);
+                free(listv[len]);
+            }
+        }
 
         fprintf(fpOut, "\n");
     }
@@ -275,12 +261,12 @@ int main(int argc, char **argv)
     FreeMem(dic, counters, maxSize);
     free(nomeFicheiroOut);
     free(aux);
+    free(listv);
     fclose(fpPals);
     fclose(fpDic);
     free(isSorted);
     free(pCounter);
     free(subs);
-    if (!exitProcessing)
-        fclose(fpOut);
+    fclose(fpOut);
     return 0;
 }

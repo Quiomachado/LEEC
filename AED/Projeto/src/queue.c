@@ -8,9 +8,12 @@ struct _queueElem
     int wt;
 };
 
-static QueueElem *queue;
-static int clear;
-static int hsize;
+typedef struct heapS
+{
+    int clear;
+    int hsize;
+    QueueElem *queue;
+} heap;
 
 void exch(QueueElem A, QueueElem B)
 {
@@ -21,81 +24,94 @@ void exch(QueueElem A, QueueElem B)
     return;
 }
 
-void FixUp(int Idx)
+void FixUp(heap *acervo, int Idx)
 {
-    while (Idx > 0 && (queue[(Idx - 1) / 2].wt < queue[Idx].wt))
+    while (Idx > 0 && (acervo->queue[(Idx - 1) / 2].wt < acervo->queue[Idx].wt))
     {
-        exch(queue[Idx], queue[(Idx - 1) / 2]);
+        exch(acervo->queue[Idx], acervo->queue[(Idx - 1) / 2]);
         Idx = (Idx - 1) / 2;
     }
 }
 
-void FixDown(int Idx)
+void FixDown(heap *acervo, int Idx)
 {
     int Child;
-    int N = clear - 1;
+    int N = (acervo->clear) - 1;
 
     while (2 * Idx < N)
     {
         Child = 2 * Idx + 1;
-        if (Child < N && (queue[Child].wt < queue[Child + 1].wt))
+        if (Child < N && (acervo->queue[Child].wt < acervo->queue[Child + 1].wt))
             Child++;
-        if (!(queue[Idx].wt < queue[Child].wt))
+        if (!(acervo->queue[Idx].wt < acervo->queue[Child].wt))
             break;
-        exch(queue[Idx], queue[Child]);
+        exch(acervo->queue[Idx], acervo->queue[Child]);
         Idx = Child;
     }
 }
 
-void PQinit(int Size)
+heap *PQinit(heap *acervo, int Size)
 {
-    queue = (QueueElem *)malloc(Size * sizeof(QueueElem));
-    hsize = Size;
-    clear = 0;
+    acervo = (heap *)malloc(sizeof(heap));
+    if (acervo == NULL)
+        exit(0);
+    acervo->queue = (QueueElem *)calloc(1, Size * sizeof(QueueElem));
+    if (acervo->queue == NULL)
+        exit(0);
+    acervo->hsize = Size;
+    acervo->clear = 0;
+    return acervo;
 }
 
-void PQinsert(int pos, int wt)
+heap *PQinsert(heap *acervo, int pos, int wt)
 {
     QueueElem A;
     A.pos = pos;
     A.wt = wt;
-    if ((clear + 1) < hsize)
+    if (((acervo->clear) + 1) < acervo->hsize)
     {
-        queue[clear] = A;
-        FixUp(clear);
-        clear++;
+        acervo->queue[acervo->clear] = A;
+        FixUp(acervo, acervo->clear);
+        acervo->clear++;
     }
-    return;
+    return acervo;
 }
 
-int PQempty()
+int PQempty(heap *acervo)
 {
-    if (clear == 0)
+    if (acervo->clear == 0)
         return 1;
     return 0;
 }
 
-int PQdelMax()
+int PQdelMax(heap **acervo)
 {
-    exch(queue[0], queue[clear - 1]);
-    FixDown(0);
-    return queue[--clear].pos;
+    exch((*acervo)->queue[0], (*acervo)->queue[(*acervo)->clear - 1]);
+    FixDown(*acervo, 0);
+    return (*acervo)->queue[--((*acervo)->clear)].pos;
 }
 
-void PQdec(int Idx, int nWt)
+heap *PQdec(heap *acervo, int Idx, int nWt)
 {
     int tmp;
-    for (tmp = 0; tmp < clear; tmp++)
-        if (queue[tmp].pos == Idx)
+    for (tmp = 0; tmp < acervo->clear; tmp++)
+        if (acervo->queue[tmp].pos == Idx)
             break;
-    if (nWt < queue[tmp].wt)
+    if (nWt < acervo->queue[tmp].wt)
     {
-        queue[tmp].wt = nWt;
-        FixUp(tmp);
+        acervo->queue[tmp].wt = nWt;
+        FixUp(acervo, tmp);
     }
-    else if (nWt > queue[tmp].wt)
+    else if (nWt > acervo->queue[tmp].wt)
     {
-        queue[tmp].wt = nWt;
-        FixDown(tmp);
+        acervo->queue[tmp].wt = nWt;
+        FixDown(acervo, tmp);
     }
+    return acervo;
+}
+
+void PQFree(heap *acervo)
+{
+    free(acervo->queue);
+    free(acervo);
 }

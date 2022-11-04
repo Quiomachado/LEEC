@@ -5,7 +5,8 @@
 
 struct LinkedListStruct
 {
-    Item this;
+    int pos;
+    int wt;
     LinkedList *next;
 };
 
@@ -14,14 +15,13 @@ LinkedList *initLinkedList(void)
     return NULL;
 }
 
-void FreeLinkedLIst(LinkedList *first, void (*freeItemFnt)(Item))
+void FreeLinkedLIst(LinkedList *first)
 {
     LinkedList *aux, *next;
 
     for (aux = first; aux != NULL; aux = next)
     {
         next = aux->next;
-        freeItemFnt(aux->this);
         free(aux);
     }
     return;
@@ -32,12 +32,17 @@ LinkedList *getNextNodeLinkedList(LinkedList *node)
     return ((node == NULL) ? NULL : node->next);
 }
 
-Item getItemLinkedList(LinkedList *node)
+int getWt(LinkedList *node)
 {
-    return ((node == NULL) ? NULL : node->this);
+    return (node->wt);
 }
 
-LinkedList *insertUnsortedLinkedList(LinkedList *next, Item this)
+int getpos(LinkedList *node)
+{
+    return (node->pos);
+}
+
+LinkedList *insertUnsortedLinkedList(LinkedList *next, int pos, int wt)
 {
     LinkedList *new;
 
@@ -45,7 +50,8 @@ LinkedList *insertUnsortedLinkedList(LinkedList *next, Item this)
     if (new == NULL)
         exit(0);
 
-    new->this = this;
+    new->pos = pos;
+    new->wt = wt;
     new->next = next;
 
     return new;

@@ -14,31 +14,31 @@ int *IniCounters(FILE *fpDic, int *maxSize)
     {
         if (strlen(novaPal) > size)
         {
-            counters = (int *)realloc(counters, sizeof(int) * (strlen(novaPal) + 1));
-            for (size = size + 1; size <= strlen(novaPal); size++)
+            counters = (int *)realloc(counters, sizeof(int) * strlen(novaPal));
+            for (size = size + 1; size < strlen(novaPal); size++)
                 counters[size] = 0;
-            size = strlen(novaPal);
+            size = strlen(novaPal) - 1;
         }
-        counters[strlen(novaPal)]++;
+        counters[strlen(novaPal) - 1]++;
     }
 
-    *maxSize = size;
+    *maxSize = size + 1;
 
     return counters;
 }
 
-char ***IniDic(FILE *fpDic, int *counters, int n)
+char ***IniDic(FILE *fpDic, int *counters, int maxSize)
 {
     int i, j;
     char ***dic = {NULL};
 
-    dic = (char ***)malloc(sizeof(char **) * (n + 1));
-    for (i = 1; i <= n; i++)
+    dic = (char ***)malloc(sizeof(char **) * maxSize);
+    for (i = 0; i < maxSize; i++)
     {
-        dic[i] = (char **)malloc(sizeof(char *) * (counters[i] + 1));
-        for (j = 0; j <= counters[i]; j++)
+        dic[i] = (char **)malloc(sizeof(char *) * counters[i]);
+        for (j = 0; j < counters[i]; j++)
         {
-            dic[i][j] = (char *)malloc(sizeof(char) * (i + 1));
+            dic[i][j] = (char *)malloc(sizeof(char) * (i + 2));
             dic[i][j][0] = '\0';
         }
     }
@@ -46,19 +46,19 @@ char ***IniDic(FILE *fpDic, int *counters, int n)
     return dic;
 }
 
-char ***LerDicionario(FILE *fpDic, char ***dic, int *counters, int n)
+char ***LerDicionario(FILE *fpDic, char ***dic, int *counters, int maxSize)
 {
-    int times[n + 1];
-    char nPal[n];
+    int times[maxSize];
+    char nPal[maxSize];
     int i;
     unsigned int tamanho;
 
-    for (i = 0; i < n + 1; i++)
+    for (i = 0; i < maxSize; i++)
         times[i] = 0;
 
     while (fscanf(fpDic, "%s", nPal) == 1)
     {
-        tamanho = strlen(nPal);
+        tamanho = strlen(nPal) - 1;
         strcpy(dic[tamanho][times[tamanho]], nPal);
         times[tamanho]++;
     }
@@ -73,7 +73,7 @@ int MyCompare(const void *a, const void *b)
 
 void Sort(char ***dic, int *counters, int linha)
 {
-    qsort(dic[linha], counters[linha] + 1, sizeof(char *), MyCompare);
+    qsort(dic[linha], counters[linha], sizeof(char *), MyCompare);
 }
 
 int Search(char **dic, char *palavra, int low, int high)
@@ -98,12 +98,12 @@ void ImprimirTamanhoDaLinha(int linha, int *counters, char *palavra, FILE *fpOut
     return;
 }
 
-void FreeMem(char ***dic, int *counters, int n)
+void FreeMem(char ***dic, int *counters, int maxSize)
 {
     int i, j;
-    for (i = 1; i <= n; i++)
+    for (i = 0; i < maxSize; i++)
     {
-        for (j = 0; j <= counters[i]; j++)
+        for (j = 0; j < counters[i]; j++)
         {
             free(dic[i][j]);
         }

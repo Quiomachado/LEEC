@@ -7,11 +7,13 @@
 #include "defs.h"
 
 typedef struct _queueElem QueueElem;
+typedef struct heapS heap;
 
-void PQinit(int Size);
-void PQinsert(int pos, int wt);
-int PQempty();
-int PQdelMax();
-void PQdec(int Idx, int nWt);
+heap *PQinit(heap *acervo, int Size);
+heap *PQinsert(heap *acervo, int pos, int wt);
+int PQempty(heap *acervo);
+int PQdelMax(heap **acervo);
+heap *PQdec(heap *acervo, int Idx, int nWt);
+void PQFree(heap *acervo);
 
 #endif

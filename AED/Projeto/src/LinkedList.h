@@ -6,9 +6,10 @@
 typedef struct LinkedListStruct LinkedList;
 
 LinkedList *initLinkedList(void);
-void FreeLinkedLIst(LinkedList *first, void (*freeItemFnt)(Item));
+void FreeLinkedLIst(LinkedList *first);
 LinkedList *getNextNodeLinkedList(LinkedList *node);
-Item getItemLinkedList(LinkedList *node);
-LinkedList *insertUnsortedLinkedList(LinkedList *next, Item this);
+LinkedList *insertUnsortedLinkedList(LinkedList *next, int pos, int wt);
+int getWt(LinkedList *node);
+int getpos(LinkedList *node);
 
 #endif
