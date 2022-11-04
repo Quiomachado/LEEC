@@ -104,6 +104,7 @@ heap *PQdec(heap *acervo, int Idx, int nWt)
 {
     int tmp;
     for (tmp = 0; tmp < acervo->clear; tmp++)
+    {
         if (acervo->queue[tmp].pos == Idx)
         {
             if (nWt <= acervo->queue[tmp].wt)
@@ -113,6 +114,7 @@ heap *PQdec(heap *acervo, int Idx, int nWt)
                 return acervo;
             }
         }
+    }
     return acervo;
 }
 
