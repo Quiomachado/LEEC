@@ -107,21 +107,21 @@ int Dijkstra(LinkedList **A, int nv, int s, int f, int mSub, double **tmpW, int 
     return flag;
 }
 
-void shortestPath(LinkedList **Graph, int son, int *st, char **dic, FILE *fpOut, int *dist)
+void shortestPath(LinkedList **Graph, int Child, int *st, char **dic, FILE *fpOut, int *dist)
 {
     LinkedList *aux;
-    if (st[son] == -1)
+    if (st[Child] == -1)
     {
-        fprintf(fpOut, "%s %d\n", dic[son], *dist);
+        fprintf(fpOut, "%s %d\n", dic[Child], *dist);
         return;
     }
-    for (aux = Graph[st[son]]; aux != NULL; aux = getNextNodeLinkedList(aux))
+    for (aux = Graph[st[Child]]; aux != NULL; aux = getNextNodeLinkedList(aux))
     {
-        if (getpos(aux) == son)
+        if (getpos(aux) == Child)
         {
             (*dist) += getWt(aux);
-            son = st[son];
-            shortestPath(Graph, son, st, dic, fpOut, dist);
+            Child = st[Child];
+            shortestPath(Graph, Child, st, dic, fpOut, dist);
             fprintf(fpOut, "%s\n", dic[getpos(aux)]);
             break;
         }
