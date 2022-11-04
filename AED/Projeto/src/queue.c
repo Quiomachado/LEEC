@@ -15,15 +15,12 @@ typedef struct heapS
     QueueElem *queue;
 } heap;
 
-void exch(QueueElem A, QueueElem B)
+void exch(QueueElem *A, QueueElem *B)
 {
     QueueElem tmp;
-    tmp.pos = A.pos;
-    tmp.wt = A.wt;
-    A.pos = B.pos;
-    A.wt = B.wt;
-    B.pos = tmp.pos;
-    B.wt = tmp.wt;
+    tmp = *A;
+    *A = *B;
+    *B = tmp;
     return;
 }
 
@@ -31,7 +28,7 @@ heap *FixUp(heap *acervo, int Idx)
 {
     while (Idx > 0 && (acervo->queue[(Idx - 1) / 2].wt < acervo->queue[Idx].wt))
     {
-        exch(acervo->queue[Idx], acervo->queue[(Idx - 1) / 2]);
+        exch(&(acervo->queue[Idx]), &(acervo->queue[(Idx - 1) / 2]));
         Idx = (Idx - 1) / 2;
     }
     return acervo;
@@ -40,16 +37,16 @@ heap *FixUp(heap *acervo, int Idx)
 heap *FixDown(heap *acervo, int Idx)
 {
     int Child;
-    int N = (acervo->clear) - 1;
+    int N = (acervo->clear) - 2;
 
     while (2 * Idx < N)
     {
         Child = 2 * Idx + 1;
-        if (Child < N && (acervo->queue[Child].wt < acervo->queue[Child + 1].wt))
+        if (Child < N && (acervo->queue[Child].wt > acervo->queue[Child + 1].wt))
             Child++;
-        if (!(acervo->queue[Idx].wt < acervo->queue[Child].wt))
+        if (!(acervo->queue[Idx].wt > acervo->queue[Child].wt))
             break;
-        exch(acervo->queue[Idx], acervo->queue[Child]);
+        exch(&(acervo->queue[Idx]), &(acervo->queue[Child]));
         Idx = Child;
     }
     return acervo;
@@ -94,7 +91,7 @@ int PQdelMax(heap **acervo)
     heap *tmp;
     int ret;
     tmp = *acervo;
-    exch(tmp->queue[0], tmp->queue[tmp->clear - 1]);
+    exch(&(tmp->queue[0]), &(tmp->queue[tmp->clear - 1]));
     *acervo = FixDown(*acervo, 0);
     tmp->clear--;
     ret = tmp->queue[tmp->clear].pos;
