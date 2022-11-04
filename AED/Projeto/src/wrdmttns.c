@@ -48,15 +48,14 @@ int DiffChars(char *A, char *B, int len)
     return count;
 }
 
-double Dijkstra(LinkedList **A, int nv, int s, int f, int mSub)
+void Dijkstra(LinkedList **A, int nv, int s, int f, int mSub, double **tmpW, int **tmpSt)
 {
     LinkedList *t;
     int tmpPos, tmpWt;
     int v, w;
-    int *st;
-    double *wt;
-    double finalWt;
     heap *acervo = NULL;
+    double *wt;
+    int *st;
 
     st = (int *)malloc(sizeof(int) * nv);
     if (st == NULL)
@@ -82,7 +81,6 @@ double Dijkstra(LinkedList **A, int nv, int s, int f, int mSub)
         {
             tmpWt = getWt(t);
             tmpPos = getpos(t);
-            /* printf("%d\n", tmpPos); */
             if (tmpWt > mSub)
                 continue;
             if (wt[w = tmpPos] == maxWT)
@@ -99,13 +97,33 @@ double Dijkstra(LinkedList **A, int nv, int s, int f, int mSub)
             }
         }
     }
-    finalWt = wt[f];
-    free(st);
-    free(wt);
+
+    *tmpSt = st;
+    *tmpW = wt;
+
     PQFree(acervo);
-    if (finalWt == maxWT)
-        return -1;
-    return finalWt;
+    return;
+}
+
+void shortestPath(LinkedList **Graph, int son, int *st, double *wt, char **dic, FILE *fpOut, int *dist)
+{
+    LinkedList *aux;
+    if (st[son] == -1)
+    {
+        fprintf(fpOut, "%s %d\n", dic[son], *dist);
+        return;
+    }
+    for (aux = Graph[st[son]]; aux != NULL; aux = getNextNodeLinkedList(aux))
+    {
+        if (getpos(aux) == son)
+        {
+            (*dist) += getWt(aux);
+            son = st[son];
+            shortestPath(Graph, son, st, wt, dic, fpOut, dist);
+            fprintf(fpOut, "%s\n", dic[son]);
+            break;
+        }
+    }
 }
 
 int main(int argc, char **argv)
@@ -119,10 +137,11 @@ int main(int argc, char **argv)
     int *counters = NULL;
     int *subs = NULL;
     int *pCounter = NULL;
-    int maxSize, len, loc1, loc2, counter = 0;
+    int maxSize, len, loc1, loc2, final = 0;
     int *isSorted;
+    double *wts;
+    int *st;
     LinkedList ***listv = {NULL};
-    LinkedList *tmp = NULL;
 
     if (argc < 3)
     {
@@ -248,7 +267,9 @@ int main(int argc, char **argv)
                     }
                 }
             }
-            printf("%f\n", Dijkstra(listv[len], counters[len], loc1, loc2, (num * num)));
+            Dijkstra(listv[len], counters[len], loc1, loc2, (num * num), &wts, &st);
+            final = 0;
+            shortestPath(listv[len], loc2, st, wts, dic[len], fpOut, &final);
             pCounter[len]--;
             if (pCounter[len] <= 0)
             {
@@ -257,11 +278,6 @@ int main(int argc, char **argv)
                 free(listv[len]);
             }
         }
-        /* counter = 0;
-        for (tmp = listv[len][loc1]; tmp != NULL; tmp = getNextNodeLinkedList(tmp))
-            printf("%d\n", getpos(tmp));
-        printf("\n");
-        printf("%d\n", counter); */
         fprintf(fpOut, "\n");
     }
 
@@ -270,6 +286,8 @@ int main(int argc, char **argv)
     free(nomeFicheiroOut);
     free(aux);
     free(listv);
+    free(wts);
+    free(st);
     fclose(fpPals);
     fclose(fpDic);
     free(isSorted);
