@@ -71,7 +71,7 @@ heap *PQinsert(heap *acervo, int pos, int wt)
     QueueElem A;
     A.pos = pos;
     A.wt = wt;
-    if (((acervo->clear) + 1) < acervo->hsize)
+    if ((acervo->clear + 1) < acervo->hsize)
     {
         acervo->queue[acervo->clear] = A;
         acervo = FixUp(acervo, acervo->clear);

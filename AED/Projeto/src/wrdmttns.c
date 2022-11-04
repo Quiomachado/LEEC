@@ -48,11 +48,11 @@ int DiffChars(char *A, char *B, int len)
     return count;
 }
 
-void Dijkstra(LinkedList **A, int nv, int s, int f, int mSub, double **tmpW, int **tmpSt)
+int Dijkstra(LinkedList **A, int nv, int s, int f, int mSub, double **tmpW, int **tmpSt)
 {
     LinkedList *t;
     int tmpPos, tmpWt;
-    int v, w;
+    int v, w, flag = -1;
     heap *acervo = NULL;
     double *wt;
     int *st;
@@ -76,7 +76,10 @@ void Dijkstra(LinkedList **A, int nv, int s, int f, int mSub, double **tmpW, int
     {
         v = PQdelMax(&acervo);
         if (v == f)
+        {
+            flag = 1;
             break;
+        }
         for (t = A[v]; t != NULL; t = getNextNodeLinkedList(t))
         {
             tmpWt = getWt(t);
@@ -101,7 +104,7 @@ void Dijkstra(LinkedList **A, int nv, int s, int f, int mSub, double **tmpW, int
     *tmpW = wt;
 
     PQFree(acervo);
-    return;
+    return flag;
 }
 
 void shortestPath(LinkedList **Graph, int son, int *st, char **dic, FILE *fpOut, int *dist)
@@ -136,7 +139,7 @@ int main(int argc, char **argv)
     int *counters = NULL;
     int *subs = NULL;
     int *pCounter = NULL;
-    int maxSize, len, loc1, loc2, final = 0;
+    int maxSize, len, loc1, loc2, final = 0, flag = 0;
     int *isSorted;
     double *wts;
     int *st;
@@ -270,9 +273,12 @@ int main(int argc, char **argv)
                     }
                 }
             }
-            Dijkstra(listv[len], counters[len], loc1, loc2, (num * num), &wts, &st);
+            flag = Dijkstra(listv[len], counters[len], loc1, loc2, (num * num), &wts, &st);
             final = 0;
-            shortestPath(listv[len], loc2, st, dic[len], fpOut, &final);
+            if (flag == 1)
+                shortestPath(listv[len], loc2, st, dic[len], fpOut, &final);
+            else if (flag == -1)
+                fprintf(fpOut, "%s -1\n%s\n", palavra1, palavra2);
             free(wts);
             free(st);
             pCounter[len]--;
