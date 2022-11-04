@@ -93,7 +93,7 @@ int PQdelMax(heap **acervo)
     int ret;
     tmp = *acervo;
     exch(&(tmp->queue[0]), &(tmp->queue[tmp->clear - 1]));
-    *acervo = FixDown(*acervo, 0);
+    tmp = FixDown(tmp, 0);
     tmp->clear--;
     ret = tmp->queue[tmp->clear].pos;
     *acervo = tmp;
