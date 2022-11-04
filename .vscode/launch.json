@@ -5,7 +5,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "args": ["/home/quio/LEEC/AED/Projeto/tests/dicts/portugues.dict", "/home/quio/LEEC/AED/Projeto/tests/Primeiros/primeiros01.pals"],
+            "args": ["/home/quio/LEEC/AED/Projeto/tests/dicts/portugues.dict", "/home/quio/LEEC/AED/Projeto/tests/Size05/Size_5_01.pals"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

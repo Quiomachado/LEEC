@@ -83,7 +83,7 @@ int Search(char **dic, char *palavra, int low, int high)
         int mid = low + (high - low) / 2;
 
         if (strcmp(dic[mid], palavra) == 0)
-            return mid - 1;
+            return mid;
         if (strcmp(dic[mid], palavra) > 0)
             return Search(dic, palavra, low, mid - 1);
         return Search(dic, palavra, mid + 1, high);

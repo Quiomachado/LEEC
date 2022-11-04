@@ -43,10 +43,8 @@ int DiffChars(char *A, char *B, int len)
     int count, i;
     count = 0;
     for (i = 0; i < len; i++)
-    {
         if (A[i] != B[i])
             count++;
-    }
     return count;
 }
 
@@ -54,7 +52,7 @@ double Dijkstra(LinkedList **A, int nv, int s, int f, int mSub)
 {
     LinkedList *t;
     int tmp;
-    int v, w;
+    int v, w, flag = 0;
     int *st;
     double *wt;
     double finalWt;
@@ -75,19 +73,22 @@ double Dijkstra(LinkedList **A, int nv, int s, int f, int mSub)
     }
     wt[s] = 0;
     acervo = PQinsert(acervo, s, wt[s]);
-    while (!PQempty(acervo))
+    while (!PQempty(acervo) && !flag)
     {
         if (wt[v = PQdelMax(&acervo)] != maxWT)
         {
             if (v == f)
+            {
+                flag = 1;
                 break;
+            }
             for (t = A[v]; t != NULL; getNextNodeLinkedList(t))
             {
                 tmp = getWt(t);
                 if (tmp > mSub)
                     continue;
                 acervo = PQinsert(acervo, getpos(t), wt[getpos(t)]);
-                if (wt[w = tmp] > wt[v] + tmp)
+                if (wt[w = getpos(t)] > wt[v] + tmp)
                 {
                     wt[w] = wt[v] + tmp;
                     acervo = PQdec(acervo, w, wt[w]);
@@ -212,13 +213,13 @@ int main(int argc, char **argv)
             fprintf(fpOut, "%s -1\n%s\n", palavra1, palavra2);
             continue;
         }
-        loc1 = Search(dic[len], palavra1, 0, counters[len] - 1);
-        loc2 = Search(dic[len], palavra2, 0, counters[len] - 1);
         if (isSorted[len] == 0)
         {
             Sort(dic, counters, len);
             isSorted[len] = 1;
         }
+        loc1 = Search(dic[len], palavra1, 0, counters[len] - 1);
+        loc2 = Search(dic[len], palavra2, 0, counters[len] - 1);
         if (loc1 == -1 || loc2 == -1)
         {
             fprintf(fpOut, "%s -1\n%s\n", palavra1, palavra2);
