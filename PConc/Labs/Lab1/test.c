@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 int Num_Words(char *path)
 {
@@ -49,6 +50,18 @@ void Sort(char **word_array, int size)
     qsort(word_array, size, sizeof(char *), MyCompare);
 }
 
+int Count_Words(char **word_array, int size, char letter)
+{
+    int counter = 0;
+    int i = 0;
+    for (i = 0; i < size; i++)
+    {
+        if (tolower(word_array[i][0]) == tolower(letter))
+            counter++;
+    }
+    return counter;
+}
+
 int main(int argc, char **argv)
 {
     char **word_array = {NULL};
@@ -61,9 +74,10 @@ int main(int argc, char **argv)
     size = Num_Words(path);
     word_array = Read_Dic(size, path);
     Sort(word_array, size);
+    for (char i = 'a'; i <= 'z'; i++)
+        printf("%d\n", Count_Words(word_array, size, i));
     for (int i = 0; i < size; i++)
     {
-        printf("%s\n", word_array[i]);
         free(word_array[i]);
     }
     free(word_array);
