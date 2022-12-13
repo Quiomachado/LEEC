@@ -53,22 +53,20 @@ int main(int argc, char **argv)
 {
     char **word_array = {NULL};
     int size = 0;
-    printf("%s", argv[1]);
-    /* char *path = NULL;
+    char *path = NULL;
     path = (char *)malloc(sizeof(char) * (strlen(argv[1]) + 1));
     if (path == NULL)
-        exit(0); */
-    char path[] = "lusiadas-words.txt";
-    /* strcpy(path, argv[1]); */
+        exit(0);
+    strcpy(path, argv[1]);
     size = Num_Words(path);
     word_array = Read_Dic(size, path);
     Sort(word_array, size);
     for (int i = 0; i < size; i++)
     {
-        /* printf("%s\n", word_array[i]); */
+        printf("%s\n", word_array[i]);
         free(word_array[i]);
     }
     free(word_array);
-    // free(path);
+    free(path);
     return 0;
 }
