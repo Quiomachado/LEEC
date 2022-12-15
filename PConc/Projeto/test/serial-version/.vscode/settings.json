@@ -1,0 +1,9 @@
+{
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/jnos/SYNC-Folder/CurrentWork/Docencia/22-23/2-PConc/Projecto/part-1/to-students/serial-version",
+            "binaryPath": "/home/jnos/SYNC-Folder/CurrentWork/Docencia/22-23/2-PConc/Projecto/part-1/to-students/serial-version/serial-basic",
+            "binaryArgs": []
+        }
+    ]
+}
