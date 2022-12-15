@@ -13,21 +13,21 @@
  * Description: creates clone of image and puts a watermark on it
  *
  *****************************************************************************/
-gdImagePtr  add_watermark(gdImagePtr in_img, gdImagePtr watermark){
-	
+gdImagePtr add_watermark(gdImagePtr in_img, gdImagePtr watermark)
+{
 	gdImagePtr out_img;
 
-	int width,heigth;
+	int width, heigth;
 
 	width = watermark->sx;
 	heigth = watermark->sy;
 
-	out_img =  gdImageClone (in_img);
+	out_img = gdImageClone(in_img);
 
 	gdImageCopy(out_img, watermark, 0, 0, 0, 0, width, heigth);
 
-	return(out_img);		
-} 
+	return (out_img);
+}
 
 /******************************************************************************
  * resize_image()
@@ -41,26 +41,27 @@ gdImagePtr  add_watermark(gdImagePtr in_img, gdImagePtr watermark){
  *              width
  *
  *****************************************************************************/
-gdImagePtr  resize_image(gdImagePtr in_img ,int new_width){
-	
+gdImagePtr resize_image(gdImagePtr in_img, int new_width)
+{
+
 	gdImagePtr out_img;
-	int width,heigth;
-	
+	int width, heigth;
+
 	// Get the image's width and height
-	
+
 	width = in_img->sx;
 	heigth = in_img->sy;
-	int new_heigth = (int) new_width *1.0/width * heigth;
-		
+	int new_heigth = (int)new_width * 1.0 / width * heigth;
 
 	gdImageSetInterpolationMethod(in_img, GD_BILINEAR_FIXED);
-    out_img = gdImageScale(in_img, new_width, new_heigth);
-	if (!out_img) {
+	out_img = gdImageScale(in_img, new_width, new_heigth);
+	if (!out_img)
+	{
 		return NULL;
 	}
 
-	return(out_img);		
-} 
+	return (out_img);
+}
 
 /******************************************************************************
  * make_thumb()
@@ -73,33 +74,35 @@ gdImagePtr  resize_image(gdImagePtr in_img ,int new_width){
  * Description: thumbnail of image with smalles dimension equal to target size
  *
  *****************************************************************************/
-gdImagePtr  make_thumb(gdImagePtr in_img, int size){
-	
+gdImagePtr make_thumb(gdImagePtr in_img, int size)
+{
+
 	gdImagePtr out_img, aux_img;
 
-
-	int width,heigth;
+	int width, heigth;
 	int new_heigth, new_width;
 	// Get the image's width and height
 
 	width = in_img->sx;
 	heigth = in_img->sy;
 
-	if (heigth > width){
+	if (heigth > width)
+	{
 		new_width = size;
-		new_heigth = (int) new_width *1.0/width * heigth;
-	}else{
-		new_heigth = size;
-		new_width = (int) new_heigth * 1.0 / heigth * width;
+		new_heigth = (int)new_width * 1.0 / width * heigth;
 	}
-		
+	else
+	{
+		new_heigth = size;
+		new_width = (int)new_heigth * 1.0 / heigth * width;
+	}
 
 	gdImageSetInterpolationMethod(in_img, GD_BILINEAR_FIXED);
-    aux_img = gdImageScale(in_img, new_width, new_heigth);
-	if (!aux_img) {
+	aux_img = gdImageScale(in_img, new_width, new_heigth);
+	if (!aux_img)
+	{
 		return NULL;
-    }
-
+	}
 
 	gdRect crop_area;
 	crop_area.height = size;
@@ -107,15 +110,16 @@ gdImagePtr  make_thumb(gdImagePtr in_img, int size){
 	crop_area.x = 0;
 	crop_area.y = 0;
 
-	out_img = gdImageCrop(aux_img, & crop_area);
+	out_img = gdImageCrop(aux_img, &crop_area);
 	gdImageDestroy(aux_img);
 
-	if (!out_img) {
+	if (!out_img)
+	{
 		return NULL;
-    }
+	}
 
-	return(out_img);		
-} 
+	return (out_img);
+}
 
 /******************************************************************************
  * read_png_file()
@@ -127,21 +131,24 @@ gdImagePtr  make_thumb(gdImagePtr in_img, int size){
  * Description: reads a PNG image from a file
  *
  *****************************************************************************/
-gdImagePtr read_png_file(char * file_name){
+gdImagePtr read_png_file(char *file_name)
+{
 
-	FILE * fp;
+	FILE *fp;
 	gdImagePtr read_img;
 
 	fp = fopen(file_name, "rb");
-   	if (!fp) {
-        fprintf(stderr, "Can't read image %s\n", file_name);
-        return NULL;
-    }
-    read_img = gdImageCreateFromPng(fp);
-    fclose(fp);
-  	if (read_img == NULL) {
-    	return NULL;
-    }
+	if (!fp)
+	{
+		fprintf(stderr, "Can't read image %s\n", file_name);
+		return NULL;
+	}
+	read_img = gdImageCreateFromPng(fp);
+	fclose(fp);
+	if (read_img == NULL)
+	{
+		return NULL;
+	}
 
 	return read_img;
 }
@@ -157,11 +164,13 @@ gdImagePtr read_png_file(char * file_name){
  * Description: writes a PNG image to a file
  *
  *****************************************************************************/
-int write_png_file(gdImagePtr write_img, char * file_name){
-	FILE * fp;
+int write_png_file(gdImagePtr write_img, char *file_name)
+{
+	FILE *fp;
 
 	fp = fopen(file_name, "wb");
-	if (fp == NULL) {
+	if (fp == NULL)
+	{
 		return 0;
 	}
 	gdImagePng(write_img, fp);
@@ -178,17 +187,22 @@ int write_png_file(gdImagePtr write_img, char * file_name){
  *                 0 in case of failure to create
  * Side-Effects: none
  *
- * Description: Create a directory. 
+ * Description: Create a directory.
  *
  *****************************************************************************/
-int create_directory(char * dir_name){
+int create_directory(char *dir_name)
+{
 
-	DIR * d = opendir(dir_name);
-	if (d == NULL){
-		if (mkdir(dir_name, 0777)!=0){
+	DIR *d = opendir(dir_name);
+	if (d == NULL)
+	{
+		if (mkdir(dir_name, 0777) != 0)
+		{
 			return 0;
 		}
-	}else{
+	}
+	else
+	{
 		fprintf(stderr, "%s directory already existent\n", dir_name);
 		closedir(d);
 	}
