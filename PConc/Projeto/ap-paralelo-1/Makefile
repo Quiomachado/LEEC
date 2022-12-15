@@ -3,11 +3,14 @@ CFLAGS=-Wall -g -lpthread -lgd
 
 all: main
 
-main: main.o
-		$(CC) $(CFLAGS) -o main main.o
+main: image-lib.o main.o
+		$(CC) -o main main.o image-lib.o $(CFLAGS)
 
-main.o:
-		$(CC) -c $(CFLAGS) main.c
+image-lib.o: image-lib.c image-lib.h
+		$(CC) -c image-lib.c $(CFLAGS)
+
+main.o: main.c image-lib.h
+		$(CC) -c main.c $(CFLAGS)
 
 clean::
 		rm -f *.o core main *~

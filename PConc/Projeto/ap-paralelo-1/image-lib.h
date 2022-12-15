@@ -1,5 +1,4 @@
-#include "gd.h"
-
+#include <gd.h>
 
 /******************************************************************************
  * add_watermark()
@@ -12,8 +11,7 @@
  * Description: creates clone of image and puts a watermark on it
  *
  *****************************************************************************/
-gdImagePtr  add_watermark(gdImagePtr in_img, gdImagePtr watermark);
-
+gdImagePtr add_watermark(gdImagePtr in_img, gdImagePtr watermark);
 
 /******************************************************************************
  * resize_image()
@@ -27,7 +25,7 @@ gdImagePtr  add_watermark(gdImagePtr in_img, gdImagePtr watermark);
  *              width
  *
  *****************************************************************************/
-gdImagePtr  resize_image(gdImagePtr in_img ,int new_width);
+gdImagePtr resize_image(gdImagePtr in_img, int new_width);
 
 /******************************************************************************
  * make_thumb()
@@ -40,7 +38,7 @@ gdImagePtr  resize_image(gdImagePtr in_img ,int new_width);
  * Description: thumbnail of image with smalles dimension equal to target size
  *
  *****************************************************************************/
-gdImagePtr  make_thumb(gdImagePtr in_img, int size);
+gdImagePtr make_thumb(gdImagePtr in_img, int size);
 
 /******************************************************************************
  * read_png_file()
@@ -52,7 +50,7 @@ gdImagePtr  make_thumb(gdImagePtr in_img, int size);
  * Description: reads a PNG image from a file
  *
  *****************************************************************************/
-gdImagePtr read_png_file(char * file_name);
+gdImagePtr read_png_file(char *file_name);
 
 /******************************************************************************
  * write_png_file()
@@ -65,7 +63,7 @@ gdImagePtr read_png_file(char * file_name);
  * Description: writes a PNG image to a file
  *
  *****************************************************************************/
-int write_png_file(gdImagePtr write_img, char * file_name);
+int write_png_file(gdImagePtr write_img, char *file_name);
 
 /******************************************************************************
  * create_directory()
@@ -75,7 +73,7 @@ int write_png_file(gdImagePtr write_img, char * file_name);
  *                 0 in case of failure to create
  * Side-Effects: none
  *
- * Description: Create a directory. 
+ * Description: Create a directory.
  *
  *****************************************************************************/
-int create_directory(char * dir_name);
+int create_directory(char *dir_name);
