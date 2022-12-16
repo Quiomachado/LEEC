@@ -6,6 +6,16 @@
 #include "image-lib.h"
 char WATERMARK[] = "watermark.png";
 
+#define RESIZE_DIR "./Resize-dir/"
+#define THUMB_DIR "./Thumbnail-dir/"
+#define WATER_DIR "./Watermark-dir/"
+
+typedef struct imgs
+{
+    gdImagePtr *in_img;
+    gdImagePtr watermark_img;
+} imgs;
+
 int main(int argc, char **argv)
 {
     char *img_dir_path = NULL;
@@ -16,7 +26,10 @@ int main(int argc, char **argv)
     FILE *img_file = NULL;
     char img_list[40][100];
     char buffer[100];
+    imgs **inputs = {NULL};
     int *n_img_thread = NULL;
+    int img_counter = 0;
+
     if (argc != 3)
     {
         printf("Wrong Number of arguments.\n");
@@ -30,6 +43,8 @@ int main(int argc, char **argv)
     strcat(img_dir_path, "/");
 
     n_threads = argv[2];
+
+    inputs = (imgs **)malloc(sizeof(imgs *) * n_threads);
 
     img_file = fopen(img_file_path, "r");
     if (img_file == NULL)
@@ -53,6 +68,29 @@ int main(int argc, char **argv)
     for (int i = n_threads % n_img - 1; i >= 0; i--)
         n_img_thread[i] += 1;
 
+    for (int i = 0; i < n_threads; i++)
+    {
+        inputs[i]->watermark_img = read_png_file(WATERMARK);
+        inputs[i]->in_img = (gdImagePtr *)malloc(sizeof(n_img_thread[i]));
+        for (int k = 0; k < n_img_thread[i]; k++)
+        {
+            inputs[i]->in_img[k] = read_png_file(img_list[img_counter]);
+            img_counter++;
+        }
+    }
+
+    
+
     free(img_dir_path);
+    for (int i = 0; i < n_threads; i++)
+    {
+        gdImageDestroy(inputs[i]->watermark_img);
+        for (int k = 0; k < n_img_thread[i]; k++)
+            gdImageDestroy(inputs[i]->in_img[k]);
+        free(inputs[i]->in_img);
+        free(inputs[i]);
+    }
+    free(inputs);
+    free(n_img_thread);
     return 0;
 }
