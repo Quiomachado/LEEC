@@ -1,0 +1,31 @@
+PC - Intel(R) Core(TM) i7-9700F CPU @ 3.00GHz
+dataset-original - 5,072
+dataset1 - 2,84s
+dataset2 - 9,761
+dataset3 - 11,113
+
+
+IMAC - Intel(R) Core(TM) i5-4570 CPU @ 3.20GHz
+dataset-original - 6,409
+dataset1 - 3,617
+dataset2 - 12,086
+dataset3 - 13,925
+
+Sigma - Intel(R) Xeon(R) CPU E5-2630 v4 @ 2.20GHz
+dataset-original - 11,602
+dataset1 - 6,349
+dataset2 - 20,889
+dataset3 - 25,814
+
+tablet Win11+WSL - Intel(R) Pentium(R) Silver N5030 CPU @ 1.10GHz
+dataset-original - 12.339
+dataset1 - 8.275
+dataset2 - 27.034
+dataset3 - 27.112
+
+laptop XPS- Intel(R) Core(TM) i7-7Y75 CPU @ 1.30GHz
+dataset-original -18,46
+dataset1 - 10,790
+dataset2 - 34,566
+dataset3 - 39,890
+
