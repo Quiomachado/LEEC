@@ -13,12 +13,11 @@ int pipe_fd[2];
 void *thread_function(void *arg)
 {
     int *int_arg = (int *)arg;
-    int value = *int_arg;
-    int read_value = -1;
+    char read_value[100];
     while (1)
     {
         read(pipe_fd[0], &read_value, sizeof(read_value));
-        printf("Thread %d just read %d from pipe_fd[0]\n", value, read_value);
+        printf("Thread just read %s from pipe_fd[0]\n", read_value);
     }
     pthread_exit(NULL);
 }
@@ -33,7 +32,7 @@ int main()
         printf("error creating the pipe");
         exit(-1);
     }
-    int n = 0;
+    char n[] = "ola";
 
     pthread_t thread_id[4];
     for (int i = 0; i < 4; i++)
@@ -41,8 +40,10 @@ int main()
         pthread_create(&thread_id[i], NULL, thread_function, (void *)i);
     }
 
+    write(pipe_fd[1], &n, sizeof(n));
+
     // infinite look that in each iteration writes a number to the pipe and read it aftwards
-    while (1)
+    /* while (1)
     {
         printf("going to write %d into pipe_fd[1]\n", n);
         write(pipe_fd[1], &n, sizeof(n));
@@ -54,5 +55,5 @@ int main()
         // pipe_fd[0] correpsonded to the exit of data in the pipe
         // &n is apointer to variable that will hold the read data
         // sizeof(n) is the ammount of data to be read from the pipe
-    }
+    } */
 }
