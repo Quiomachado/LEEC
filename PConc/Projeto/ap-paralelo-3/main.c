@@ -236,7 +236,6 @@ int main(int argc, char **argv)
     {
         printf("Error Creating Pipe.\n");
     }
-    input = (imgs *)malloc(sizeof(imgs));
     while (fscanf(img_file, "%s", buffer) == 1)
     {
         strcpy(img_name[n_img], buffer);
@@ -301,6 +300,7 @@ int main(int argc, char **argv)
     for (int i = 0; i < n_threads; i++)
     {
         write(WM_pipe[1], &input, sizeof(input));
+        sleep(2);
     }
 
     for (int i = 0; i < n_threads; i++)
