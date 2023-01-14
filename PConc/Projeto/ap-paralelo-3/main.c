@@ -39,13 +39,11 @@ void *watermark_function(void *arg)
 
     while (1)
     {
-        printf("A1\n");
         read(WM_pipe[0], &input, sizeof(input));
         if (input->n_img == -10)
         {
             gdImageDestroy(watermark_img);
             write(R_pipe[1], &input, sizeof(input));
-            printf("A\n");
             return (void *)NULL;
         }
 
@@ -94,12 +92,10 @@ void *resize_function(void *arg)
 
     while (1)
     {
-        printf("B1\n");
         read(R_pipe[0], &input, sizeof(input));
         if (input->n_img == -10)
         {
             write(TH_pipe[1], &input, sizeof(input));
-            printf("B\n");
             return (void *)NULL;
         }
 
@@ -145,12 +141,9 @@ void *thumbnail_function(void *arg)
 
     while (1)
     {
-        printf("C1\n");
         read(TH_pipe[0], &input, sizeof(input));
-        printf("%d\n", input->n_img);
         if (input->n_img == -10)
         {
-            printf("C\n");
             return (void *)NULL;
         }
 
@@ -305,7 +298,10 @@ int main(int argc, char **argv)
         sleep(2);
     }
     input->n_img = -10;
-    write(WM_pipe[1], &input, sizeof(input));
+    for (int i = 0; i < n_threads; i++)
+    {
+        write(WM_pipe[1], &input, sizeof(input));
+    }
 
     for (int i = 0; i < n_threads; i++)
     {

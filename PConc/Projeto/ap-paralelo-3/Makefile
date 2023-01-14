@@ -13,4 +13,7 @@ main.o: main.c image-lib.h
 		$(CC) -c main.c $(CFLAGS)
 
 clean::
-		rm -f *.o core ap-paralelo-3 *~
+		rm -f -r *.o core ap-paralelo-3 Resize-dir/ Thumbnail-dir/ Watermark-dir/ *~
+
+clean-dir::
+		rm -r Resize-dir/ Thumbnail-dir/ Watermark-dir/
