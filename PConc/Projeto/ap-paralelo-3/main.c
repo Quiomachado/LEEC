@@ -39,11 +39,15 @@ void *watermark_function(void *arg)
 
     while (1)
     {
+        printf("A1\n");
         read(WM_pipe[0], &input, sizeof(input));
-        /* if (input->n_img == -10)
-            break; */
-
-        printf("watermark  %s\n", input->img);
+        if (input->n_img == -10)
+        {
+            gdImageDestroy(watermark_img);
+            write(R_pipe[1], &input, sizeof(input));
+            printf("A\n");
+            return (void *)NULL;
+        }
 
         sprintf(out_file_name, "%s%s", WATER_DIR, input->img_name);
         if (access(out_file_name, F_OK) != -1)
@@ -90,11 +94,14 @@ void *resize_function(void *arg)
 
     while (1)
     {
+        printf("B1\n");
         read(R_pipe[0], &input, sizeof(input));
-        /* if (input->n_img == -10)
-            break; */
-
-        printf("resize  %s\n", input->img);
+        if (input->n_img == -10)
+        {
+            write(TH_pipe[1], &input, sizeof(input));
+            printf("B\n");
+            return (void *)NULL;
+        }
 
         sprintf(out_file_name, "%s%s", RESIZE_DIR, input->img_name);
         if (access(out_file_name, F_OK) != -1)
@@ -138,11 +145,14 @@ void *thumbnail_function(void *arg)
 
     while (1)
     {
+        printf("C1\n");
         read(TH_pipe[0], &input, sizeof(input));
-        /* if (input->n_img == -10)
-            break; */
-
-        printf("thumbnail  %s\n", input->img);
+        printf("%d\n", input->n_img);
+        if (input->n_img == -10)
+        {
+            printf("C\n");
+            return (void *)NULL;
+        }
 
         sprintf(out_file_name, "%s%s", THUMB_DIR, input->img_name);
         if (access(out_file_name, F_OK) != -1)
@@ -178,13 +188,13 @@ int main(int argc, char **argv)
 {
     char *img_dir_path = NULL;
     char dir_extra[] = "./";
-    // int n_img = 0;
+    int n_img = 0;
     char img_file_p[] = "image-list.txt";
     char img_file_path[100];
     FILE *img_file = NULL;
     int n_threads;
-    /* char img_list[100];
-    char img_name[100]; */
+    char img_list[40][100];
+    char img_name[40][100];
     char buffer[100];
     pthread_t *WM_thread_ids;
     pthread_t *R_thread_ids;
@@ -234,18 +244,23 @@ int main(int argc, char **argv)
         printf("Error Creating Pipe.\n");
     }
     input = (imgs *)malloc(sizeof(imgs));
-    input->n_img = 0;
     while (fscanf(img_file, "%s", buffer) == 1)
     {
-        strcpy(input->img_name, buffer);
-        strcpy(input->img, img_dir_path);
-        strcat(input->img, buffer);
-        input->n_img += 1;
-        write(WM_pipe[1], &input, sizeof(input));
+        strcpy(img_name[n_img], buffer);
+        strcpy(img_list[n_img], img_dir_path);
+        strcat(img_list[n_img], buffer);
+        n_img++;
     }
-    input->n_img = -10;
-    write(WM_pipe[1], &input, sizeof(input));
-    sleep(1);
+    /* input->n_img = n_img;
+    for (int i = 0; i < n_img; i++)
+    {
+        strcpy(input->img_name, img_name[i]);
+        strcpy(input->img, img_list[i]);
+        write(WM_pipe[1], &input, sizeof(input));
+        sleep(1);
+    } */
+    /* input->n_img = -10;
+    write(WM_pipe[1], &input, sizeof(input)); */
 
     if (create_directory(RESIZE_DIR) == 0)
     {
@@ -280,7 +295,7 @@ int main(int argc, char **argv)
         pthread_create(&TH_thread_ids[i], NULL, thumbnail_function, NULL);
     }
 
-    /* input = (imgs *)malloc(sizeof(imgs));
+    input = (imgs *)malloc(sizeof(imgs));
     input->n_img = n_img;
     for (int i = 0; i < n_img; i++)
     {
@@ -291,7 +306,6 @@ int main(int argc, char **argv)
     }
     input->n_img = -10;
     write(WM_pipe[1], &input, sizeof(input));
-    sleep(1); */
 
     for (int i = 0; i < n_threads; i++)
     {
