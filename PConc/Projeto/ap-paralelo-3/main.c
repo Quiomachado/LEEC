@@ -21,13 +21,13 @@ int WM_pipe[2];
 int R_pipe[2];
 int TH_pipe[2];
 
-pthread_mutex_t mutexWM;
+/* pthread_mutex_t mutexWM;
 pthread_mutex_t mutexR;
 pthread_mutex_t mutexTH;
 
 pthread_cond_t condWM;
 pthread_cond_t condR;
-pthread_cond_t condTH;
+pthread_cond_t condTH; */
 
 void *watermark_function(void *arg)
 {
@@ -36,12 +36,12 @@ void *watermark_function(void *arg)
     gdImagePtr in_img;
     gdImagePtr out_watermark_img;
     gdImagePtr watermark_img = read_png_file(WATERMARK);
-    int i = 0;
 
     while (1)
     {
         read(WM_pipe[0], &input, sizeof(input));
-        i++;
+        /* if (input->n_img == -10)
+            break; */
 
         printf("watermark  %s\n", input->img);
 
@@ -76,8 +76,6 @@ void *watermark_function(void *arg)
             gdImageDestroy(out_watermark_img);
         }
         gdImageDestroy(in_img);
-        if (i == input->n_img)
-            break;
     }
     gdImageDestroy(watermark_img);
     return (void *)NULL;
@@ -89,12 +87,12 @@ void *resize_function(void *arg)
     char out_file_name[1000];
     gdImagePtr in_img;
     gdImagePtr out_resized_img;
-    int i = 0;
 
     while (1)
     {
         read(R_pipe[0], &input, sizeof(input));
-        i++;
+        /* if (input->n_img == -10)
+            break; */
 
         printf("resize  %s\n", input->img);
 
@@ -127,8 +125,6 @@ void *resize_function(void *arg)
             gdImageDestroy(out_resized_img);
         }
         gdImageDestroy(in_img);
-        if (i == input->n_img)
-            break;
     }
     return (void *)NULL;
 }
@@ -139,12 +135,12 @@ void *thumbnail_function(void *arg)
     char out_file_name[1000];
     gdImagePtr in_img;
     gdImagePtr out_thumb_img;
-    int i = 0;
 
     while (1)
     {
         read(TH_pipe[0], &input, sizeof(input));
-        i++;
+        /* if (input->n_img == -10)
+            break; */
 
         printf("thumbnail  %s\n", input->img);
 
@@ -174,8 +170,6 @@ void *thumbnail_function(void *arg)
             gdImageDestroy(out_thumb_img);
         }
         gdImageDestroy(in_img);
-        if (i == input->n_img)
-            break;
     }
     return (void *)NULL;
 }
@@ -184,13 +178,13 @@ int main(int argc, char **argv)
 {
     char *img_dir_path = NULL;
     char dir_extra[] = "./";
-    int n_img = 0;
+    // int n_img = 0;
     char img_file_p[] = "image-list.txt";
     char img_file_path[100];
     FILE *img_file = NULL;
     int n_threads;
-    char img_list[40][100];
-    char img_name[40][100];
+    /* char img_list[100];
+    char img_name[100]; */
     char buffer[100];
     pthread_t *WM_thread_ids;
     pthread_t *R_thread_ids;
@@ -203,13 +197,13 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    pthread_cond_init(&condWM, NULL);
+    /* pthread_cond_init(&condWM, NULL);
     pthread_cond_init(&condR, NULL);
     pthread_cond_init(&condTH, NULL);
 
     pthread_mutex_init(&mutexWM, NULL);
     pthread_mutex_init(&mutexR, NULL);
-    pthread_mutex_init(&mutexTH, NULL);
+    pthread_mutex_init(&mutexTH, NULL); */
 
     n_threads = atoi(argv[2]);
 
@@ -227,13 +221,31 @@ int main(int argc, char **argv)
         printf("File %s not found.\n", img_file_path);
         exit(1);
     }
+    if (pipe(WM_pipe) != 0)
+    {
+        printf("Error Creating Pipe.\n");
+    }
+    if (pipe(R_pipe) != 0)
+    {
+        printf("Error Creating Pipe.\n");
+    }
+    if (pipe(TH_pipe) != 0)
+    {
+        printf("Error Creating Pipe.\n");
+    }
+    input = (imgs *)malloc(sizeof(imgs));
+    input->n_img = 0;
     while (fscanf(img_file, "%s", buffer) == 1)
     {
-        strcpy(img_name[n_img], buffer);
-        strcpy(img_list[n_img], img_dir_path);
-        strcat(img_list[n_img], buffer);
-        n_img++;
+        strcpy(input->img_name, buffer);
+        strcpy(input->img, img_dir_path);
+        strcat(input->img, buffer);
+        input->n_img += 1;
+        write(WM_pipe[1], &input, sizeof(input));
     }
+    input->n_img = -10;
+    write(WM_pipe[1], &input, sizeof(input));
+    sleep(1);
 
     if (create_directory(RESIZE_DIR) == 0)
     {
@@ -261,19 +273,6 @@ int main(int argc, char **argv)
     if (TH_thread_ids == NULL)
         exit(-1);
 
-    if (pipe(WM_pipe) != 0)
-    {
-        printf("Error Creating Pipe.\n");
-    }
-    if (pipe(R_pipe) != 0)
-    {
-        printf("Error Creating Pipe.\n");
-    }
-    if (pipe(TH_pipe) != 0)
-    {
-        printf("Error Creating Pipe.\n");
-    }
-
     for (int i = 0; i < n_threads; i++)
     {
         pthread_create(&WM_thread_ids[i], NULL, watermark_function, NULL);
@@ -281,7 +280,7 @@ int main(int argc, char **argv)
         pthread_create(&TH_thread_ids[i], NULL, thumbnail_function, NULL);
     }
 
-    input = (imgs *)malloc(sizeof(imgs));
+    /* input = (imgs *)malloc(sizeof(imgs));
     input->n_img = n_img;
     for (int i = 0; i < n_img; i++)
     {
@@ -290,6 +289,9 @@ int main(int argc, char **argv)
         write(WM_pipe[1], &input, sizeof(input));
         sleep(2);
     }
+    input->n_img = -10;
+    write(WM_pipe[1], &input, sizeof(input));
+    sleep(1); */
 
     for (int i = 0; i < n_threads; i++)
     {
@@ -303,11 +305,11 @@ int main(int argc, char **argv)
     free(WM_thread_ids);
     free(R_thread_ids);
     free(TH_thread_ids);
-    pthread_cond_destroy(&condWM);
+    /* pthread_cond_destroy(&condWM);
     pthread_cond_destroy(&condR);
     pthread_cond_destroy(&condTH);
     pthread_mutex_destroy(&mutexWM);
     pthread_mutex_destroy(&mutexR);
-    pthread_mutex_destroy(&mutexTH);
+    pthread_mutex_destroy(&mutexTH); */
     return 0;
 }

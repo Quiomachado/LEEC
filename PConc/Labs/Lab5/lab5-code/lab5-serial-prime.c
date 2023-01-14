@@ -50,7 +50,8 @@ void *verify_primes_thread(void *arg)
     while (1)
     {
         // STEP 4
-        read(pipe_fd[0], &number, sizeof(number));
+        if (!read(pipe_fd[0], &number, sizeof(number)))
+            printf("OLA\n");
         if (verify_prime(number) == 1)
         {
             printf("\t\t%d is prime\n", number);
@@ -94,6 +95,8 @@ int main()
     {
         pthread_create(&t_id[i], NULL, verify_primes_thread, (void *)i);
     }
+
+    sleep(5);
 
     int number;
     int n_primes = 0;
