@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <unistd.h>
 #include "image-lib.h"
+
 char WATERMARK[] = "watermark.png";
 
 #define RESIZE_DIR "./Resize-dir/"
