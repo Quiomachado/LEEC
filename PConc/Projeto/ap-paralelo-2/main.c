@@ -168,7 +168,10 @@ int main(int argc, char **argv)
     char *img_dir_path = NULL;
     char dir_extra[] = "./";
     int n_img = 0;
-    char img_file_path[] = "image-list.txt";
+    //new
+    char img_file_p[] = "image-list.txt";
+    char img_file_path[100];
+    //end new
     FILE *img_file = NULL;
     int n_threads = 3;
     char img_list[40][100];
@@ -188,6 +191,11 @@ int main(int argc, char **argv)
     strcat(img_dir_path, argv[1]);
     strcat(img_dir_path, "/");
 
+    //new
+    strcpy(img_file_path, img_dir_path);
+    strcat(img_file_path, img_file_p);
+    //end new
+    
     img_file = fopen(img_file_path, "r");
     if (img_file == NULL)
     {
