@@ -21,14 +21,6 @@ int WM_pipe[2];
 int R_pipe[2];
 int TH_pipe[2];
 
-/* pthread_mutex_t mutexWM;
-pthread_mutex_t mutexR;
-pthread_mutex_t mutexTH;
-
-pthread_cond_t condWM;
-pthread_cond_t condR;
-pthread_cond_t condTH; */
-
 void *watermark_function(void *arg)
 {
     imgs *input = NULL;
@@ -199,14 +191,6 @@ int main(int argc, char **argv)
         printf("./ap-paralelo-2 img_dir (number of threads per stage)\n");
         exit(1);
     }
-
-    /* pthread_cond_init(&condWM, NULL);
-    pthread_cond_init(&condR, NULL);
-    pthread_cond_init(&condTH, NULL);
-
-    pthread_mutex_init(&mutexWM, NULL);
-    pthread_mutex_init(&mutexR, NULL);
-    pthread_mutex_init(&mutexTH, NULL); */
 
     n_threads = atoi(argv[2]);
 
