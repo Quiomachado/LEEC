@@ -66,7 +66,6 @@ void *watermark_function(void *arg)
             }
             strcpy(input->img, out_file_name);
             write(R_pipe[1], &input, sizeof(input));
-            sleep(1);
             gdImageDestroy(out_watermark_img);
         }
         gdImageDestroy(in_img);
@@ -116,7 +115,6 @@ void *resize_function(void *arg)
             }
             strcpy(input->img, out_file_name);
             write(TH_pipe[1], &input, sizeof(input));
-            sleep(1);
             gdImageDestroy(out_resized_img);
         }
         gdImageDestroy(in_img);
@@ -165,6 +163,7 @@ void *thumbnail_function(void *arg)
             gdImageDestroy(out_thumb_img);
         }
         gdImageDestroy(in_img);
+        free(input);
     }
     return (void *)NULL;
 }
@@ -227,16 +226,6 @@ int main(int argc, char **argv)
         strcat(img_list[n_img], buffer);
         n_img++;
     }
-    /* input->n_img = n_img;
-    for (int i = 0; i < n_img; i++)
-    {
-        strcpy(input->img_name, img_name[i]);
-        strcpy(input->img, img_list[i]);
-        write(WM_pipe[1], &input, sizeof(input));
-        sleep(1);
-    } */
-    /* input->n_img = -10;
-    write(WM_pipe[1], &input, sizeof(input)); */
 
     if (create_directory(RESIZE_DIR) == 0)
     {
@@ -271,20 +260,19 @@ int main(int argc, char **argv)
         pthread_create(&TH_thread_ids[i], NULL, thumbnail_function, NULL);
     }
 
-    input = (imgs *)malloc(sizeof(imgs));
-    input->n_img = n_img;
     for (int i = 0; i < n_img; i++)
     {
+        input = (imgs *)malloc(sizeof(imgs));
+        input->n_img = n_img;
         strcpy(input->img, img_list[i]);
         strcpy(input->img_name, img_name[i]);
         write(WM_pipe[1], &input, sizeof(input));
-        sleep(2);
     }
+    input = (imgs *)malloc(sizeof(imgs));
     input->n_img = -10;
     for (int i = 0; i < n_threads; i++)
     {
         write(WM_pipe[1], &input, sizeof(input));
-        sleep(2);
     }
 
     for (int i = 0; i < n_threads; i++)
