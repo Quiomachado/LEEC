@@ -32,6 +32,7 @@ void *watermark_function(void *arg)
     while (1)
     {
         read(WM_pipe[0], &input, sizeof(input));
+        printf("%s read from WM_pipe\n", input->img_name);
         if (input->n_img == -10)
         {
             gdImageDestroy(watermark_img);
@@ -66,6 +67,7 @@ void *watermark_function(void *arg)
             }
             strcpy(input->img, out_file_name);
             write(R_pipe[1], &input, sizeof(input));
+            printf("%s write to R_pipe\n", input->img_name);
             gdImageDestroy(out_watermark_img);
         }
         gdImageDestroy(in_img);
@@ -84,6 +86,7 @@ void *resize_function(void *arg)
     while (1)
     {
         read(R_pipe[0], &input, sizeof(input));
+        printf("%s read from R_pipe\n", input->img_name);
         if (input->n_img == -10)
         {
             write(TH_pipe[1], &input, sizeof(input));
@@ -115,6 +118,7 @@ void *resize_function(void *arg)
             }
             strcpy(input->img, out_file_name);
             write(TH_pipe[1], &input, sizeof(input));
+            printf("%s write to TH_pipe\n", input->img_name);
             gdImageDestroy(out_resized_img);
         }
         gdImageDestroy(in_img);
@@ -132,6 +136,7 @@ void *thumbnail_function(void *arg)
     while (1)
     {
         read(TH_pipe[0], &input, sizeof(input));
+        printf("%s read from TH_pipe\n", input->img_name);
         if (input->n_img == -10)
         {
             return (void *)NULL;
@@ -267,6 +272,7 @@ int main(int argc, char **argv)
         strcpy(input->img, img_list[i]);
         strcpy(input->img_name, img_name[i]);
         write(WM_pipe[1], &input, sizeof(input));
+        printf("%s write to WM_pipe\n", input->img_name);
     }
     input = (imgs *)malloc(sizeof(imgs));
     input->n_img = -10;
@@ -287,11 +293,5 @@ int main(int argc, char **argv)
     free(WM_thread_ids);
     free(R_thread_ids);
     free(TH_thread_ids);
-    /* pthread_cond_destroy(&condWM);
-    pthread_cond_destroy(&condR);
-    pthread_cond_destroy(&condTH);
-    pthread_mutex_destroy(&mutexWM);
-    pthread_mutex_destroy(&mutexR);
-    pthread_mutex_destroy(&mutexTH); */
     return 0;
 }
