@@ -3,11 +3,10 @@
 
 typedef struct node_struct node;
 typedef struct graph_struct graph;
-typedef struct edge_struct edge;
 
 node *NEW(int v, double wt, node *next);
 graph *GRAPHinit(int V);
-void GRAPHinsertE(graph *G, edge *e);
-void GRAPHremoveE(graph *G, edge *e);
+void GRAPHinsertE(graph *G, int ver1, int ver2, int wt);
+void GRAPHremoveE(graph *G, int ver1, int ver2);
 
 #endif

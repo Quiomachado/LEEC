@@ -17,13 +17,6 @@ struct graph_struct
     node **adj;
 };
 
-struct edge_struct
-{
-    int v;
-    int w;
-    double wt;
-};
-
 node *NEW(int v, double wt, node *next)
 {
     node *x = (node *)malloc(sizeof(node));
@@ -45,20 +38,17 @@ graph *GRAPHinit(int V)
     return G;
 }
 
-void GRAPHinsertE(graph *G, edge *e)
+void GRAPHinsertE(graph *G, int ver1, int ver2, int wt)
 {
-    int v = e->v;
-    int w = e->w;
-    double wt = e->wt;
-    G->adj[v] = NEW(w, wt, G->adj[v]);
-    G->adj[w] = NEW(v, wt, G->adj[w]);
+    G->adj[ver1] = NEW(ver2, wt, G->adj[ver1]);
+    G->adj[ver2] = NEW(ver1, wt, G->adj[ver2]);
     G->E++;
 }
 
-void GRAPHremoveE(graph *G, edge *e)
+void GRAPHremoveE(graph *G, int ver1, int ver2)
 {
-    int v = e->v;
-    int w = e->w;
+    int v = ver1;
+    int w = ver2;
     node *t;
     node *prev = NULL;
     for (t = G->adj[v]; t != NULL; t = t->next)
@@ -89,4 +79,20 @@ void GRAPHremoveE(graph *G, edge *e)
         prev = t;
     }
     G->E--;
+}
+
+void GraphDestroy(graph *G)
+{
+    int v;
+    node *t, *next;
+    for (v = 0; v < G->V; v++)
+    {
+        for (t = G->adj[v]; t != NULL; t = next)
+        {
+            next = t->next;
+            free(t);
+        }
+    }
+    free(G->adj);
+    free(G);
 }
