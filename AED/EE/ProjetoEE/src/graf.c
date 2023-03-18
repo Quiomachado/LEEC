@@ -17,6 +17,36 @@ struct graph_struct
     node **adj;
 };
 
+node *GetNext(node *t)
+{
+    return t->next;
+}
+
+int GetV(node *t)
+{
+    return t->v;
+}
+
+double GetWt(node *t)
+{
+    return t->wt;
+}
+
+node *GetAdj(graph *G, int v)
+{
+    return G->adj[v];
+}
+
+int GetVCount(graph *G)
+{
+    return G->V;
+}
+
+int GetECount(graph *G)
+{
+    return G->E;
+}
+
 node *NEW(int v, double wt, node *next)
 {
     node *x = (node *)malloc(sizeof(node));
@@ -32,13 +62,13 @@ graph *GRAPHinit(int V)
     graph *G = (graph *)malloc(sizeof(graph));
     G->V = V;
     G->E = 0;
-    G->adj = (node **)malloc(V * sizeof(node *));
-    for (v = 0; v < V; v++)
+    G->adj = (node **)malloc((V + 1) * sizeof(node *));
+    for (v = 0; v <= V; v++)
         G->adj[v] = NULL;
     return G;
 }
 
-void GRAPHinsertE(graph *G, int ver1, int ver2, int wt)
+void GRAPHinsertE(graph *G, int ver1, int ver2, double wt)
 {
     G->adj[ver1] = NEW(ver2, wt, G->adj[ver1]);
     G->adj[ver2] = NEW(ver1, wt, G->adj[ver2]);
@@ -81,11 +111,11 @@ void GRAPHremoveE(graph *G, int ver1, int ver2)
     G->E--;
 }
 
-void GraphDestroy(graph *G)
+void GRAPHDestroy(graph *G)
 {
     int v;
     node *t, *next;
-    for (v = 0; v < G->V; v++)
+    for (v = 0; v <= G->V; v++)
     {
         for (t = G->adj[v]; t != NULL; t = next)
         {
