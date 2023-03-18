@@ -6,17 +6,56 @@
 
 char MODES[4][3] = {"A0", "B0", "C0", "D0"};
 
-void GetDegree(graph *G, int id, FILE *fp_out, int mode)
+void FindAdjency(graph *G, int id1, int id2, FILE *fp_out, int mode)
 {
-    int degree = 0;
     char mode_str[3];
     node *t = 0;
-    strcpy(mode_str, MODES[mode]);
-    for (t = GetAdj(G, id); t != NULL; t = GetNext(t))
+
+    if (id1 > GetVCount(G) || id2 > GetVCount(G))
     {
-        degree++;
+        fprintf(fp_out, "%d %d %s %d %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id1, id2, -1);
+        return;
     }
-    fprintf(fp_out, "%d %d %s %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id, degree);
+
+    strcpy(mode_str, MODES[mode]);
+    for (t = GetAdj(G, id1); t != NULL; t = GetNext(t))
+    {
+        if (GetV(t) == id2)
+        {
+            fprintf(fp_out, "%d %d %s %d %d %.2lf\n\n", GetVCount(G), GetECount(G), mode_str, id1, id2, GetWt(t));
+            return;
+        }
+    }
+
+    fprintf(fp_out, "%d %d %s %d %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id1, id2, -1);
+    return;
+}
+
+void DetermineClique(graph *G, int id, FILE *fp_out, int mode)
+{
+    char mode_str[3];
+    int v1 = 0, v2 = 0;
+    node *t1 = 0, *t2 = 0;
+    strcpy(mode_str, MODES[mode]);
+
+    for (t1 = GetAdj(G, id); t1 != NULL; t1 = GetNext(t1))
+    {
+        v1 = GetV(t1);
+        if (GetDegree(G, v1) < 2)
+            continue;
+        for (t2 = GetAdj(G, v1); t2 != NULL; t2 = GetNext(t2))
+        {
+            v2 = GetV(t2);
+            if (GetDegree(G, v2) < 2)
+                continue;
+            if (v2 == id)
+            {
+                fprintf(fp_out, "%d %d %s %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id, 1);
+                return;
+            }
+        }
+    }
+    fprintf(fp_out, "%d %d %s %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id, 0);
     return;
 }
 
@@ -44,9 +83,13 @@ int main(int argc, char *argv[])
     // Get the input file name
     file_input = argv[1];
     aux = (char *)malloc(sizeof(char) * (strlen(file_input) + 1));
+    if (aux == NULL)
+        exit(0);
     strcpy(aux, file_input);
     aux[strlen(aux) - 8] = '\0';
     file_output = (char *)malloc(sizeof(char) * (strlen(aux) + strlen(file_ending) + 1));
+    if (file_output == NULL)
+        exit(0);
     sprintf(file_output, "%s%s", aux, file_ending);
 
     // Open the input and output files and check if they exist
@@ -79,27 +122,44 @@ int main(int argc, char *argv[])
     switch (mode)
     {
     case 0:
-        while (fscanf(fp_in, "%d %d %le", &ver1, &ver2, &wt) != EOF)
+        while (fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt) != EOF)
         {
             GRAPHinsertE(G, ver1, ver2, wt);
         }
-        GetDegree(G, id1, fp_out, mode);
+        if (id1 > V)
+        {
+            fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
+            break;
+        }
+        fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, GetDegree(G, id1));
         break;
     case 1:
         fscanf(fp_in, "%d", &id2);
-        while (fscanf(fp_in, "%d %d %le", &ver1, &ver2, &wt) != EOF)
+        while (fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt) != EOF)
         {
             GRAPHinsertE(G, ver1, ver2, wt);
         }
+        FindAdjency(G, id1, id2, fp_out, mode);
         break;
     case 2:
-        while (fscanf(fp_in, "%d %d %le", &ver1, &ver2, &wt) != EOF)
+        if (id1 > V)
+        {
+            fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
+            break;
+        }
+        while (fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt) != EOF)
         {
             GRAPHinsertE(G, ver1, ver2, wt);
         }
+        DetermineClique(G, id1, fp_out, mode);
         break;
     case 3:
-        while (fscanf(fp_in, "%d %d %le", &ver1, &ver2, &wt) != EOF)
+        if (id1 > V)
+        {
+            fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
+            break;
+        }
+        while (fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt) != EOF)
         {
             GRAPHinsertE(G, ver1, ver2, wt);
         }

@@ -14,6 +14,7 @@ struct graph_struct
 {
     int V;
     int E;
+    int *degree;
     node **adj;
 };
 
@@ -37,6 +38,11 @@ node *GetAdj(graph *G, int v)
     return G->adj[v];
 }
 
+int GetDegree(graph *G, int v)
+{
+    return G->degree[v];
+}
+
 int GetVCount(graph *G)
 {
     return G->V;
@@ -50,6 +56,8 @@ int GetECount(graph *G)
 node *NEW(int v, double wt, node *next)
 {
     node *x = (node *)malloc(sizeof(node));
+    if (x == NULL)
+        exit(0);
     x->v = v;
     x->wt = wt;
     x->next = next;
@@ -60,11 +68,21 @@ graph *GRAPHinit(int V)
 {
     int v;
     graph *G = (graph *)malloc(sizeof(graph));
+    if (G == NULL)
+        exit(0);
     G->V = V;
     G->E = 0;
     G->adj = (node **)malloc((V + 1) * sizeof(node *));
+    if (G->adj == NULL)
+        exit(0);
+    G->degree = (int *)malloc((V + 1) * sizeof(int));
+    if (G->degree == NULL)
+        exit(0);
     for (v = 0; v <= V; v++)
+    {
         G->adj[v] = NULL;
+        G->degree[v] = 0;
+    }
     return G;
 }
 
@@ -72,6 +90,8 @@ void GRAPHinsertE(graph *G, int ver1, int ver2, double wt)
 {
     G->adj[ver1] = NEW(ver2, wt, G->adj[ver1]);
     G->adj[ver2] = NEW(ver1, wt, G->adj[ver2]);
+    G->degree[ver1]++;
+    G->degree[ver2]++;
     G->E++;
 }
 
@@ -108,6 +128,8 @@ void GRAPHremoveE(graph *G, int ver1, int ver2)
         }
         prev = t;
     }
+    G->degree[v]--;
+    G->degree[w]--;
     G->E--;
 }
 
@@ -124,5 +146,6 @@ void GRAPHDestroy(graph *G)
         }
     }
     free(G->adj);
+    free(G->degree);
     free(G);
 }

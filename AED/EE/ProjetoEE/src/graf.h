@@ -11,6 +11,7 @@ double GetWt(node *t);
 node *GetAdj(graph *G, int v);
 int GetVCount(graph *G);
 int GetECount(graph *G);
+int GetDegree(graph *G, int v);
 graph *GRAPHinit(int V);
 void GRAPHinsertE(graph *G, int ver1, int ver2, double wt);
 void GRAPHremoveE(graph *G, int ver1, int ver2);
