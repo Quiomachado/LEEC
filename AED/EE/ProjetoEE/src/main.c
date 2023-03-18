@@ -9,7 +9,7 @@ char MODES[4][3] = {"A0", "B0", "C0", "D0"};
 void FindAdjency(graph *G, int id1, int id2, FILE *fp_out, int mode)
 {
     char mode_str[3];
-    node *t = 0;
+    node *t = NULL;
 
     if (id1 > GetVCount(G) || id2 > GetVCount(G))
     {
@@ -34,8 +34,8 @@ void FindAdjency(graph *G, int id1, int id2, FILE *fp_out, int mode)
 void DetermineClique(graph *G, int id, FILE *fp_out, int mode)
 {
     char mode_str[3];
-    int v1 = 0, v2 = 0;
-    node *t1 = 0, *t2 = 0;
+    int v1 = 0, v2 = 0, v3 = 0;
+    node *t1 = NULL, *t2 = NULL, *t3 = NULL;
     strcpy(mode_str, MODES[mode]);
 
     for (t1 = GetAdj(G, id); t1 != NULL; t1 = GetNext(t1))
@@ -46,12 +46,18 @@ void DetermineClique(graph *G, int id, FILE *fp_out, int mode)
         for (t2 = GetAdj(G, v1); t2 != NULL; t2 = GetNext(t2))
         {
             v2 = GetV(t2);
-            if (GetDegree(G, v2) < 2)
+            if (GetDegree(G, v2) < 2 || v2 == id)
                 continue;
-            if (v2 == id)
+            for (t3 = GetAdj(G, v2); t3 != NULL; t3 = GetNext(t3))
             {
-                fprintf(fp_out, "%d %d %s %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id, 1);
-                return;
+                v3 = GetV(t3);
+                if (GetDegree(G, v3) < 2 || v3 == v1)
+                    continue;
+                if (v3 == id)
+                {
+                    fprintf(fp_out, "%d %d %s %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id, 1);
+                    return;
+                }
             }
         }
     }
@@ -59,16 +65,60 @@ void DetermineClique(graph *G, int id, FILE *fp_out, int mode)
     return;
 }
 
+void CountClique(graph *G, int id, FILE *fp_out, int mode)
+{
+    char mode_str[3];
+    int v1 = 0, v2 = 0, v3 = 0;
+    node *t1 = NULL, *t2 = NULL, *t3 = NULL;
+    int count = 0;
+    int *flag = NULL;
+    int i;
+    strcpy(mode_str, MODES[mode]);
+    flag = (int *)malloc(sizeof(int) * (GetVCount(G) + 1));
+    if (flag == NULL)
+        exit(0);
+
+    for (i = 0; i < GetVCount(G) + 1; i++)
+        flag[i] = 0;
+
+    for (t1 = GetAdj(G, id); t1 != NULL; t1 = GetNext(t1))
+    {
+        v1 = GetV(t1);
+        if (GetDegree(G, v1) < 2 || flag[v1] == 1)
+            continue;
+        for (t2 = GetAdj(G, v1); t2 != NULL; t2 = GetNext(t2))
+        {
+            v2 = GetV(t2);
+            if (GetDegree(G, v2) < 2 || v2 == id)
+                continue;
+            for (t3 = GetAdj(G, v2); t3 != NULL; t3 = GetNext(t3))
+            {
+                v3 = GetV(t3);
+                if (GetDegree(G, v3) < 2 || v3 == v1)
+                    continue;
+                if (v3 == id)
+                {
+                    count++;
+                    flag[v2] = 1;
+                }
+            }
+        }
+    }
+    fprintf(fp_out, "%d %d %s %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id, count);
+    free(flag);
+    return;
+}
+
 int main(int argc, char *argv[])
 {
     int max_args = 2;
-    char *file_input = 0;
-    char *file_output = 0;
+    char *file_input = NULL;
+    char *file_output = NULL;
     char file_ending[9] = ".queries";
-    char *aux = 0;
-    FILE *fp_in = 0, *fp_out = 0;
+    char *aux = NULL;
+    FILE *fp_in = NULL, *fp_out = NULL;
     int V = 0, E = 0, id1 = 0, id2 = 0;
-    graph *G = 0;
+    graph *G = NULL;
     int ver1 = 0, ver2 = 0;
     double wt = 0;
     char mode_str[2];
@@ -163,6 +213,7 @@ int main(int argc, char *argv[])
         {
             GRAPHinsertE(G, ver1, ver2, wt);
         }
+        CountClique(G, id1, fp_out, mode);
         break;
     default:
         break;
