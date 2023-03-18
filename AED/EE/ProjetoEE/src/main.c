@@ -6,6 +6,48 @@
 
 char MODES[4][3] = {"A0", "B0", "C0", "D0"};
 
+typedef struct BeenChecked
+{
+    int el1;
+    int el2;
+    int el3;
+    struct BeenChecked *next;
+} BeenChecked;
+
+void addBeenChecked(BeenChecked **head, int el1, int el2, int el3)
+{
+    BeenChecked *new = (BeenChecked *)malloc(sizeof(BeenChecked));
+    if (new == NULL)
+        exit(0);
+    new->el1 = el1;
+    new->el2 = el2;
+    new->el3 = el3;
+    new->next = *head;
+    *head = new;
+}
+
+int checkBeenChecked(BeenChecked *head, int el1, int el2, int el3)
+{
+    BeenChecked *t = NULL;
+    for (t = head; t != NULL; t = t->next)
+    {
+        if (t->el3 == el3 && ((t->el1 == el1 && t->el2 == el2) || (t->el2 == el1 && t->el1 == el2)))
+            return 1;
+    }
+    return 0;
+}
+
+void freeBeenChecked(BeenChecked *head)
+{
+    BeenChecked *t = NULL;
+    while (head != NULL)
+    {
+        t = head;
+        head = head->next;
+        free(t);
+    }
+}
+
 void FindAdjency(graph *G, int id1, int id2, FILE *fp_out, int mode)
 {
     char mode_str[3];
@@ -71,20 +113,16 @@ void CountClique(graph *G, int id, FILE *fp_out, int mode)
     int v1 = 0, v2 = 0, v3 = 0;
     node *t1 = NULL, *t2 = NULL, *t3 = NULL;
     int count = 0;
-    int *flag = NULL;
-    int i;
-    strcpy(mode_str, MODES[mode]);
-    flag = (int *)malloc(sizeof(int) * (GetVCount(G) + 1));
-    if (flag == NULL)
+    BeenChecked *been_checked = NULL;
+    been_checked = (BeenChecked *)malloc(sizeof(BeenChecked));
+    if (been_checked == NULL)
         exit(0);
-
-    for (i = 0; i < GetVCount(G) + 1; i++)
-        flag[i] = 0;
+    strcpy(mode_str, MODES[mode]);
 
     for (t1 = GetAdj(G, id); t1 != NULL; t1 = GetNext(t1))
     {
         v1 = GetV(t1);
-        if (GetDegree(G, v1) < 2 || flag[v1] == 1)
+        if (GetDegree(G, v1) < 2)
             continue;
         for (t2 = GetAdj(G, v1); t2 != NULL; t2 = GetNext(t2))
         {
@@ -98,14 +136,26 @@ void CountClique(graph *G, int id, FILE *fp_out, int mode)
                     continue;
                 if (v3 == id)
                 {
-                    count++;
-                    flag[v2] = 1;
+                    if (count == 0)
+                    {
+                        been_checked->el1 = v1;
+                        been_checked->el2 = v2;
+                        been_checked->el3 = v3;
+                        been_checked->next = NULL;
+                        count++;
+                        continue;
+                    }
+                    if (checkBeenChecked(been_checked, v1, v2, v3) == 0)
+                    {
+                        addBeenChecked(&been_checked, v1, v2, v3);
+                        count++;
+                    }
                 }
             }
         }
     }
     fprintf(fp_out, "%d %d %s %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id, count);
-    free(flag);
+    freeBeenChecked(been_checked);
     return;
 }
 
