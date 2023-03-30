@@ -201,10 +201,10 @@ int main(int argc, char *argv[])
     if (fp_out == NULL)
         exit(0);
 
+    // Read the first line of the input file
+    fscanf(fp_in, "%d %d %s %d", &V, &E, mode_str, &id1);
     do
     {
-        // Read the first line of the input file
-        fscanf(fp_in, "%d %d %s %d", &V, &E, mode_str, &id1);
 
         // Initialize the graph
         G = GRAPHinit(V);
@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
             break;
         }
         GRAPHDestroy(G);
-    } while (!feof(fp_in));
+    } while (fscanf(fp_in, "%d %d %s %d", &V, &E, mode_str, &id1) != EOF);
 
     // Close the input and output files and free all memory
     fclose(fp_in);
