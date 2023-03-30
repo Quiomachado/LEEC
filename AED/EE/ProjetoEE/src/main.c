@@ -173,6 +173,7 @@ int main(int argc, char *argv[])
     double wt = 0;
     char mode_str[2];
     int mode = 0;
+    int edge_count = 0;
 
     // Check if the number of arguments is correct
     if (argc > max_args)
@@ -200,79 +201,92 @@ int main(int argc, char *argv[])
     if (fp_out == NULL)
         exit(0);
 
-    // Read the first line of the input file
-    fscanf(fp_in, "%d %d %s %d", &V, &E, mode_str, &id1);
-
-    // Initialize the graph
-    G = GRAPHinit(V);
-
-    // Turn the mode into an integer
-    if (strcmp(mode_str, MODES[0]) == 0)
-        mode = 0;
-    else if (strcmp(mode_str, MODES[1]) == 0)
-        mode = 1;
-    else if (strcmp(mode_str, MODES[2]) == 0)
-        mode = 2;
-    else if (strcmp(mode_str, MODES[3]) == 0)
-        mode = 3;
-    else
-        exit(0);
-
-    // Read the rest of the input file and insert the edges into the graph
-    switch (mode)
+    do
     {
-    case 0:
-        while (fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt) != EOF)
+        // Read the first line of the input file
+        fscanf(fp_in, "%d %d %s %d", &V, &E, mode_str, &id1);
+
+        // Initialize the graph
+        G = GRAPHinit(V);
+
+        // Turn the mode into an integer
+        if (strcmp(mode_str, MODES[0]) == 0)
+            mode = 0;
+        else if (strcmp(mode_str, MODES[1]) == 0)
+            mode = 1;
+        else if (strcmp(mode_str, MODES[2]) == 0)
+            mode = 2;
+        else if (strcmp(mode_str, MODES[3]) == 0)
+            mode = 3;
+        else
+            exit(0);
+
+        edge_count = 0;
+
+        // Read the rest of the input file and insert the edges into the graph
+        switch (mode)
         {
-            GRAPHinsertE(G, ver1, ver2, wt);
-        }
-        if (id1 > V)
-        {
-            fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
+        case 0:
+            while (edge_count < E)
+            {
+                fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
+                edge_count++;
+                GRAPHinsertE(G, ver1, ver2, wt);
+            }
+            if (id1 > V)
+            {
+                fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
+                break;
+            }
+            fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, GetDegree(G, id1));
+            break;
+        case 1:
+            fscanf(fp_in, "%d", &id2);
+            while (edge_count < E)
+            {
+                fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
+                edge_count++;
+                GRAPHinsertE(G, ver1, ver2, wt);
+            }
+            FindAdjency(G, id1, id2, fp_out, mode);
+            break;
+        case 2:
+            if (id1 > V)
+            {
+                fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
+                break;
+            }
+            while (edge_count < E)
+            {
+                fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
+                edge_count++;
+                GRAPHinsertE(G, ver1, ver2, wt);
+            }
+            DetermineClique(G, id1, fp_out, mode);
+            break;
+        case 3:
+            if (id1 > V)
+            {
+                fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
+                break;
+            }
+            while (edge_count < E)
+            {
+                fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
+                edge_count++;
+                GRAPHinsertE(G, ver1, ver2, wt);
+            }
+            CountClique(G, id1, fp_out, mode);
+            break;
+        default:
             break;
         }
-        fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, GetDegree(G, id1));
-        break;
-    case 1:
-        fscanf(fp_in, "%d", &id2);
-        while (fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt) != EOF)
-        {
-            GRAPHinsertE(G, ver1, ver2, wt);
-        }
-        FindAdjency(G, id1, id2, fp_out, mode);
-        break;
-    case 2:
-        if (id1 > V)
-        {
-            fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
-            break;
-        }
-        while (fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt) != EOF)
-        {
-            GRAPHinsertE(G, ver1, ver2, wt);
-        }
-        DetermineClique(G, id1, fp_out, mode);
-        break;
-    case 3:
-        if (id1 > V)
-        {
-            fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
-            break;
-        }
-        while (fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt) != EOF)
-        {
-            GRAPHinsertE(G, ver1, ver2, wt);
-        }
-        CountClique(G, id1, fp_out, mode);
-        break;
-    default:
-        break;
-    }
+        GRAPHDestroy(G);
+    } while (!feof(fp_in));
 
     // Close the input and output files and free all memory
     fclose(fp_in);
     fclose(fp_out);
-    GRAPHDestroy(G);
     free(aux);
     free(file_output);
 
