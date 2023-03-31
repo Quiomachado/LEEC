@@ -53,7 +53,7 @@ void FindAdjency(graph *G, int id1, int id2, FILE *fp_out, int mode)
     char mode_str[3];
     node *t = NULL;
 
-    if (id1 > GetVCount(G) || id2 > GetVCount(G))
+    if (id1 > GetVCount(G) || id2 > GetVCount(G) || id1 < 1 || id2 < 1)
     {
         fprintf(fp_out, "%d %d %s %d %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id1, id2, -1);
         return;
@@ -233,12 +233,14 @@ int main(int argc, char *argv[])
                 edge_count++;
                 GRAPHinsertE(G, ver1, ver2, wt);
             }
-            if (id1 > V)
+            if (id1 > V || id1 < 1)
             {
                 fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
+                GRAPHDestroy(G);
                 break;
             }
             fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, GetDegree(G, id1));
+            GRAPHDestroy(G);
             break;
         case 1:
             fscanf(fp_in, "%d", &id2);
@@ -249,11 +251,13 @@ int main(int argc, char *argv[])
                 GRAPHinsertE(G, ver1, ver2, wt);
             }
             FindAdjency(G, id1, id2, fp_out, mode);
+            GRAPHDestroy(G);
             break;
         case 2:
-            if (id1 > V)
+            if (id1 > V || id1 < 1)
             {
                 fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
+                GRAPHDestroy(G);
                 break;
             }
             while (edge_count < E)
@@ -263,11 +267,13 @@ int main(int argc, char *argv[])
                 GRAPHinsertE(G, ver1, ver2, wt);
             }
             DetermineClique(G, id1, fp_out, mode);
+            GRAPHDestroy(G);
             break;
         case 3:
-            if (id1 > V)
+            if (id1 > V || id1 < 1)
             {
                 fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
+                GRAPHDestroy(G);
                 break;
             }
             while (edge_count < E)
@@ -277,11 +283,11 @@ int main(int argc, char *argv[])
                 GRAPHinsertE(G, ver1, ver2, wt);
             }
             CountClique(G, id1, fp_out, mode);
+            GRAPHDestroy(G);
             break;
         default:
             break;
         }
-        GRAPHDestroy(G);
     } while (fscanf(fp_in, "%d %d %s %d", &V, &E, mode_str, &id1) != EOF);
 
     // Close the input and output files and free all memory
