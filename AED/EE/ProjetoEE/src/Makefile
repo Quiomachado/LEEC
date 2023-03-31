@@ -12,3 +12,18 @@ graf.o: graf.c graf.h
 
 clean::
 		rm -f *.o core a.out backbone *~
+
+FILES = $(shell ls ../Enunciado/*.routes0)
+
+VALG = valgrind --leak-check=full
+
+t:
+	for F in ${FILES}; do  ./backbone $${F} ; done;
+
+
+tv:
+	for F in ${FILES}; do ${VALG} ./backbone $${F} ; done;
+
+
+tt:
+	for F in ${FILES}; do  time ./backbone $${F} ; done;
