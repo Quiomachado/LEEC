@@ -53,12 +53,6 @@ void FindAdjency(graph *G, int id1, int id2, FILE *fp_out, int mode)
     char mode_str[3];
     node *t = NULL;
 
-    if (id1 > GetVCount(G) || id2 > GetVCount(G) || id1 < 1 || id2 < 1)
-    {
-        fprintf(fp_out, "%d %d %s %d %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id1, id2, -1);
-        return;
-    }
-
     strcpy(mode_str, MODES[mode]);
     for (t = GetAdj(G, id1); t != NULL; t = GetNext(t))
     {
@@ -155,7 +149,10 @@ void CountClique(graph *G, int id, FILE *fp_out, int mode)
         }
     }
     fprintf(fp_out, "%d %d %s %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id, count);
-    freeBeenChecked(been_checked);
+    if (count != 0)
+        freeBeenChecked(been_checked);
+    else
+        free(been_checked);
     return;
 }
 
@@ -174,6 +171,7 @@ int main(int argc, char *argv[])
     char mode_str[2];
     int mode = 0;
     int edge_count = 0;
+    int flag = 0;
 
     // Check if the number of arguments is correct
     if (argc > max_args)
@@ -205,7 +203,7 @@ int main(int argc, char *argv[])
     fscanf(fp_in, "%d %d %s %d", &V, &E, mode_str, &id1);
     do
     {
-
+        flag = 0;
         // Initialize the graph
         G = GRAPHinit(V);
 
@@ -227,23 +225,43 @@ int main(int argc, char *argv[])
         switch (mode)
         {
         case 0:
+            if (id1 > V || id1 < 1)
+            {
+                fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
+                GRAPHDestroy(G);
+                flag++;
+                while (edge_count < E)
+                {
+                    fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
+                    edge_count++;
+                    continue;
+                }
+                break;
+            }
             while (edge_count < E)
             {
                 fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
                 edge_count++;
                 GRAPHinsertE(G, ver1, ver2, wt);
             }
-            if (id1 > V || id1 < 1)
-            {
-                fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
-                GRAPHDestroy(G);
-                break;
-            }
             fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, GetDegree(G, id1));
             GRAPHDestroy(G);
             break;
         case 1:
             fscanf(fp_in, "%d", &id2);
+            if (id1 > V || id1 < 1 || id2 > V || id2 < 1)
+            {
+                fprintf(fp_out, "%d %d %s %d %d %d\n\n", V, E, mode_str, id1, id2, -1);
+                GRAPHDestroy(G);
+                flag++;
+                while (edge_count < E)
+                {
+                    fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
+                    edge_count++;
+                    continue;
+                }
+                break;
+            }
             while (edge_count < E)
             {
                 fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
@@ -258,6 +276,13 @@ int main(int argc, char *argv[])
             {
                 fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
                 GRAPHDestroy(G);
+                flag++;
+                while (edge_count < E)
+                {
+                    fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
+                    edge_count++;
+                    continue;
+                }
                 break;
             }
             while (edge_count < E)
@@ -274,6 +299,13 @@ int main(int argc, char *argv[])
             {
                 fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
                 GRAPHDestroy(G);
+                flag++;
+                while (edge_count < E)
+                {
+                    fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
+                    edge_count++;
+                    continue;
+                }
                 break;
             }
             while (edge_count < E)
