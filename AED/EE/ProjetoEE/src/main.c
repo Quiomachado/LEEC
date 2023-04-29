@@ -6,7 +6,7 @@
 
 char MODES[4][3] = {"A0", "B0", "C0", "D0"};
 
-typedef struct BeenChecked
+/*typedef struct BeenChecked
 {
     int el1;
     int el2;
@@ -46,7 +46,7 @@ void freeBeenChecked(BeenChecked *head)
         head = head->next;
         free(t);
     }
-}
+}*/
 
 void FindAdjency(graph *G, int id1, int id2, FILE *fp_out, int mode)
 {
@@ -101,7 +101,7 @@ void DetermineClique(graph *G, int id, FILE *fp_out, int mode)
     return;
 }
 
-void CountClique(graph *G, int id, FILE *fp_out, int mode)
+/*void CountClique(graph *G, int id, FILE *fp_out, int mode)
 {
     char mode_str[3];
     int v1 = 0, v2 = 0, v3 = 0;
@@ -154,6 +154,77 @@ void CountClique(graph *G, int id, FILE *fp_out, int mode)
     else
         free(been_checked);
     return;
+}*/
+
+int checkBeenChecked(int **checked, int v1, int v2, int v3)
+{
+    if (checked[v1][v2] && checked[v1][v3])
+        return 1;
+    return 0;
+}
+
+void CountClique(graph *G, int id, FILE *fp_out, int mode)
+{
+    int V, i;
+    int **checked;
+    char mode_str[3];
+    int v1 = 0, v2 = 0, v3 = 0;
+    node *t1 = NULL, *t2 = NULL, *t3 = NULL;
+    int count = 0;
+    V = GetVCount(G);
+    checked = (int **)malloc(sizeof(int*) * V);
+    for (i = 0; i < V; i++)
+    {
+        checked[i] = (int *)calloc(1, sizeof(int) * V);
+    }
+    for (t1 = GetAdj(G, id); t1 != NULL; t1 = GetNext(t1))
+    {
+        v1 = GetV(t1);
+        if (GetDegree(G, v1) < 2)
+            continue;
+        for (t2 = GetAdj(G, v1); t2 != NULL; t2 = GetNext(t2))
+        {
+            v2 = GetV(t2);
+            if (GetDegree(G, v2) < 2 || v2 == id)
+                continue;
+            for (t3 = GetAdj(G, v2); t3 != NULL; t3 = GetNext(t3))
+            {
+                v3 = GetV(t3);
+                if (GetDegree(G, v3) < 2 || v3 == v1)
+                    continue;
+                if (v3 == id)
+                {
+                    if (count == 0)
+                    {
+                        checked[v1 - 1][v2 - 1] = 1;
+                        checked[v1 - 1][v3 - 1] = 1;
+                        checked[v2 - 1][v1 - 1] = 1;
+                        checked[v2 - 1][v3 - 1] = 1;
+                        checked[v3 - 1][v1 - 1] = 1;
+                        checked[v3 - 1][v1 - 1] = 1;
+                        count++;
+                        continue;
+                    }
+                    if (checkBeenChecked(checked, v1, v2, v3) == 0)
+                    {
+                        checked[v1 - 1][v2 - 1] = 1;
+                        checked[v1 - 1][v3 - 1] = 1;
+                        checked[v2 - 1][v1 - 1] = 1;
+                        checked[v2 - 1][v3 - 1] = 1;
+                        checked[v3 - 1][v1 - 1] = 1;
+                        checked[v3 - 1][v1 - 1] = 1;
+                        count++;
+                    }
+                }
+            }
+        }
+    }
+    fprintf(fp_out, "%d %d %s %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id, count);
+    for (i = 0; i < V; i++)
+    {
+        free(checked[i]);
+    }
+    free(checked);
 }
 
 int main(int argc, char *argv[])

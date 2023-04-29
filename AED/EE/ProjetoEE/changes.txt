@@ -1,0 +1,1 @@
+Turn been checked from linkedlist to table for faster checking
