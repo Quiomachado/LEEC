@@ -158,7 +158,7 @@ void DetermineClique(graph *G, int id, FILE *fp_out, int mode)
 
 int checkBeenChecked(int **checked, int v1, int v2, int v3)
 {
-    if (checked[v1][v2] && checked[v1][v3])
+    if (checked[v1 - 1][v2 - 1] && checked[v1 - 1][v3 - 1])
         return 1;
     return 0;
 }
@@ -173,10 +173,15 @@ void CountClique(graph *G, int id, FILE *fp_out, int mode)
     int count = 0;
     V = GetVCount(G);
     checked = (int **)malloc(sizeof(int*) * V);
+    if (checked == NULL)
+        exit(0);
     for (i = 0; i < V; i++)
     {
         checked[i] = (int *)calloc(1, sizeof(int) * V);
+        if (checked[i] == NULL)
+            exit(0);
     }
+    strcpy(mode_str, MODES[mode]);
     for (t1 = GetAdj(G, id); t1 != NULL; t1 = GetNext(t1))
     {
         v1 = GetV(t1);
