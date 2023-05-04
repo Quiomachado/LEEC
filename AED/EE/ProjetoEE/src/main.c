@@ -4,50 +4,10 @@
 
 #include "graf.h"
 
+// Allowed Modes
 char MODES[4][3] = {"A0", "B0", "C0", "D0"};
 
-/*typedef struct BeenChecked
-{
-    int el1;
-    int el2;
-    int el3;
-    struct BeenChecked *next;
-} BeenChecked;
-
-void addBeenChecked(BeenChecked **head, int el1, int el2, int el3)
-{
-    BeenChecked *new = (BeenChecked *)malloc(sizeof(BeenChecked));
-    if (new == NULL)
-        exit(0);
-    new->el1 = el1;
-    new->el2 = el2;
-    new->el3 = el3;
-    new->next = *head;
-    *head = new;
-}
-
-int checkBeenChecked(BeenChecked *head, int el1, int el2, int el3)
-{
-    BeenChecked *t = NULL;
-    for (t = head; t != NULL; t = t->next)
-    {
-        if (t->el3 == el3 && ((t->el1 == el1 && t->el2 == el2) || (t->el2 == el1 && t->el1 == el2)))
-            return 1;
-    }
-    return 0;
-}
-
-void freeBeenChecked(BeenChecked *head)
-{
-    BeenChecked *t = NULL;
-    while (head != NULL)
-    {
-        t = head;
-        head = head->next;
-        free(t);
-    }
-}*/
-
+// function to find if two vertices (id1 and id2) are adjacent and the correspondent weight associated with the adjacency
 void FindAdjency(graph *G, int id1, int id2, FILE *fp_out, int mode)
 {
     char mode_str[3];
@@ -67,6 +27,7 @@ void FindAdjency(graph *G, int id1, int id2, FILE *fp_out, int mode)
     return;
 }
 
+// function to determine if there is a clique of 3 vertices with vertice id
 void DetermineClique(graph *G, int id, FILE *fp_out, int mode)
 {
     char mode_str[3];
@@ -101,135 +62,44 @@ void DetermineClique(graph *G, int id, FILE *fp_out, int mode)
     return;
 }
 
-/*void CountClique(graph *G, int id, FILE *fp_out, int mode)
+// function too check if the clique from 3 vertices has already been checked
+int checkBeenChecked(double **checked, int v1, int v2, int v3)
 {
-    char mode_str[3];
-    int v1 = 0, v2 = 0, v3 = 0;
-    node *t1 = NULL, *t2 = NULL, *t3 = NULL;
-    int count = 0;
-    BeenChecked *been_checked = NULL;
-    been_checked = (BeenChecked *)malloc(sizeof(BeenChecked));
-    if (been_checked == NULL)
-        exit(0);
-    strcpy(mode_str, MODES[mode]);
-
-    for (t1 = GetAdj(G, id); t1 != NULL; t1 = GetNext(t1))
-    {
-        v1 = GetV(t1);
-        if (GetDegree(G, v1) < 2)
-            continue;
-        for (t2 = GetAdj(G, v1); t2 != NULL; t2 = GetNext(t2))
-        {
-            v2 = GetV(t2);
-            if (GetDegree(G, v2) < 2 || v2 == id)
-                continue;
-            for (t3 = GetAdj(G, v2); t3 != NULL; t3 = GetNext(t3))
-            {
-                v3 = GetV(t3);
-                if (GetDegree(G, v3) < 2 || v3 == v1)
-                    continue;
-                if (v3 == id)
-                {
-                    if (count == 0)
-                    {
-                        been_checked->el1 = v1;
-                        been_checked->el2 = v2;
-                        been_checked->el3 = v3;
-                        been_checked->next = NULL;
-                        count++;
-                        continue;
-                    }
-                    if (checkBeenChecked(been_checked, v1, v2, v3) == 0)
-                    {
-                        addBeenChecked(&been_checked, v1, v2, v3);
-                        count++;
-                    }
-                }
-            }
-        }
-    }
-    fprintf(fp_out, "%d %d %s %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id, count);
-    if (count != 0)
-        freeBeenChecked(been_checked);
-    else
-        free(been_checked);
-    return;
-}*/
-
-int checkBeenChecked(int **checked, int v1, int v2, int v3)
-{
-    if (checked[v1 - 1][v2 - 1] && checked[v1 - 1][v3 - 1])
+    if (checked[v1][v2] != 1 && checked[v1][v3] != 1 && checked[v2][v1] != 1 && checked[v2][v3] != 1 && checked[v3][v1] != 1 && checked[v3][v2] != 1)
         return 1;
     return 0;
 }
 
-void CountClique(graph *G, int id, FILE *fp_out, int mode)
+// function to count how many cliques of 3 vertice id belongs too
+void CountClique(double **G_table, int V, int E, int id, FILE *fp_out, int mode)
 {
-    int V, i;
-    int **checked;
+    int i, k;
     char mode_str[3];
-    int v1 = 0, v2 = 0, v3 = 0;
-    node *t1 = NULL, *t2 = NULL, *t3 = NULL;
     int count = 0;
-    V = GetVCount(G);
-    checked = (int **)malloc(sizeof(int*) * V);
-    if (checked == NULL)
-        exit(0);
+    strcpy(mode_str, MODES[mode]);
     for (i = 0; i < V; i++)
     {
-        checked[i] = (int *)calloc(1, sizeof(int) * V);
-        if (checked[i] == NULL)
-            exit(0);
-    }
-    strcpy(mode_str, MODES[mode]);
-    for (t1 = GetAdj(G, id); t1 != NULL; t1 = GetNext(t1))
-    {
-        v1 = GetV(t1);
-        if (GetDegree(G, v1) < 2)
-            continue;
-        for (t2 = GetAdj(G, v1); t2 != NULL; t2 = GetNext(t2))
+        if(G_table[id - 1][i] != 0)
         {
-            v2 = GetV(t2);
-            if (GetDegree(G, v2) < 2 || v2 == id)
-                continue;
-            for (t3 = GetAdj(G, v2); t3 != NULL; t3 = GetNext(t3))
+            for (k = 0; k < V; k++)
             {
-                v3 = GetV(t3);
-                if (GetDegree(G, v3) < 2 || v3 == v1)
-                    continue;
-                if (v3 == id)
+                if (G_table[i][k] != 0 && G_table[k][id - 1] != 0)
                 {
-                    if (count == 0)
+                    if (checkBeenChecked(G_table, id - 1, i, k) == 0)
                     {
-                        checked[v1 - 1][v2 - 1] = 1;
-                        checked[v1 - 1][v3 - 1] = 1;
-                        checked[v2 - 1][v1 - 1] = 1;
-                        checked[v2 - 1][v3 - 1] = 1;
-                        checked[v3 - 1][v1 - 1] = 1;
-                        checked[v3 - 1][v1 - 1] = 1;
-                        count++;
-                        continue;
-                    }
-                    if (checkBeenChecked(checked, v1, v2, v3) == 0)
-                    {
-                        checked[v1 - 1][v2 - 1] = 1;
-                        checked[v1 - 1][v3 - 1] = 1;
-                        checked[v2 - 1][v1 - 1] = 1;
-                        checked[v2 - 1][v3 - 1] = 1;
-                        checked[v3 - 1][v1 - 1] = 1;
-                        checked[v3 - 1][v1 - 1] = 1;
+                        G_table[id - 1][i] += 1;
+                        G_table[id - 1][k] += 1;
+                        G_table[i][id - 1] += 1;
+                        G_table[i][k] += 1;
+                        G_table[k][id - 1] += 1;
+                        G_table[k][i] += 1;
                         count++;
                     }
                 }
             }
         }
     }
-    fprintf(fp_out, "%d %d %s %d %d\n\n", GetVCount(G), GetECount(G), mode_str, id, count);
-    for (i = 0; i < V; i++)
-    {
-        free(checked[i]);
-    }
-    free(checked);
+    fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id, count);
 }
 
 int main(int argc, char *argv[])
@@ -248,6 +118,7 @@ int main(int argc, char *argv[])
     int mode = 0;
     int edge_count = 0;
     int flag = 0;
+    double **G_table = NULL;
 
     // Check if the number of arguments is correct
     if (argc > max_args)
@@ -371,10 +242,11 @@ int main(int argc, char *argv[])
             GRAPHDestroy(G);
             break;
         case 3:
+            GRAPHDestroy(G);
+            G_table = TableGRAPHInit(G_table, V);
             if (id1 > V || id1 < 1)
             {
                 fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, -1);
-                GRAPHDestroy(G);
                 flag++;
                 while (edge_count < E)
                 {
@@ -388,10 +260,10 @@ int main(int argc, char *argv[])
             {
                 fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
                 edge_count++;
-                GRAPHinsertE(G, ver1, ver2, wt);
+                TableGRAPHInsert(G_table, ver1, ver2, wt);
             }
-            CountClique(G, id1, fp_out, mode);
-            GRAPHDestroy(G);
+            CountClique(G_table, V, E, id1, fp_out, mode);
+            TableGRAPHDelete(G_table, V);
             break;
         default:
             break;

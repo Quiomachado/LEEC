@@ -16,5 +16,8 @@ graph *GRAPHinit(int V);
 void GRAPHinsertE(graph *G, int ver1, int ver2, double wt);
 void GRAPHremoveE(graph *G, int ver1, int ver2);
 void GRAPHDestroy(graph *G);
+double **TableGRAPHInit(double **G, int V);
+double **TableGRAPHInsert(double **G, int id1, int id2, double wt);
+void TableGRAPHDelete(double **G, int V);
 
 #endif

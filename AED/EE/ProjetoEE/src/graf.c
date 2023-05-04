@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// structure for node with the vertice number, wt associated with the connection
 struct node_struct
 {
     int v;
@@ -10,6 +11,7 @@ struct node_struct
     node *next;
 };
 
+// structure for the linked list graph with number of vertices, edges and degree for each vertice
 struct graph_struct
 {
     int V;
@@ -18,41 +20,49 @@ struct graph_struct
     node **adj;
 };
 
+// function to allow you to get the next node in the linked list
 node *GetNext(node *t)
 {
     return t->next;
 }
 
+// function to get the vertice number
 int GetV(node *t)
 {
     return t->v;
 }
 
+// function to get the weight associated with the connection to the vertice
 double GetWt(node *t)
 {
     return t->wt;
 }
 
+// function to get the linked list of the adjacent vertices
 node *GetAdj(graph *G, int v)
 {
     return G->adj[v];
 }
 
+// function to get the degree of the vertice v
 int GetDegree(graph *G, int v)
 {
     return G->degree[v];
 }
 
+// function to get the number of vertices
 int GetVCount(graph *G)
 {
     return G->V;
 }
 
+// function to get the number of edges
 int GetECount(graph *G)
 {
     return G->E;
 }
 
+// function to create a new node and allocate the memory
 node *NEW(int v, double wt, node *next)
 {
     node *x = (node *)malloc(sizeof(node));
@@ -64,6 +74,7 @@ node *NEW(int v, double wt, node *next)
     return x;
 }
 
+// function to initialize the graph and it's memmory
 graph *GRAPHinit(int V)
 {
     int v;
@@ -86,6 +97,7 @@ graph *GRAPHinit(int V)
     return G;
 }
 
+// function to insert a new edge in the graph
 void GRAPHinsertE(graph *G, int ver1, int ver2, double wt)
 {
     G->adj[ver1] = NEW(ver2, wt, G->adj[ver1]);
@@ -95,6 +107,7 @@ void GRAPHinsertE(graph *G, int ver1, int ver2, double wt)
     G->E++;
 }
 
+//fucntion to remove an edge from the graph
 void GRAPHremoveE(graph *G, int ver1, int ver2)
 {
     int v = ver1;
@@ -133,6 +146,7 @@ void GRAPHremoveE(graph *G, int ver1, int ver2)
     G->E--;
 }
 
+// function to free the graph
 void GRAPHDestroy(graph *G)
 {
     int v;
@@ -147,5 +161,38 @@ void GRAPHDestroy(graph *G)
     }
     free(G->adj);
     free(G->degree);
+    free(G);
+}
+
+// function to initialize the graph as a table
+double **TableGRAPHInit(double **G, int V)
+{
+    int i;
+    G = (double **)malloc(sizeof(double*) * V);
+    if (G == NULL)
+        exit(0);
+    for (i = 0; i < V; i++)
+    {
+        G[i] = (double *)calloc(1, sizeof(double) * V);
+        if (G[i] == NULL)
+            exit(0);
+    }
+    return G;
+}
+
+// function to insert a new "edge" in the table graph
+double **TableGRAPHInsert(double **G, int id1, int id2, double wt)
+{
+    G[id1 - 1][id2 - 1] = 1;
+    G[id2 - 1][id1 - 1] = 1;
+    return G;
+}
+
+// function to free the table graph
+void TableGRAPHDelete(double **G, int V)
+{
+    int i;
+    for (i = 0; i < V; i++)
+        free(G[i]);
     free(G);
 }

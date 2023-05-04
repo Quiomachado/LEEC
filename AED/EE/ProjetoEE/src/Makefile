@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS=-Wall -std=c99 -g
+CFLAGS=-Wall -std=c99
 
 backbone: main.o graf.o
 		$(CC) $(CFLAGS) -o backbone main.o graf.o
