@@ -3,10 +3,9 @@
 #include <string.h>
 
 #include "graf.h"
-#include "mst.h"
 
 // Allowed Modes
-char MODES[3][3] = {"A1", "B1", "D1"};
+char MODES[3][3] = {"A0", "B0", "D0"};
 
 int main(int argc, char *argv[])
 {
@@ -23,7 +22,6 @@ int main(int argc, char *argv[])
     char mode_str[2];
     int mode = 0;
     int edge_count = 0;
-    double **G_table = NULL;
 
     // Check if the number of arguments is correct
     if (argc > max_args)
@@ -78,9 +76,8 @@ int main(int argc, char *argv[])
             {
                 fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
                 edge_count++;
-                GRAPHinsertE(G, ver1, ver2, wt);
+                GRAPHinsertE(G, ver1 - 1, ver2 - 1, wt);
             }
-            fprintf(fp_out, "%d %d %s %d %d\n\n", V, E, mode_str, id1, GetDegree(G, id1));
             GRAPHDestroy(G);
             break;
         case 1:
@@ -103,7 +100,7 @@ int main(int argc, char *argv[])
                 edge_count++;
                 if ((ver1 == id1 && ver2 == id2) || (ver1 == id2 && ver2 == id1))
                     continue;
-                GRAPHinsertE(G, ver1, ver2, wt);
+                GRAPHinsertE(G, ver1 - 1, ver2 - 1, wt);
             }
             GRAPHDestroy(G);
             break;
@@ -127,14 +124,14 @@ int main(int argc, char *argv[])
                 edge_count++;
                 if (ver1 == id1 || ver2 == id1)
                     continue;
-                GRAPHinsertE(G, ver1, ver2, wt);
+                GRAPHinsertE(G, ver1 - 1, ver2 - 1, wt);
             }
             GRAPHDestroy(G);
             break;
         default:
             break;
         }
-    } while (fscanf(fp_in, "%d %d %s %d", &V, &E, mode_str, &id1) != EOF);
+    } while (fscanf(fp_in, "%d %d %s", &V, &E, mode_str) != EOF);
 
     // Close the input and output files and free all memory
     fclose(fp_in);
