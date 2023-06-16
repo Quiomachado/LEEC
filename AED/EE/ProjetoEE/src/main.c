@@ -5,7 +5,7 @@
 #include "graf.h"
 
 // Allowed Modes
-char MODES[3][3] = {"A0", "B0", "D0"};
+char MODES[3][3] = {"A1", "B1", "D1"};
 
 int main(int argc, char *argv[])
 {
@@ -78,22 +78,12 @@ int main(int argc, char *argv[])
                 edge_count++;
                 GRAPHinsertE(G, ver1 - 1, ver2 - 1, wt);
             }
+            GRAPHmst(G);
+            GRAPHprintMst(G, fp_out, mode_str);
             GRAPHDestroy(G);
             break;
         case 1:
             fscanf(fp_in, "%d %d", &id1, &id2);
-            if (id1 > V || id1 < 1 || id2 > V || id2 < 1)
-            {
-                fprintf(fp_out, "%d %d %s %d %d %d\n\n", V, E, mode_str, id1, id2, -1);
-                GRAPHDestroy(G);
-                while (edge_count < E)
-                {
-                    fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
-                    edge_count++;
-                    continue;
-                }
-                break;
-            }
             while (edge_count < E)
             {
                 fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
@@ -102,6 +92,15 @@ int main(int argc, char *argv[])
                     continue;
                 GRAPHinsertE(G, ver1 - 1, ver2 - 1, wt);
             }
+            GRAPHmst(G);
+            if (id1 > V || id1 < 1 || id2 > V || id2 < 1)
+            {
+                fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n\n", V, E, mode_str, id1, id2, GetV(G) - 1, GetMstWt(G), -1);
+                GRAPHDestroy(G);
+                break;
+            }
+            GRAPHremoveE(G, id1, id2);
+            GRAPHprintMst(G, fp_out, mode_str);
             GRAPHDestroy(G);
             break;
         case 2:

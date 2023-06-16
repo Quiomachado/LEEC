@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS=-Wall -std=c99 -g
 
-backbone: main.o graf.o mst.o
-		$(CC) $(CFLAGS) -o backbone main.o graf.o mst.o
+backbone: main.o graf.o
+		$(CC) $(CFLAGS) -o backbone main.o graf.o 
 
 main.o: main.c graf.h
 		$(CC) -c $(CFLAGS) main.c
@@ -10,13 +10,10 @@ main.o: main.c graf.h
 graf.o: graf.c graf.h
 		$(CC) -c $(CFLAGS) graf.c
 
-mst.o: mst.c mst.h graf.h
-		$(CC) -c $(CFLAGS) mst.c
-
 clean::
 		rm -f *.o core a.out backbone *~
 
-FILES = $(shell ls ../densos2/*.routes0)
+FILES = $(shell ls ../Enunciados2/*.routes)
 
 VALG = valgrind --leak-check=full
 
