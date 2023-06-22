@@ -1,7 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <limits.h>
 #include <float.h>
-#include <stdlib.h>
 
 #include "graf.h"
 
@@ -29,6 +29,10 @@ double GetMstWt (graph *G) {
     return G->mstWT;
 }
 
+int GetMstI (graph *G, int i) {
+    return G->st[i];
+}
+
 graph* GRAPHinit (int V) {
     graph *G = NULL;
     int i, k;
@@ -40,15 +44,10 @@ graph* GRAPHinit (int V) {
     G->E = 0;
     G->V = V;
     G->mstWT = 0;
-    for (i = 0; i <= V; i++) {
-        G->val[i] = DBL_MAX;
-        if (i != V) {
-            G->fr[i] = i;
-            G->st[i] = -1;
-            G->adj[i] = (double *)malloc(sizeof(double) * V);
-            for (k = 0; k < V; k++) {
-                G->adj[i][k] = DBL_MAX;
-            }
+    for (i = 0; i < V; i++) {
+        G->adj[i] = (double *)malloc(sizeof(double) * V);
+        for (k = 0; k < V; k++) {
+            G->adj[i][k] = DBL_MAX;
         }
     }
     return G;
@@ -80,12 +79,52 @@ void GRAPHDestroy (graph *G) {
     free(G);
 }
 
+int *dfs (double **adj, int vertice, int *visited, int num_vertices) {
+    int i, k;
+    visited[vertice] = 1;
+
+    for (i = 0; i < num_vertices; i++) {
+        if (adj[vertice][i] != DBL_MAX && !visited[i])
+            dfs(adj, i, visited, num_vertices);
+    }
+
+    return visited;
+
+}
+
+int GRAPHConnectivity (graph *G) {
+    int V, i;
+    int *visited;
+    V = G->V;
+    visited = (int *)malloc(sizeof(int) * V);
+    
+    visited = dfs(G->adj, 0, visited, V);
+    
+    for (i = 0; i < V; i++) {
+        if (!visited[i]) {
+            free(visited);
+            return 0;
+        }
+    }
+
+    free(visited);
+    return 1;
+}
 
 void GRAPHmst (graph *G) {
-    int v, w, min;
+    int v, w, min, i;
+
+    for (i = 0; i <= G->V; i++) {
+        G->val[i] = DBL_MAX;
+        if (i != G->V) {
+            G->fr[i] = i;
+            G->st[i] = -1;
+        }
+    }
 
     min = 0; G->st[0] = 0; G->val[G->V] = DBL_MAX;
     v = 0;
+
     while (min != G->V) {
         v = min;
         if (G->val[min] != DBL_MAX)
@@ -110,3 +149,12 @@ void GRAPHprintMst (graph *G, FILE *fp_out, char *mode) {
         fprintf(fp_out, "%d %d %.2f\n", i + 1, G->st[i] + 1, G->adj[i][G->st[i]]);
 }
 
+void GRAPHmstDiff (graph *G, FILE *fp_out, int *old_st) {
+    int v;
+    for (v = 0; v < G->V; v++) {
+        if (G->st[v] != old_st[v] && v != old_st[v]) {
+            fprintf(fp_out, "%d %d %.2f\n", v + 1, G->st[v] + 1, G->adj[v][G->st[v]]);
+            printf("YES\n");
+        }
+    }
+}

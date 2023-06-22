@@ -10,7 +10,7 @@ main.o: main.c graf.h
 graf.o: graf.c graf.h
 		$(CC) -c $(CFLAGS) graf.c
 
-clean::
+clean:
 		rm -f *.o core a.out backbone *~
 
 FILES = $(shell ls ../Enunciados2/*.routes)

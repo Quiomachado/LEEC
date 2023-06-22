@@ -22,6 +22,8 @@ int main(int argc, char *argv[])
     char mode_str[2];
     int mode = 0;
     int edge_count = 0;
+    int *old_st;
+    int i;
 
     // Check if the number of arguments is correct
     if (argc > max_args)
@@ -55,6 +57,7 @@ int main(int argc, char *argv[])
     {
         // Initialize the graph
         G = GRAPHinit(V);
+        old_st = (int *)malloc(sizeof(int) * V);
 
         // Turn the mode into an integer
         if (strcmp(mode_str, MODES[0]) == 0)
@@ -88,8 +91,6 @@ int main(int argc, char *argv[])
             {
                 fscanf(fp_in, "%d %d %lf", &ver1, &ver2, &wt);
                 edge_count++;
-                if ((ver1 == id1 && ver2 == id2) || (ver1 == id2 && ver2 == id1))
-                    continue;
                 GRAPHinsertE(G, ver1 - 1, ver2 - 1, wt);
             }
             GRAPHmst(G);
@@ -99,8 +100,14 @@ int main(int argc, char *argv[])
                 GRAPHDestroy(G);
                 break;
             }
-            GRAPHremoveE(G, id1, id2);
-            GRAPHprintMst(G, fp_out, mode_str);
+            for (i = 0; i < V; i++)
+                old_st[i] = GetMstI(G, i);
+
+            fclose(fp_out);
+            fp_out = fopen(file_output, "a");
+            if (fp_out == NULL)
+                exit(0);
+            GRAPHmstDiff(G, fp_out, old_st);
             GRAPHDestroy(G);
             break;
         case 2:
@@ -137,6 +144,7 @@ int main(int argc, char *argv[])
     fclose(fp_out);
     free(aux);
     free(file_output);
+    free(old_st);
 
     return 0;
 }
