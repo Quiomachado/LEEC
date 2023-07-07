@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
             }
             if (id1 > V || id1 < 1 || id2 > V || id2 < 1)
             {
-                fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n\n", V, E, mode_str, id1, id2, GetV(G) - 1, GetMstWt(G), -1);
+                fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n", V, E, mode_str, id1, id2, GetV(G) - 1, GetMstWt(G), -1);
                 free(old_st);
                 GRAPHprintMst(G, fp_out, mode_str);
                 GRAPHDestroy(G);
@@ -105,14 +105,14 @@ int main(int argc, char *argv[])
             GRAPHmst(G, -1);
             
             if (!CheckEdge(G, id1, id2)) {
-                fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n\n", V, E, mode_str, id1, id2, GetV(G) - 1, GetMstWt(G), 0);
+                fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n", V, E, mode_str, id1, id2, GetV(G) - 1, GetMstWt(G), 0);
                 free(old_st);
                 GRAPHprintMst(G, fp_out, mode_str);
                 GRAPHDestroy(G);
                 break;
             }
             if (!GRAPHConnectivity(G)) {
-                fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n\n", V, E, mode_str, id1, id2, GetV(G) - 1, GetMstWt(G), -1);
+                fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n", V, E, mode_str, id1, id2, GetV(G) - 1, GetMstWt(G), -1);
                 free(old_st);
                 GRAPHprintMst(G, fp_out, mode_str);
                 GRAPHDestroy(G);
