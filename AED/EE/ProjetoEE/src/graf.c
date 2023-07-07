@@ -19,11 +19,16 @@ struct GRAPH {
     int *st;
     int *fr;
     double *val;
+    int mstCount;
     int E;
     int V;
     double mstWT;
     node *mst;
 };
+
+int GetMstCount (graph *G) {
+    return G->mstCount;
+}
 
 int GetV (graph *G) {
     return G->V;
@@ -208,6 +213,7 @@ void MSTInsertSorted (graph *G, int v1, int v2, double wt) {
 
 void GRAPHmst (graph *G, int exclude) {
     int v, w, min, i;
+    G->mstCount = -1;
     G->mst = NULL;
 
     for (i = 0; i <= G->V; i++) {
@@ -229,6 +235,7 @@ void GRAPHmst (graph *G, int exclude) {
             G->mstWT += G->val[min];
         G->st[v] = G->fr[v];
         MSTInsertSorted(G, v + 1, G->st[v] + 1, G->val[min]);
+        G->mstCount++;
         for (w = 0, min = G->V; w < G->V; w++) {
             if (w == exclude)
                 continue;
@@ -263,11 +270,11 @@ void GRAPHmstDiff (graph *G, FILE *fp_out, node *old_st) {
             t1 = t1->next;
         }
         else {
-            printf("Difference %d %d %.2f\n", t2->v1, t2->v2, t2->wt);
+            t2 = t2->next;
         }
     }
     while (t1 != NULL) {
-        printf("Difference %d %d %.2f\n", t1->v1, t1->v2, t1->wt);
+        fprintf(fp_out, "%d %d %.2f\n", t1->v1, t1->v2, t1->wt);
         t1 = t1->next;
     }
 }
@@ -275,14 +282,15 @@ void GRAPHmstDiff (graph *G, FILE *fp_out, node *old_st) {
 int CheckEdge (graph *G, int v1, int v2) {
     int tmp;
     node *t1;
-    t1 = G->mst;
-    if (v1 > v2) {
+    if (v2 < v1) {
         tmp = v1;
         v1 = v2;
         v2 = tmp;
     }
+    
+    t1 = G->mst;
     while (t1 != NULL) {
-        if (t1->v1 == v1 && t1->v2 == v2) {
+        if ((t1->v1 == v1 && t1->v2 == v2) || (t1->v1 == v2 && t1->v2 == v1)) {
             return 1;
         }
         t1 = t1->next;

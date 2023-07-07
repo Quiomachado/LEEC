@@ -6,6 +6,7 @@ typedef struct GRAPH graph;
 
 #include <stdio.h>
 
+int GetMstCount (graph *G);
 int GetV (graph *G);
 int GetE (graph *G);
 double GetMstWt (graph *G);

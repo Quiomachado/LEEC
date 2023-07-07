@@ -82,8 +82,9 @@ int main(int argc, char *argv[])
                 GRAPHinsertE(G, ver1 - 1, ver2 - 1, wt);
             }
             GRAPHmst(G, -1);
-            fprintf(fp_out, "%d %d %s %d %.2f\n", V, E, mode_str, V - 1, GetMstWt(G));
+            fprintf(fp_out, "%d %d %s %d %.2f\n", V, E, mode_str, GetMstCount(G), GetMstWt(G));
             GRAPHprintMst(G, fp_out, mode_str);
+            free(old_st);
             GRAPHDestroy(G);
             break;
         case 1:
@@ -94,34 +95,34 @@ int main(int argc, char *argv[])
                 edge_count++;
                 GRAPHinsertE(G, ver1 - 1, ver2 - 1, wt);
             }
-            if (id1 > V || id1 < 1 || id2 > V || id2 < 1)
+            GRAPHmst(G, -1);
+            if (id1 > V || id1 < 1 || id2 > V || id2 < 1 || id1 == id2)
             {
-                fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n", V, E, mode_str, id1, id2, GetV(G) - 1, GetMstWt(G), -1);
+                fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n", V, E, mode_str, id1, id2, GetMstCount(G), GetMstWt(G), -1);
                 free(old_st);
                 GRAPHprintMst(G, fp_out, mode_str);
                 GRAPHDestroy(G);
                 break;
             }
-            GRAPHmst(G, -1);
             
             if (!CheckEdge(G, id1, id2)) {
-                fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n", V, E, mode_str, id1, id2, GetV(G) - 1, GetMstWt(G), 0);
+                fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n", V, E, mode_str, id1, id2, GetMstCount(G), GetMstWt(G), 0);
                 free(old_st);
                 GRAPHprintMst(G, fp_out, mode_str);
                 GRAPHDestroy(G);
                 break;
             }
+            GRAPHremoveE(G, id1 - 1, id2 - 1);
             if (!GRAPHConnectivity(G)) {
-                fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n", V, E, mode_str, id1, id2, GetV(G) - 1, GetMstWt(G), -1);
+                fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n", V, E, mode_str, id1, id2, GetMstCount(G), GetMstWt(G), -1);
                 free(old_st);
                 GRAPHprintMst(G, fp_out, mode_str);
                 GRAPHDestroy(G);
                 break;
             }
-            fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n", V, E, mode_str, id1, id2, GetV(G) - 1, GetMstWt(G), 1);
+            fprintf(fp_out, "%d %d %s %d %d %d %.2f %d\n", V, E, mode_str, id1, id2, GetMstCount(G), GetMstWt(G), 1);
             GRAPHprintMst(G, fp_out, mode_str);
 
-            GRAPHremoveE(G, id1 - 1, id2 - 1);
 
             old_st = CopyNode(old_st, GetMst(G));
             

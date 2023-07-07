@@ -13,7 +13,7 @@ graf.o: graf.c graf.h
 clean:
 		rm -f *.o core a.out backbone *~
 
-FILES = $(shell ls ../Enunciados2/*.routes)
+FILES = $(shell ls ../15_A1/*.routes)
 
 VALG = valgrind --leak-check=full
 
