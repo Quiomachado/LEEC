@@ -7,6 +7,13 @@
 
 #define P G->adj[v][w]
 
+struct NODE {
+    int v1;
+    int v2;
+    double wt;
+    node *next;
+};
+
 struct GRAPH {
     double **adj;
     int *st;
@@ -15,6 +22,7 @@ struct GRAPH {
     int E;
     int V;
     double mstWT;
+    node *mst;
 };
 
 int GetV (graph *G) {
@@ -29,23 +37,53 @@ double GetMstWt (graph *G) {
     return G->mstWT;
 }
 
+unsigned int SizeofNode () {
+    return sizeof(node);
+}
+
+node *GetMst (graph *G) {
+    return G->mst;
+}
+
 int GetMstI (graph *G, int i) {
     return G->st[i];
+}
+
+node *CopyNode (node *old_head, node *head) {
+    old_head->v1 = head->v1;
+    old_head->v2 = head->v2;
+    old_head->wt = head->wt;
+    old_head->next = head->next;
+    free(head);
+    return old_head;
 }
 
 graph* GRAPHinit (int V) {
     graph *G = NULL;
     int i, k;
     G = (graph *)malloc(sizeof(graph));
+    if (G == NULL)
+        exit(0);
     G->adj = (double **)malloc(sizeof(double *) * V);
+    if (G->adj == NULL)
+        exit(0);
     G->val = (double *)malloc(sizeof(double) * (V + 1));
+    if (G->val == NULL)
+        exit(0);
     G->fr = (int *)malloc(sizeof(int) * V);
+    if (G->fr == NULL)
+        exit(0);
     G->st = (int *)malloc(sizeof(int) * V);
+    if (G->st == NULL)
+        exit(0);
+    G->mst = NULL;
     G->E = 0;
     G->V = V;
     G->mstWT = 0;
     for (i = 0; i < V; i++) {
         G->adj[i] = (double *)malloc(sizeof(double) * V);
+        if (G->adj[i] == NULL)
+            exit(0);
         for (k = 0; k < V; k++) {
             G->adj[i][k] = DBL_MAX;
         }
@@ -69,8 +107,13 @@ void GRAPHremoveE (graph *G, int ver1, int ver2) {
 
 void GRAPHDestroy (graph *G) {
     int i;
+    node *tmp, *next;
     for (i = 0; i < G->V; i++) {
         free(G->adj[i]);
+    }
+    for (tmp = G->mst; tmp != NULL; tmp = next) {
+        next = tmp->next;
+        free(tmp);
     }
     free(G->adj);
     free(G->fr);
@@ -79,8 +122,16 @@ void GRAPHDestroy (graph *G) {
     free(G);
 }
 
+void DESTROYoldSt (node *old_st) {
+    node *tmp;
+    for (old_st = old_st; old_st != NULL; old_st = tmp) {
+        tmp = old_st->next;
+        free (old_st);
+    }
+}
+
 int *dfs (double **adj, int vertice, int *visited, int num_vertices) {
-    int i, k;
+    int i;
     visited[vertice] = 1;
 
     for (i = 0; i < num_vertices; i++) {
@@ -97,6 +148,8 @@ int GRAPHConnectivity (graph *G) {
     int *visited;
     V = G->V;
     visited = (int *)malloc(sizeof(int) * V);
+    for (i = 0; i < V; i++)
+        visited[i] = 0;
     
     visited = dfs(G->adj, 0, visited, V);
     
@@ -111,8 +164,51 @@ int GRAPHConnectivity (graph *G) {
     return 1;
 }
 
-void GRAPHmst (graph *G) {
+node *NEW(int v1, int v2, double wt) {
+    node *x = (node *)malloc(sizeof(node));
+    if (x == NULL)
+        exit(0);
+    if (v1 <= v2) {
+        x->v1 = v1;
+        x->v2 = v2;
+    } else {
+        x->v1 = v2;
+        x->v2 = v1;
+    }
+    x->wt = wt;
+    x->next = NULL;
+    return x;
+}
+
+void MSTInsertSorted (graph *G, int v1, int v2, double wt) {
+    node *current, *new;
+    node *head;
+    if (v1 == 1 && v2 == 1)
+        return;
+    head = G->mst;
+    
+    new = NEW(v1, v2, wt);
+
+    if (head == NULL || (head->v1 >= new->v1 && head->v2 > new->v2)) {
+        new->next = head;
+        head = new;
+    }
+    else {
+        current = head;
+        while (current->next != NULL && current->next->v1 < new->v1) {
+            current = current->next;
+        }
+        while (current->next != NULL && current->next->v1 == new->v1 && current->next->v2 < new->v2)
+            current = current->next;
+        new->next = current->next;
+        current->next = new;
+    }
+    G->mst = head;
+}
+
+void GRAPHmst (graph *G, int exclude) {
     int v, w, min, i;
+    G->mst = NULL;
 
     for (i = 0; i <= G->V; i++) {
         G->val[i] = DBL_MAX;
@@ -127,10 +223,15 @@ void GRAPHmst (graph *G) {
 
     while (min != G->V) {
         v = min;
+        if (v == exclude)
+            continue;
         if (G->val[min] != DBL_MAX)
             G->mstWT += G->val[min];
         G->st[v] = G->fr[v];
+        MSTInsertSorted(G, v + 1, G->st[v] + 1, G->val[min]);
         for (w = 0, min = G->V; w < G->V; w++) {
+            if (w == exclude)
+                continue;
             if (G->st[w] == -1) {
                 if (P < G->val[w]) {
                     G->val[w] = P;
@@ -143,18 +244,48 @@ void GRAPHmst (graph *G) {
 }
 
 void GRAPHprintMst (graph *G, FILE *fp_out, char *mode) {
-    int i;
-    fprintf(fp_out, "%d %d %s %d %.2f\n", G->V, G->E, mode, G->V - 1, G->mstWT);
-    for (i = 1; i < G->V; i++)
-        fprintf(fp_out, "%d %d %.2f\n", i + 1, G->st[i] + 1, G->adj[i][G->st[i]]);
+    node *tmp;
+    for (tmp = G->mst; tmp != NULL; tmp = tmp->next)
+        fprintf(fp_out, "%d %d %.2f\n", tmp->v1, tmp->v2, tmp->wt);
 }
 
-void GRAPHmstDiff (graph *G, FILE *fp_out, int *old_st) {
-    int v;
-    for (v = 0; v < G->V; v++) {
-        if (G->st[v] != old_st[v] && v != old_st[v]) {
-            fprintf(fp_out, "%d %d %.2f\n", v + 1, G->st[v] + 1, G->adj[v][G->st[v]]);
-            printf("YES\n");
+void GRAPHmstDiff (graph *G, FILE *fp_out, node *old_st) {
+    node *t1, *t2;
+    t1 = G->mst;
+    t2 = old_st;
+    while (t1 != NULL && t2 != NULL) {
+        if (t1->v1 == t2->v1 && t1->v2 == t2->v2) {
+            t1 = t1->next;
+            t2 = t2->next;
+        }
+        else if (t1->v1 < t2->v1 || (t1->v1 == t2->v1 && t1->v2 < t2->v2)) {
+            fprintf(fp_out, "%d %d %.2f\n", t1->v1, t1->v2, t1->wt);
+            t1 = t1->next;
+        }
+        else {
+            printf("Difference %d %d %.2f\n", t2->v1, t2->v2, t2->wt);
         }
     }
+    while (t1 != NULL) {
+        printf("Difference %d %d %.2f\n", t1->v1, t1->v2, t1->wt);
+        t1 = t1->next;
+    }
+}
+
+int CheckEdge (graph *G, int v1, int v2) {
+    int tmp;
+    node *t1;
+    t1 = G->mst;
+    if (v1 > v2) {
+        tmp = v1;
+        v1 = v2;
+        v2 = tmp;
+    }
+    while (t1 != NULL) {
+        if (t1->v1 == v1 && t1->v2 == v2) {
+            return 1;
+        }
+        t1 = t1->next;
+    }
+    return 0;
 }

@@ -2,24 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-int sum(int a, int b) { return a + b; }
-
-int sub(int a, int b) { return a - b; }
-
-int mul(int a, int b) { return a * b; }
-
-int divi(int a, int b) { return a / b; }
 
 int main(void) {
-    int a = 0;
-    int b = 0;
-    char op[2];
-    printf("Welcome to the Calculator App\n");
-    do {
-        scanf("Input value of a: %d\nInput value of b: %d\n", a, b);
+    int *a;
+    int *b;
+    int i;
+    a = (int *)malloc(sizeof(int) * 5);
+    b = (int *)malloc(sizeof(int) * 5);
 
+    for (i = 0; i < 5; i++)
+        a[i] = i;
+    b = a;
+    a[2] = 10;
+    for (i = 0; i < 5; i++)
+        printf("a:%d\tb:%d\n", a[i], b[i]);
 
-    } while (strcmp(op, "+") == 0 || strcmp(op, "-") == 0 ||
-            strcmp(op, "*") == 0 || strcmp(op, "/") == 0);
+    free(a);
+    free(b);
+
     return 0;
 }
