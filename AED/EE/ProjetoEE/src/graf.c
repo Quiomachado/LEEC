@@ -135,7 +135,7 @@ void DESTROYoldSt (node *old_st) {
     }
 }
 
-int *dfs (double **adj, int vertice, int *visited, int num_vertices) {
+void dfs (double **adj, int vertice, int *visited, int num_vertices) {
     int i;
     visited[vertice] = 1;
 
@@ -143,9 +143,6 @@ int *dfs (double **adj, int vertice, int *visited, int num_vertices) {
         if (adj[vertice][i] != DBL_MAX && !visited[i])
             dfs(adj, i, visited, num_vertices);
     }
-
-    return visited;
-
 }
 
 int GRAPHConnectivity (graph *G) {
@@ -156,7 +153,7 @@ int GRAPHConnectivity (graph *G) {
     for (i = 0; i < V; i++)
         visited[i] = 0;
     
-    visited = dfs(G->adj, 0, visited, V);
+    dfs(G->adj, 0, visited, V);
     
     for (i = 0; i < V; i++) {
         if (!visited[i]) {
